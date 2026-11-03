@@ -2,8 +2,10 @@
 // The fixtures carry the part states the exporter writes (tests/data.test.mts "fixtures are producer-shaped").
 import { after, test } from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
-  cleanupVariants, fixtureVariant, renderHome, renderLayout, renderMethod, renderTicker, visibleText,
+  cleanupVariants, FIXTURE, fixtureVariant, renderHome, renderLayout, renderMethod, renderTicker, visibleText,
 } from "./helpers/render.mts";
 
 after(cleanupVariants);
@@ -14,6 +16,19 @@ const adviceWords = (text: string) => text.toLowerCase().split(/[^\p{L}\p{N}]+/u
 const count = (text: string, part: string) => text.split(part).length - 1;
 const TICKERS = ["ACB", "FPT", "GAS", "HPG", "LPB", "MBB", "SSI", "STB", "TCB", "VCB", "VIC", "VPL"];
 const KEPT = "Dữ liệu giữ từ một lượt cập nhật trước";
+// The site's own words about a thesis on a ticker page (C1): the card for a hidden one, the label and the cut note.
+const CARD = "Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị luật tự động ẩn. Luật tự động đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật; xem trang Phương pháp và giới hạn.";
+const THESIS_LABEL = "Lập luận gốc của AI (tiếng Anh)";
+const CUT_NOTE = "Lập luận dài hơn 1.500 ký tự đã được cắt; dấu … đánh dấu chỗ cắt.";
+// Words that would tie a thesis to a holding, an action or one of the rules, or claim what the rules guarantee (review
+// of r4b, MINOR). The site's own copy has none of them outside /phuong-phap/'s thesis section, apart from the VN30-1
+// sentences of / and of the limits ("nắm giữ 10 mã …"), which the checks below take out first.
+const TIE = ["vị thế", "hành động", "luật thứ", "bộ lọc", "từ khóa", "gắn với", "nắm giữ", "đang giữ", "người viết",
+  "danh mục", "bảo đảm"];
+const TIE_WORDS = new RegExp(TIE.join("|"), "iu");
+
+/** A ticker's fixture file as the exporter wrote it (the expectations below follow its notes, not a list). */
+const fixtureSymbol = (ticker: string) => JSON.parse(readFileSync(join(FIXTURE, "symbols", `${ticker}.json`), "utf8"));
 
 /** Visible text of each <td> of the overview row that links to /ma/<ticker>/ (Link drops the slash outside Next). */
 function homeCells(html: string, ticker: string): string[] {
@@ -70,6 +85,10 @@ test("home: notes cells say '—' when unknown, mark kept values, and show the s
   assert.match(text, /★ = 3 mã có lợi nhuận 6 tháng cao nhất/);
   assert.match(text, /nắm giữ 10 mã có lợi nhuận 6 tháng cao nhất thắng VNINDEX/);
   assert.deepEqual(adviceWords(text), []);
+  // C1 (review of r4b): nothing on / about theses, the rules or a holding; the VN30-1 sentence is its only "nắm giữ".
+  const own = text.split("nắm giữ 10 mã có lợi nhuận 6 tháng cao nhất thắng VNINDEX").join(" ");
+  assert.doesNotMatch(own, TIE_WORDS);
+  assert.doesNotMatch(own, /lập luận|luật tự động/iu);
 });
 
 test("home: the '—' and '*' legends appear only when some row needs them", async () => {
@@ -145,15 +164,25 @@ test("ticker MBB (fresh): every status label, cut thesis, whole-journal score wi
   assert.doesNotMatch(text, /tại lúc chấm/);
 });
 
-test("ticker VIC: older indicator row flagged; a null thesis names the filter without claiming why; nothing scored", async () => {
+test("ticker VIC: older indicator row flagged; a null thesis says 'luật tự động' without naming a rule, links the method page; nothing scored", async () => {
   const html = await renderTicker("VIC");
   const text = visibleText(html);
   assertClean(text, "VIC");
   assert.match(text, /Chỉ báo ngày, phiên 31\/10\/2026 \(cũ hơn phiên dữ liệu 03\/11\/2026\)/);
-  // T4: hidden by an automatic keyword filter (or empty), which sometimes hides a purely technical thesis too. The
-  // whole paragraph is pinned, so no sentence claiming what the filter guarantees can join it.
-  const hidden = html.match(/<p class="[^"]*">[^<]*Không hiển thị lập luận gốc[^<]*<\/p>/);
-  assert.equal(visibleText(hidden?.[0] ?? ""), "Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị bộ lọc tự động ẩn. Bộ lọc dò theo từ khóa, vì vậy đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật.");
+  // T4 + C1 (r4b): an empty thesis, or one hidden by the automatic rules (the action-field rule since r4, or the keyword
+  // filter), which sometimes hide a purely technical thesis too. The card names neither rule and says nothing about an
+  // action, a position or money, so it cannot point at this note; /phuong-phap/ describes the rules. The whole paragraph
+  // is pinned, so no sentence claiming a cause or what the rules guarantee can join it.
+  const hidden = html.match(/<p class="[^"]*">(?:(?!<\/p>)[\s\S])*Không hiển thị lập luận gốc(?:(?!<\/p>)[\s\S])*<\/p>/)?.[0] ?? "";
+  assert.equal(visibleText(hidden), CARD);
+  assert.match(hidden, /<a\b[^>]*\shref="\/phuong-phap\/?"[^>]*>Phương pháp và giới hạn<\/a>/); // Link drops the slash outside Next
+  assert.doesNotMatch(visibleText(hidden), /vị thế|hành động|tiền|lệnh|giữ|chờ|gắn với|từ khóa/i);
+  // Review of r4b: the whole "Nhận định AI mới nhất" card is pinned, so no sibling sentence (a cause for this note, a
+  // holding) can join the paragraph above, whatever its words. Its class is pinned too: static text cannot see a class
+  // that hides it (sr-only, hidden, invisible), and a reader would then see no card at all.
+  const latestCard = html.match(/<section\b[^>]*aria-label="Nhận định AI mới nhất"[^>]*>(?:(?!<\/section>)[\s\S])*<\/section>/)?.[0] ?? "";
+  assert.equal(visibleText(latestCard), `Nhận định AI mới nhất Tăng Kỳ hạn 20 phiên Ngày tín hiệu 03/11/2026 Ngày chấm 01/12/2026 Trạng thái Chờ đủ 20 phiên ${CARD}`);
+  assert.match(hidden, /^<p class="text-xs text-slate-600">/);
   assert.doesNotMatch(text, /bị ẩn vì nhắc tới thông tin ngoài phạm vi kỹ thuật|ngoài phạm vi kỹ thuật/);
   assert.doesNotMatch(text, /Lập luận gốc của AI/);
   // T5b: "chưa chấm" without a cause (none written, none due or waiting for a bar look the same in the totals).
@@ -413,15 +442,56 @@ test("the reason text is never interpreted: the words shown change, the state an
   assert.match(visibleText(await renderTicker("FPT", r2)), /Chưa có chỉ báo kỹ thuật, sức mạnh tương đối và nhận định: backend chưa hỗ trợ mã này \(UNSUPPORTED_CAPABILITY\)\./);
 });
 
-test("ticker pages: no advice words and no raw null/undefined/NaN on any fixture ticker", async () => {
+test("ticker pages: outside the thesis no advice word, no raw null, nothing tying a thesis to a holding, an action or a rule", async () => {
+  const withCard: string[] = [];
   for (const ticker of TICKERS) {
     const html = await renderTicker(ticker);
-    // The thesis is English text from the note writer; check the site's own Vietnamese copy around it.
+    const latest = fixtureSymbol(ticker).notes[0];
+    // The thesis is the note writer's text (English in every fixture, hence lang="en"); check the site's own Vietnamese
+    // copy around it.
+    assert.equal(count(html, '<p lang="en"'), latest?.thesis ? 1 : 0, ticker);
     const text = visibleText(html.replace(/<p lang="en"[\s\S]*?<\/p>/g, ""));
     assertClean(text, ticker);
     assert.deepEqual(adviceWords(text), [], ticker);
     assert.doesNotMatch(text, /của lượt cập nhật trước|lấy từ lượt cập nhật trước/, ticker);
+    // C1 (review of r4b): locked on the whole page, not only in the card's paragraph. No word tying a thesis to a
+    // holding, an action or a rule anywhere, and every "lập luận" belongs to the card, the label or the cut note, so no
+    // other sentence about a thesis (a cause for this one, a guarantee) can join the page.
+    assert.doesNotMatch(text, TIE_WORDS, ticker);
+    assert.doesNotMatch([CARD, THESIS_LABEL, CUT_NOTE].reduce((t, s) => t.split(s).join(" "), text), /lập luận/iu, ticker);
+    // The card shows exactly where the latest note has a null thesis; a shown thesis carries the label once.
+    const card = count(text, "Không hiển thị lập luận gốc");
+    assert.equal(card, latest && latest.thesis === null ? 1 : 0, ticker);
+    assert.equal(count(text, THESIS_LABEL), latest?.thesis ? 1 : 0, ticker);
+    if (card) withCard.push(ticker);
   }
+  assert.deepEqual(withCard, ["VIC"]); // the fixture's one null latest thesis: the card checks above are not vacuous
+});
+
+test("thesis language (review of r4b): '(tiếng Anh)' and lang=\"en\" only for a thesis with no letter outside A-Z", async () => {
+  // Only v7 asks for English and nothing enforces it, so the label follows the text: a Vietnamese thesis, precomposed or
+  // decomposed (NFD), is shown as written and never called English; English with symbols (≈, −, …) still is. The NFD
+  // one has no "đ" (a letter of its own that NFD keeps), so only its combining marks can tell it from English.
+  const vi = "Giá đóng cửa trên đỉnh 20 phiên, khối lượng gấp 1,5 lần trung bình; RSI14 gần 62.";
+  const nfd = "Giá trên SMA50 và SMA200; khối lượng gấp 1,5 lần trung bình phiên.".normalize("NFD");
+  const en = "Close ≈ SMA50 − 0.4%; RSI14 near 48 … range-bound.";
+  assert.ok(/^[\x00-\x7F\p{M}]+$/u.test(nfd)); // ASCII letters and combining marks only
+  const dir = fixtureVariant(({ read, write }) => {
+    for (const [ticker, thesis] of [["SSI", vi], ["VPL", nfd], ["GAS", en]]) {
+      const doc = read(`symbols/${ticker}.json`);
+      doc.notes[0].thesis = thesis;
+      write(`symbols/${ticker}.json`, doc);
+    }
+  });
+  for (const [ticker, thesis] of [["SSI", vi], ["VPL", nfd]]) {
+    const html = await renderTicker(ticker, dir);
+    assert.match(html, /<summary[^>]*>Lập luận gốc của AI<\/summary>/, ticker);
+    assert.doesNotMatch(html, /lang="en"|tiếng Anh/, ticker);
+    assert.ok(html.includes(`<p class="mt-2 whitespace-pre-line text-slate-700">${thesis}</p>`), ticker);
+  }
+  const gas = await renderTicker("GAS", dir);
+  assert.match(gas, /<summary[^>]*>Lập luận gốc của AI \(tiếng Anh\)<\/summary>/);
+  assert.ok(gas.includes(`<p lang="en" class="mt-2 whitespace-pre-line text-slate-700">${en}</p>`));
 });
 
 test("ticker metadata and unknown tickers", async () => {
@@ -431,18 +501,49 @@ test("ticker metadata and unknown tickers", async () => {
   await assert.rejects(renderTicker("XYZ"));
 });
 
-test("method page: v2 rules in words, the three part states, the filter as it is, advice words only in the disclaimer", async () => {
-  const text = visibleText(await renderMethod());
+/** The visible text of the one <p> of `html` that contains `start` ("" when there is none). */
+function paragraph(html: string, start: string): string {
+  const all = html.match(/<p\b[^>]*>(?:(?!<\/p>)[\s\S])*<\/p>/g) ?? [];
+  const hits = all.filter((p) => visibleText(p).includes(start));
+  assert.ok(hits.length <= 1, `${hits.length} paragraphs contain ${start}`);
+  return visibleText(hits[0] ?? "");
+}
+
+test("method page: v2 rules in words, the three part states, both thesis rules, what v7 added, advice words only in the disclaimer", async () => {
+  const html = await renderMethod();
+  const text = visibleText(html);
   assertClean(text, "phuong-phap");
+  // C1 (r4b): both automatic rules, in general terms (the action-field rule of r4 X1 and the keyword filter); the filter
+  // may hide a purely technical thesis and does not catch every wording; the page does not say which rule hid a thesis,
+  // so a hidden thesis on a ticker page points at no rule. Pinned whole, so no claim of a guarantee or a cause can join.
+  // Review of r4b (NIT): rule 1 reads only the note's two fields, so the page says what the note records ("ghi là không
+  // dựa vào vị thế"), not a fact about the session that wrote it.
+  const rules = paragraph(html, "Hai luật tự động");
+  assert.equal(rules, "Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: lập luận chỉ được đăng khi nhận định ghi hành động “chờ” hoặc “không có” và ghi là không dựa vào vị thế. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập luận nào bị ẩn theo luật nào.");
+  // C2 (r4b): what v7 (03/11/2026) added is the rules for writing a thesis for the public page (Step 4; "trong đó có":
+  // it also asks for English, 1500 characters and number formats); the versions before it already kept the model to
+  // candles and indicators (skill v1-v6 "Technical-only (candles and indicators)") and had none of these rules. Y1
+  // (review of r4): the rules belong to a version, not to a date: the ACB thesis with signal date 03/11/2026 was written
+  // under v6, MBB and BID of that date under v7; the page cannot tell which thesis followed which, nor how many.
+  const v7 = paragraph(html, "từ bản v7");
+  assert.equal(v7, "Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào; không nhắc vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản trước v7 cũng giới hạn mô hình ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu 03/11/2026 có thể được viết theo bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản nào.");
+  // The r4 sentence named the wrong gap (candles and indicators only) and counted one older thesis as "một số".
+  assert.doesNotMatch(text, /dặn mô hình chỉ viết mô tả kỹ thuật|không được dặn như vậy|một số lập luận|gắn với vị thế/);
+  // Review of r4b (NIT): only v7 asks for English and nothing enforces it, so a thesis is "thường" in English.
+  const intro = paragraph(html, "Lập luận gốc của mô hình");
+  assert.equal(intro, "Lập luận gốc của mô hình, thường viết bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất ở trang từng mã. Lập luận dài hơn 1.500 ký tự được cắt ở 1.500 ký tự và kết thúc bằng dấu “…”.");
+  const made = paragraph(html, "Với mỗi mã backend đã hỗ trợ");
+  assert.equal(made, "Với mỗi mã backend đã hỗ trợ, sau mỗi phiên một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận định cho 20 phiên tới: Tăng, Giảm, Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính hay sự kiện doanh nghiệp. Nhận định được ghi vào nhật ký trước khi biết kết quả. Trang chỉ hiển thị và chấm nhận định kỳ hạn 20 phiên; nhận định kỳ hạn khác (nếu có) không xuất hiện ở đây.");
+  // Review of r4b (MINOR): locked on the whole page, not only in the pinned paragraphs. The thesis section is pinned
+  // whole (its heading and these four paragraphs), so no sentence about theses, positions or the rules can join it; and
+  // the words such a sentence needs appear nowhere else on the page (the VN30-1 limit is the one other "nắm giữ").
+  const section = html.match(/<section\b[^>]*>(?:(?!<\/section>)[\s\S])*Nhận định hướng được tạo thế nào(?:(?!<\/section>)[\s\S])*<\/section>/)?.[0] ?? "";
+  assert.equal(visibleText(section), ["Nhận định hướng được tạo thế nào", made, intro, rules, v7].join(" "));
+  const page = text.split("rằng nắm giữ 10 mã mạnh nhất thắng VNINDEX").join(" ").toLowerCase();
+  for (const word of [...TIE, "lập luận", "luật tự động", "v7", "tiếng anh"]) {
+    assert.equal(count(page, word), count(visibleText(section).toLowerCase(), word), word);
+  }
   for (const phrase of [
-    "Trang chỉ hiển thị và chấm nhận định kỳ hạn 20 phiên",
-    "Lập luận gốc của mô hình bằng tiếng Anh, hiển thị nguyên văn",
-    "được cắt ở 1.500 ký tự và kết thúc bằng dấu “…”",
-    // T4: a keyword filter, may hide a purely technical thesis, does not catch every wording. Y1 (review of r4): the
-    // writing rule belongs to a version of the writing instructions (skill v7, from 03/11/2026), not to a date: the ACB
-    // thesis with signal date 03/11/2026 was written under v6. The page cannot tell which thesis followed which.
-    "một bộ lọc dò theo từ khóa ẩn cả lập luận khi nghi lập luận nhắc tới vị thế, tiền, lệnh hay hành động giao dịch, đường dẫn hay mã nội bộ",
-    "Bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt; vì vậy hướng dẫn viết của mô hình, từ bản v7 (ngày 03/11/2026), dặn mô hình chỉ viết mô tả kỹ thuật về nến và chỉ báo. Lập luận viết theo bản hướng dẫn cũ hơn, kể cả một số lập luận có ngày tín hiệu 03/11/2026, không được dặn như vậy; trang không ghi lập luận nào được viết theo bản nào.",
     // T1: the three states of a part.
     "“Chưa có”: backend đã trả lời nhưng chưa có dữ liệu cho phần đó",
     "hoặc chưa hỗ trợ mã đó",
@@ -450,7 +551,6 @@ test("method page: v2 rules in words, the three part states, the filter as it is
     "“Dữ liệu giữ từ một lượt cập nhật trước”: lượt cập nhật gần nhất gặp lỗi khi đọc phần đó",
     "có thể đã cách nhiều lượt",
     "ô “—” ở cột nhận định và cột điểm nghĩa là chưa có hoặc chưa lấy được",
-    "Với mỗi mã backend đã hỗ trợ, sau mỗi phiên một mô hình AI",
     // T5d: scored again on every update.
     "R = giá đóng cửa điều chỉnh phiên chấm ÷ giá đóng cửa điều chỉnh phiên tín hiệu − 1",
     "Ở mỗi lượt cập nhật, backend chấm lại cả nhật ký trên giá điều chỉnh đang lưu lúc đó",
@@ -496,6 +596,12 @@ test("layout: the disclaimer twice, the data session and update time on every pa
   assert.match(text, /Dữ liệu phiên 03\/11\/2026\./);
   assert.match(text, /cập nhật 19:05 03\/11\/2026 \(giờ Việt Nam\)/);
   assert.match(text, /NỘI DUNG TRANG/);
+  // Review of r4b: header, banner and footer pinned whole, so no claim (about theses, the rules, a holding or advice)
+  // can be added to every page. The two nav links are adjacent inline elements: visibleText joins their words, the
+  // browser separates them with the flex gap.
+  assert.equal(text, `Bảng VN30 Bảng VN30Phương pháp ${DISCLAIMER} Dữ liệu phiên 03/11/2026. NỘI DUNG TRANG Dữ liệu phiên 03/11/2026, cập nhật 19:05 03/11/2026 (giờ Việt Nam). Nguồn: VCI, giá điều chỉnh, qua backend của dự án. ${DISCLAIMER} Phương pháp và giới hạn`);
+  assert.doesNotMatch(text, TIE_WORDS);
+  assert.doesNotMatch(text, /lập luận|luật tự động/iu);
 });
 
 test("404 page has its own title", async () => {
