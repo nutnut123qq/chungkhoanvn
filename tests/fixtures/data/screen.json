@@ -1,0 +1,66 @@
+{
+  "session": "2026-11-03",
+  "basket": {
+    "effectiveDate": "2026-08-03",
+    "possiblyStale": false
+  },
+  "indexReturns": {
+    "3": -0.014,
+    "6": -0.088,
+    "12": 0.035
+  },
+  "rankingMonths": 6,
+  "topK": 10,
+  "missingSessionBar": [],
+  "notUpToDate": [],
+  "rows": [
+    {
+      "symbol": "VIC",
+      "close": 230500,
+      "returns": {
+        "3": 0.13,
+        "6": 0.103,
+        "12": null
+      },
+      "excessVsIndex": {
+        "3": 0.144,
+        "6": 0.191,
+        "12": null
+      },
+      "rank": 1,
+      "top": true
+    },
+    {
+      "symbol": "MBB",
+      "close": 21150,
+      "returns": {
+        "3": -0.035,
+        "6": 0.079,
+        "12": 0.03
+      },
+      "excessVsIndex": {
+        "3": -0.021,
+        "6": 0.167,
+        "12": -0.005
+      },
+      "rank": 2,
+      "top": true
+    },
+    {
+      "symbol": "FPT",
+      "close": 94800,
+      "returns": {
+        "3": -0.02,
+        "6": null,
+        "12": null
+      },
+      "excessVsIndex": {
+        "3": -0.006,
+        "6": null,
+        "12": null
+      },
+      "rank": null,
+      "top": false
+    }
+  ]
+}

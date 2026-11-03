@@ -1,0 +1,23 @@
+{
+  "schema": "vn30-web-data/v1",
+  "generatedAtUtc": "2026-11-03T12:05:00Z",
+  "session": "2026-11-03",
+  "symbols": [
+    "FPT",
+    "MBB",
+    "VIC"
+  ],
+  "unavailable": [
+    {
+      "symbol": "FPT",
+      "part": "technical",
+      "reason": "backend chưa phục vụ phân tích kỹ thuật cho mã này"
+    },
+    {
+      "symbol": "FPT",
+      "part": "notes",
+      "reason": "chưa có nhận định"
+    }
+  ],
+  "source": "VCI, giá điều chỉnh, qua backend của dự án"
+}

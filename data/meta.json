@@ -1,0 +1,320 @@
+{
+  "schema": "vn30-web-data/v1",
+  "generatedAtUtc": "2026-11-03T03:03:31Z",
+  "session": "2026-11-02",
+  "symbols": [
+    "ACB",
+    "BID",
+    "BSR",
+    "CTG",
+    "FPT",
+    "GAS",
+    "GVR",
+    "HDB",
+    "HPG",
+    "LPB",
+    "MBB",
+    "MCH",
+    "MSN",
+    "MWG",
+    "SAB",
+    "SHB",
+    "SSB",
+    "SSI",
+    "STB",
+    "TCB",
+    "TCX",
+    "VCB",
+    "VHM",
+    "VIB",
+    "VIC",
+    "VJC",
+    "VNM",
+    "VPB",
+    "VPL",
+    "VRE"
+  ],
+  "unavailable": [
+    {
+      "symbol": "ACB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "ACB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "BSR",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "BSR",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "CTG",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "CTG",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "FPT",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "FPT",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "GAS",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "GAS",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "GVR",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "GVR",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "HDB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "HDB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "HPG",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "HPG",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "LPB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "LPB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MCH",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MCH",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MSN",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MSN",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MWG",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "MWG",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SAB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SAB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SHB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SHB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SSB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SSB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SSI",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "SSI",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "STB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "STB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "TCB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "TCB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "TCX",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "TCX",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VCB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VCB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VHM",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VHM",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VIB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VIB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VIC",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VIC",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VJC",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VJC",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VNM",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VNM",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VPB",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VPB",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VPL",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VPL",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VRE",
+      "part": "technical",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "VRE",
+      "part": "notes",
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    }
+  ],
+  "source": "VCI, giá điều chỉnh, qua backend của dự án"
+}
