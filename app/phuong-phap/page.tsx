@@ -39,24 +39,37 @@ export default function MethodPage() {
           chính các nến hiển thị.
         </p>
         <p>
-          Mỗi mã có ba phần được đọc riêng: nến, chỉ báo kỹ thuật và nhận định. Nếu một lượt cập nhật không lấy được một phần
-          vì lỗi tạm thời, trang giữ số liệu của lượt trước cho phần đó và ghi rõ ở trang của mã; nếu không có gì để giữ, ô
-          hiện “—” và trang ghi “chưa lấy được”.
+          Mỗi mã có ba phần được đọc riêng: nến, chỉ báo kỹ thuật (kèm sức mạnh tương đối so VNINDEX) và nhận định. Khi
+          một phần không phải số liệu vừa đọc được, trang của mã ghi rõ phần đó ở một trong ba trạng thái:
         </p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>
+            “Chưa có”: backend đã trả lời nhưng chưa có dữ liệu cho phần đó (ví dụ chưa có chỉ báo ngày, hoặc dữ liệu
+            VNINDEX chưa khớp tới phiên mới nhất của mã), hoặc chưa hỗ trợ mã đó.
+          </li>
+          <li>“Chưa lấy được”: lượt cập nhật gần nhất gặp lỗi khi đọc phần đó và không có dữ liệu cũ để hiện thay.</li>
+          <li>
+            “Dữ liệu giữ từ một lượt cập nhật trước”: lượt cập nhật gần nhất gặp lỗi khi đọc phần đó; trang hiện số liệu
+            của lần đọc được gần nhất trước đó, có thể đã cách nhiều lượt. Riêng khi không đọc được nến, toàn bộ dữ liệu
+            của mã được giữ nguyên như lần cập nhật trước đó (nếu có).
+          </li>
+        </ul>
+        <p>Ở trang chủ, ô “—” ở cột nhận định và cột điểm nghĩa là chưa có hoặc chưa lấy được.</p>
       </Section>
 
       <Section title="Nhận định hướng được tạo thế nào">
         <p>
-          Sau mỗi phiên, một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận định cho {H} phiên tới: Tăng,
-          Giảm, Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính hay sự kiện doanh nghiệp. Nhận
-          định được ghi vào nhật ký trước khi biết kết quả. Trang chỉ hiển thị và chấm nhận định kỳ hạn {H} phiên; nhận
-          định kỳ hạn khác (nếu có) không xuất hiện ở đây.
+          Với mỗi mã backend đã hỗ trợ, sau mỗi phiên một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận
+          định cho {H} phiên tới: Tăng, Giảm, Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính
+          hay sự kiện doanh nghiệp. Nhận định được ghi vào nhật ký trước khi biết kết quả. Trang chỉ hiển thị và chấm nhận
+          định kỳ hạn {H} phiên; nhận định kỳ hạn khác (nếu có) không xuất hiện ở đây.
         </p>
         <p>
           Lập luận gốc của mô hình bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất ở trang từng mã. Lập luận dài
-          hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và kết thúc bằng dấu “…”. Lập luận
-          bị ẩn hoàn toàn nếu nhắc tới thông tin ngoài phạm vi kỹ thuật, như vị thế hay số cổ phiếu đang nắm, tiền, giá vốn,
-          lệnh hay hành động giao dịch, đường dẫn, tên hoặc địa chỉ máy, mã nội bộ.
+          hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và kết thúc bằng dấu “…”. Trước
+          khi đăng, một bộ lọc dò theo từ khóa ẩn cả lập luận khi nghi lập luận nhắc tới vị thế, tiền, lệnh hay hành động
+          giao dịch, đường dẫn hay mã nội bộ. Bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm
+          bắt hết mọi cách diễn đạt; vì vậy mô hình được dặn chỉ viết mô tả kỹ thuật về nến và chỉ báo.
         </p>
       </Section>
 
@@ -64,8 +77,9 @@ export default function MethodPage() {
         <ul className="list-disc space-y-1 pl-5">
           <li>
             Phiên chấm là đúng {H} phiên giao dịch sau phiên tín hiệu theo lịch HOSE. Lợi nhuận R = giá đóng cửa điều chỉnh
-            phiên chấm ÷ giá đóng cửa điều chỉnh phiên tín hiệu − 1, tính trên giá điều chỉnh đang lưu tại lúc chấm. Giá
-            điều chỉnh được tính lại sau các sự kiện như chia cổ tức, vì vậy R có thể khác phép chia trên giá gốc.
+            phiên chấm ÷ giá đóng cửa điều chỉnh phiên tín hiệu − 1. Ở mỗi lượt cập nhật, backend chấm lại cả nhật ký trên
+            giá điều chỉnh đang lưu lúc đó. Giá điều chỉnh được tính lại sau các sự kiện như chia cổ tức, vì vậy R và kết quả
+            Đúng/Sai của một nhận định đã chấm có thể đổi giữa các lượt cập nhật, và R có thể khác phép chia trên giá gốc.
           </li>
           <li>R từ +5% trở lên là Tăng, từ −4% trở xuống là Giảm, còn lại là Đi ngang.</li>
           <li>Nhận định “Đúng” khi trùng với kết quả thực tế, ngược lại là “Sai”. “Không nhận định” không được chấm.</li>
@@ -75,8 +89,8 @@ export default function MethodPage() {
           </li>
           <li>
             Mốc so sánh của luật: với mỗi nhận định đã chấm, lấy kết quả (Tăng, Giảm hay Đi ngang) xảy ra nhiều nhất trong
-            lịch sử của chính mã đó tính tới phiên tín hiệu; hoà thì ưu tiên Đi ngang. Một cách đoán chỉ có ích nếu đúng
-            nhiều hơn mốc này trên cùng các phiên.
+            lịch sử của chính mã đó tính tới phiên tín hiệu; khi hoà, ưu tiên Đi ngang, rồi tới Tăng, rồi tới Giảm; khi
+            chưa có lịch sử nào, mốc là Đi ngang. Một cách đoán chỉ có ích nếu đúng nhiều hơn mốc này trên cùng các phiên.
           </li>
         </ul>
         <p>Trạng thái của từng nhận định:</p>
@@ -116,12 +130,16 @@ export default function MethodPage() {
             đoán “Đi ngang” đúng 34/74. Tức là chưa thấy lợi thế; cách đoán tự động còn kém mốc so sánh.
           </li>
           <li>28 mã còn lại chưa có bài thử mù nào.</li>
-          <li>Ngoài MBB và BID, chưa có tỷ lệ nền (tần suất lịch sử của Tăng/Giảm/Đi ngang) cho các mã.</li>
+          <li>
+            Tỷ lệ nền (xác suất ước lượng bằng kNN trên các phiên tương tự trong lịch sử của mã, cho việc giá chạm mức +5%
+            trước, chạm mức −4% trước, hay không chạm mức nào trong {H} phiên tính từ giá mở cửa phiên sau) mới có cho MBB
+            và BID, và trang này không hiển thị. Tỷ lệ nền khác với mốc so sánh của luật chấm ở trên.
+          </li>
           <li>
             Bảng xếp hạng chỉ đo sức mạnh giá trong quá khứ. Bài kiểm tra lịch sử VN30-1 kết luận chưa đủ bằng chứng rằng nắm
             giữ 10 mã mạnh nhất thắng VNINDEX.
           </li>
-          <li>Dữ liệu có thể trễ, thiếu hoặc sai do nguồn hoặc do lỗi xử lý; ô “—” nghĩa là không có dữ liệu hoặc chưa lấy được.</li>
+          <li>Dữ liệu có thể trễ, thiếu hoặc sai do nguồn hoặc do lỗi xử lý; ô “—” nghĩa là chưa có dữ liệu hoặc chưa lấy được.</li>
         </ul>
       </Section>
 

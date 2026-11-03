@@ -1,24 +1,27 @@
-import { NOTE_HORIZON, type NotesView, type Score } from "../lib/data.ts";
+import { KEPT_NOTE, NOTE_HORIZON, NULL_WORDS, nullText, type NotesView, type Score } from "../lib/data.ts";
 import { baselineText, sampleLongLabel, scoreText } from "../lib/format.ts";
 
 /** The ticker's whole-journal score for 20-session notes, with the rule's baseline and sample status beside it. */
 export default function ScoreSummary({ score, view }: { score: Score | null; view: NotesView }) {
   if (!view.known || !score) {
+    // "—" mirrors the overview cell of a read that failed; an empty part (not served) just says "chưa có".
     return (
       <p className="text-sm text-slate-600">
-        <span className="font-semibold">—</span> Chưa lấy được nhận định của mã này ở lượt cập nhật gần nhất.
+        {view.state === "missing" && <><span className="font-semibold">—</span>{" "}</>}
+        {nullText(NULL_WORDS.notes, view.state, view.reasons)}
       </p>
     );
   }
-  const kept = view.kept && <p className="text-xs text-amber-800">Của lượt cập nhật trước.</p>;
+  const kept = view.kept && <p className="text-xs text-amber-800">{KEPT_NOTE}.</p>;
   const baseline = baselineText(score);
   if (baseline === null) {
+    // Nothing scored yet; the reason (none written, none due, waiting for a bar) is not in the backend's totals.
     return (
       <div className="space-y-2">
         {kept}
         <p className="text-sm">
-          <span className="font-semibold">{scoreText(score)}</span>: chưa có nhận định {NOTE_HORIZON} phiên nào của mã
-          đủ kỳ hạn để chấm.
+          <span className="font-semibold">{scoreText(score)}</span>: chưa có nhận định {NOTE_HORIZON} phiên nào được
+          chấm.
         </p>
       </div>
     );

@@ -26,16 +26,32 @@ test("home page: every cell holding sr-only text is positioned, so the text cann
   for (const cell of withSrOnly) assert.match(cell, /^ className="(?:[^"]*\s)?(?:sticky|relative)\s/, cell.slice(0, 80));
 });
 
-test("ticker page: every card gets the part state of its own part", () => {
+test("ticker page: every card gets the part state (and reasons) of its own part", () => {
   const page = src("app/ma/[ticker]/page.tsx");
-  assert.match(page, /const missingLines = unavailableLines\(meta, ticker\);/);
-  assert.match(page, /const candles = partState\(meta, ticker, "candles"\);\r?\n\s*const technical = partState\(meta, ticker, "technical"\);\r?\n\s*const notes = notesView\(meta, ticker, data\.score\);/);
-  assert.match(page, /<IndicatorPanel indicators=\{data\.indicators\} session=\{meta\.session\} state=\{technical\} \/>/);
+  assert.match(page, /const missingLines = unavailableLines\(meta, data\);/);
+  assert.match(page, /const candles = partState\(meta, ticker, "candles"\);\r?\n\s*const technical = partState\(meta, ticker, "technical"\);\r?\n\s*const notes = notesView\(meta, ticker, data\.score\);\r?\n\s*const technicalReasons = technicalCardReasons\(meta, data\);/);
+  assert.match(page, /<IndicatorPanel indicators=\{data\.indicators\} session=\{meta\.session\} state=\{technical\} reasons=\{technicalReasons\} \/>/);
+  assert.match(page, /nullText\(NULL_WORDS\.candles, candles, partReasons\(meta, ticker, "candles"\)\)/);
+  assert.match(page, /nullText\(NULL_WORDS\.strength, technical, technicalReasons\)/);
   assert.match(page, /<Card title="Nhận định AI mới nhất">\r?\n\s*<LatestNote note=\{data\.notes\[0\]\} view=\{notes\} \/>/);
   assert.match(page, /<ScoreSummary score=\{data\.score\} view=\{notes\} \/>/);
   assert.match(page, /<NotesTable notes=\{data\.notes\} view=\{notes\} \/>/);
   assert.match(page, /\{missingLines\.map\(\(line\) => <li key=\{line\}>\{line\}<\/li>\)\}/);
   assert.doesNotMatch(page, /PART_LABELS/);
+});
+
+test("pages and cards never read a reason: only lib/data.ts looks at suffixes, the reasons are passed through", () => {
+  for (const rel of [
+    "app/page.tsx", "app/ma/[ticker]/page.tsx", "components/IndicatorPanel.tsx", "components/LatestNote.tsx",
+    "components/NotesTable.tsx", "components/ScoreSummary.tsx", "lib/format.ts",
+  ]) {
+    const code = src(rel);
+    assert.doesNotMatch(code, /\.reason\b|reasons\s*\[|reasons\.(?:some|every|find|includes|indexOf|filter|map|join)\b|_SUFFIX/, rel);
+  }
+  // In lib/data.ts a reason is only ever tested for a suffix, stripped of it, or shown.
+  const data = src("lib/data.ts");
+  for (const use of data.match(/\breason\.\w+\(/g) ?? []) assert.match(use, /^reason\.(?:endsWith|slice|trim)\($/, use);
+  assert.doesNotMatch(data, /reasons?\.(?:includes|indexOf|search|match|startsWith|test)\(|\.reason\.(?!endsWith\()/);
 });
 
 test("indicator panel: the 'older' flag compares with <, through indicatorsOlderThan", () => {
@@ -53,11 +69,13 @@ test("modules bundled for the browser import data.ts for types only (it reads th
   }
 });
 
-test("hygiene: 404 title, ignored local files, README on v2", () => {
+test("hygiene: 404 title, ignored local files, README on v2 and its part states", () => {
   assert.match(src("app/not-found.tsx"), /export const metadata: Metadata = \{\r?\n\s*title: "Không tìm thấy trang",/);
   const ignored = src(".gitignore").split(/\r?\n/);
   for (const entry of [".env*", ".vercel", "*.tmp", "node_modules/", ".next/", "out/"]) assert.ok(ignored.includes(entry), entry);
   const readme = src("README.md");
   assert.match(readme, /vn30-web-data\/v2/);
   assert.doesNotMatch(readme, /theo hợp đồng `vn30-web-data\/v1`/);
+  assert.match(readme, /không suy nghĩa từ chữ của lý do/);
+  assert.match(readme, /dữ liệu giữ từ một lượt cập nhật trước/);
 });

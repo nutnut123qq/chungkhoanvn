@@ -22,9 +22,17 @@ Trang không gọi API lúc người dùng xem. Mọi số liệu nằm trong th
   phải kỳ hạn 20 phiên, nhận định sai thứ tự mới nhất trước, thiếu trường hay thiếu file của một mã sẽ làm build dừng
   với thông báo chỉ rõ file và trường, nên bản đang chạy trên Vercel không bị thay bằng bản hỏng.
 - `null` trong dữ liệu luôn hiển thị là "—", không bao giờ là 0.
-- `meta.unavailable` liệt kê phần nào của mã nào chưa đọc được ở lượt cập nhật. Phần giữ lại từ lượt trước được hiển thị
-  kèm một dòng ghi chú; phần không đọc được và không có gì để giữ hiển thị "—" / "chưa lấy được", không bao giờ là
-  "chưa có nhận định" hay "chưa chấm".
+- `meta.unavailable` liệt kê phần nào của mã nào không phải số liệu vừa đọc được. Trang chỉ dựa vào hậu tố của lý do
+  và việc giá trị có `null` hay không, không suy nghĩa từ chữ của lý do (lý do hiện nguyên văn):
+  - không hậu tố (backend trả rỗng thật hoặc chưa hỗ trợ mã): "Chưa có …: <lý do>";
+  - `; chưa có dữ liệu lượt trước`: "chưa lấy được", hiện "—", không bao giờ là "chưa có nhận định" hay "chưa chấm";
+  - `; giữ dữ liệu lượt trước`: hiện số liệu kèm ghi chú "dữ liệu giữ từ một lượt cập nhật trước" (exporter có thể
+    giữ qua nhiều lượt liên tiếp).
+  - Phần chỉ báo trống, cả chỉ báo lẫn sức mạnh tương đối đều `null` và có hơn một lý do: dòng đầu trang nêu cả hai
+    cùng mọi lý do, còn hai thẻ ghi "(lý do ghi ở đầu trang)" thay vì lặp lại mọi lý do, vì mỗi lý do có thể chỉ
+    thuộc một trong hai giá trị mà trang không đọc chữ của lý do để biết.
+- Giá trị của mỗi phần phải khớp trạng thái đó như exporter ghi (ví dụ phần đọc mới không có `null` nào không kèm
+  mục trong `meta.unavailable`); dữ liệu sai khớp làm build dừng.
 
 Biến môi trường `DATA_DIR` đổi thư mục dữ liệu (mặc định `data/`, tính từ thư mục repo).
 
@@ -53,6 +61,7 @@ Xem thử thư mục `out/` bằng một static server bất kỳ, ví dụ `pyt
 - `app/` — layout và các trang (Next.js App Router, `output: "export"`).
 - `components/` — biểu đồ (client component duy nhất), bảng chỉ báo, nhận định, điểm, lịch sử.
 - `lib/` — hàm thuần: định dạng vi-VN, nhãn, tóm tắt chỉ báo, SMA, đọc và kiểm tra dữ liệu, đọc `meta.unavailable`.
-- `tests/` — test `node:test`; `tests/fixtures/data/` là bộ dữ liệu mẫu theo đúng hợp đồng, gồm cả các trường hợp giữ
-  dữ liệu lượt trước, chưa lấy được và backend chưa hỗ trợ mã. `tests/helpers/` render các trang ra HTML tĩnh để test
-  đọc đúng chữ người xem thấy.
+- `tests/` — test `node:test`; `tests/fixtures/data/` là bộ dữ liệu mẫu theo đúng hợp đồng và đúng những gì exporter
+  ghi, gồm cả các trường hợp chưa có (backend chưa hỗ trợ mã, chưa có chỉ báo ngày, dữ liệu VNINDEX chưa khớp), chưa
+  lấy được, giữ từ một lượt cập nhật trước, và giữ cả file khi không đọc được nến. `tests/helpers/` render các trang ra
+  HTML tĩnh để test đọc đúng chữ người xem thấy.

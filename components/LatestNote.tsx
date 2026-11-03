@@ -1,13 +1,13 @@
-import { NOTE_HORIZON, THESIS_MAX, thesisWasCut, type Note, type NotesView } from "../lib/data.ts";
+import {
+  KEPT_NOTE, NOTE_HORIZON, NULL_WORDS, nullText, THESIS_MAX, thesisWasCut, type Note, type NotesView,
+} from "../lib/data.ts";
 import { directionLabel, formatDate, formatNumber, noteStatusLabel } from "../lib/format.ts";
 
-/** The latest 20-session note of a ticker; `view` says whether the notes part is known and whether it was kept. */
+/** The latest 20-session note of a ticker; `view` gives the notes part's state, and whether it can be shown. */
 export default function LatestNote({ note, view }: { note: Note | undefined; view: NotesView }) {
-  if (!view.known) {
-    return <p className="text-sm text-slate-600">Chưa lấy được nhận định của mã này ở lượt cập nhật gần nhất.</p>;
-  }
+  if (!view.known) return <p className="text-sm text-slate-600">{nullText(NULL_WORDS.notes, view.state, view.reasons)}</p>;
   const kept = view.kept && (
-    <p className="text-xs text-amber-800">Của lượt cập nhật trước (lượt gần nhất chưa lấy được nhận định).</p>
+    <p className="text-xs text-amber-800">{KEPT_NOTE} (lượt cập nhật gần nhất chưa lấy được nhận định).</p>
   );
   if (!note) {
     return (
@@ -47,8 +47,8 @@ export default function LatestNote({ note, view }: { note: Note | undefined; vie
         </details>
       ) : (
         <p className="text-xs text-slate-600">
-          Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận bị ẩn vì nhắc tới thông tin ngoài phạm
-          vi kỹ thuật.
+          Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị bộ lọc tự động ẩn. Bộ lọc dò theo
+          từ khóa, vì vậy đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật.
         </p>
       )}
     </div>

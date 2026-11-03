@@ -98,8 +98,8 @@ export default function HomePage() {
                   <td className="relative px-3 py-2 whitespace-nowrap">
                     {latest.main}
                     {view.known && view.kept && (
-                      <span className="text-amber-700" title="Lấy từ lượt cập nhật trước">
-                        *<span className="sr-only"> (lấy từ lượt cập nhật trước)</span>
+                      <span className="text-amber-700" title="Giữ từ một lượt cập nhật trước">
+                        *<span className="sr-only"> (giữ từ một lượt cập nhật trước)</span>
                       </span>
                     )}
                     {latest.sub && <span className="block text-xs text-slate-500">{latest.sub}</span>}
@@ -124,8 +124,18 @@ export default function HomePage() {
             của luật đúng z lần trên cùng y nhận định; “mẫu nhỏ”: chưa đủ 30 nhận định đã chấm có kỳ hạn không chồng lên
             nhau. Đây là số đếm, không phải xác suất.
           </p>
-          {anyUnknown && <p>Ô “—” ở hai cột này: lượt cập nhật gần nhất chưa lấy được nhận định của mã đó.</p>}
-          {anyKept && <p>Dấu * : nhận định và điểm của mã lấy từ lượt cập nhật trước, vì lượt gần nhất chưa lấy được.</p>}
+          {anyUnknown && (
+            <p>
+              Ô “—” ở hai cột này: mã chưa có nhận định, hoặc lượt cập nhật gần nhất chưa lấy được nhận định của mã; trang
+              của mã ghi rõ lý do.
+            </p>
+          )}
+          {anyKept && (
+            <p>
+              Dấu * : nhận định và điểm của mã là dữ liệu giữ từ một lượt cập nhật trước, vì lượt cập nhật gần nhất chưa
+              lấy được.
+            </p>
+          )}
           <p>
             Xếp hạng chỉ phản ánh sức mạnh giá trong quá khứ. Bài kiểm tra lịch sử VN30-1 không tìm thấy đủ bằng chứng rằng
             nắm giữ {VN30_1_TOP} mã có lợi nhuận 6 tháng cao nhất thắng VNINDEX.{" "}

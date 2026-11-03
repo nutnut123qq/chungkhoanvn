@@ -122,16 +122,18 @@ export function sampleLongLabel(status: SampleStatus): string {
 }
 
 export type Cell = { main: string; sub: string | null };
+/** The part of a NotesView the overview cells read: unknown (empty, missing, or a null score) is always "—". */
+export type CellView = Pick<NotesView, "known" | "kept">;
 
 /** "Nhận định mới nhất" cell of the overview table. */
-export function latestNoteCell(view: NotesView, latest: Note | undefined): Cell {
+export function latestNoteCell(view: CellView, latest: Note | undefined): Cell {
   if (!view.known) return { main: DASH, sub: null };
   if (!latest) return { main: "Chưa có", sub: null };
   return { main: directionLabel(latest.direction), sub: formatDate(latest.signalDate) };
 }
 
 /** "Điểm" cell of the overview table: "3/7 đúng" over "mốc 4/7 · mẫu nhỏ". */
-export function scoreCell(view: NotesView, score: Score | null): Cell {
+export function scoreCell(view: CellView, score: Score | null): Cell {
   if (!view.known || !score) return { main: DASH, sub: null };
   const baseline = baselineText(score);
   if (baseline === null) return { main: scoreText(score), sub: null };

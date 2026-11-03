@@ -1,14 +1,12 @@
-import { NOTE_HORIZON, NOTE_LIMIT, type Note, type NotesView } from "../lib/data.ts";
+import { KEPT_NOTE, NOTE_HORIZON, NOTE_LIMIT, NULL_WORDS, nullText, type Note, type NotesView } from "../lib/data.ts";
 import { directionLabel, formatDate, noteStatusLabel } from "../lib/format.ts";
 import Pct from "./Pct.tsx";
 
-/** History of 20-session notes, newest first; `view` says whether the notes part is known and whether it was kept. */
+/** History of 20-session notes, newest first; `view` gives the notes part's state, and whether it can be shown. */
 export default function NotesTable({ notes, view }: { notes: Note[]; view: NotesView }) {
-  if (!view.known) {
-    return <p className="text-sm text-slate-600">Chưa lấy được lịch sử nhận định của mã này ở lượt cập nhật gần nhất.</p>;
-  }
+  if (!view.known) return <p className="text-sm text-slate-600">{nullText(NULL_WORDS.history, view.state, view.reasons)}</p>;
   const kept = view.kept && (
-    <p className="mb-2 text-xs text-amber-800">Của lượt cập nhật trước (lượt gần nhất chưa lấy được nhận định).</p>
+    <p className="mb-2 text-xs text-amber-800">{KEPT_NOTE} (lượt cập nhật gần nhất chưa lấy được nhận định).</p>
   );
   if (notes.length === 0) {
     return (

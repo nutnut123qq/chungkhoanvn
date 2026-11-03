@@ -390,11 +390,14 @@ export function parseSymbol(raw: unknown, expected: string, where = `symbols/${e
 }
 
 // ---- what a part of a ticker may claim (meta.unavailable) ---------------------------
+//
+// Only the suffix of a reason and the null-ness of the ticker's own values decide what a page says. The reason itself
+// is free text from the exporter: it is shown as written and never interpreted.
 
 export type PartUnavailable = {
-  /** The exporter kept the previous run's values: the page shows those. */
+  /** A reason ends with KEPT_SUFFIX: the exporter kept an earlier export's values. */
   kept: boolean;
-  /** The exporter had nothing to keep and wrote the part empty. */
+  /** A reason ends with NOTHING_KEPT_SUFFIX: the read failed and there was nothing to keep. */
   nothingKept: boolean;
   /** The exporter's reasons without the kept/nothing-kept suffix, de-duplicated, in file order. */
   reasons: string[];
@@ -419,63 +422,178 @@ export function partUnavailable(meta: Meta, symbol: string, part: Part): PartUna
 }
 
 /**
- * fresh: read by the latest export; kept: the values are the previous export's; missing: not read this run and
- * nothing kept (including a part the backend does not serve, UNSUPPORTED_CAPABILITY). A candles failure keeps the
- * previous file whole, so the other parts of that ticker are then "kept" too.
+ * The state of one part of a ticker in the latest export, from the suffixes of its meta.unavailable entries:
+ * - fresh: read by the latest export (no entry);
+ * - empty: read, and the backend has nothing for it or does not serve it (entries without a suffix: no 1d
+ *   indicator row, a VNINDEX benchmark that is not "ok", 400 UNSUPPORTED_CAPABILITY);
+ * - missing: the read failed and there was nothing to keep (NOTHING_KEPT_SUFFIX);
+ * - kept: the read failed and the values are an earlier export's, possibly several runs old, since the exporter keeps
+ *   a part again on every failed run (KEPT_SUFFIX). A candles failure keeps the previous file whole, so the other
+ *   parts of that ticker are then "kept" too.
  */
-export type PartState = "fresh" | "kept" | "missing";
+export type PartState = "fresh" | "empty" | "missing" | "kept";
 
 export function partState(meta: Meta, symbol: string, part: Part): PartState {
   const own = partUnavailable(meta, symbol, part);
-  if (own) return own.kept ? "kept" : "missing";
+  if (own) return own.kept ? "kept" : own.nothingKept ? "missing" : "empty";
   if (part !== "candles" && partUnavailable(meta, symbol, "candles")?.kept) return "kept";
   return "fresh";
 }
 
+/** The part's reasons (suffixes removed); empty when the latest export read the part fresh. */
+export function partReasons(meta: Meta, symbol: string, part: Part): string[] {
+  return partUnavailable(meta, symbol, part)?.reasons ?? [];
+}
+
 /**
- * What the notes and the score of a ticker may claim. `known` is false when the notes part was not read and
- * nothing was kept, or the score is null: the pages then show "—" / "chưa lấy được", never "no notes" or
- * "not scored". `kept` marks values copied from the previous export.
+ * What the notes and the score of a ticker may claim. `known` is true only when they can be shown: the part was read
+ * fresh or kept, and the score is not null. Otherwise the overview shows "—" and the ticker page the sentence of the
+ * part's state (nullText), never "no notes" or "not scored". `kept` marks values an earlier export kept.
  */
-export type NotesView = { known: boolean; kept: boolean };
+export type NotesView = { state: PartState; known: boolean; kept: boolean; reasons: string[] };
 
 export function notesView(meta: Meta, symbol: string, score: Score | null): NotesView {
   const state = partState(meta, symbol, "notes");
-  return { known: state !== "missing" && score !== null, kept: state === "kept" };
+  return {
+    state,
+    known: (state === "fresh" || state === "kept") && score !== null,
+    kept: state === "kept",
+    reasons: partReasons(meta, symbol, "notes"),
+  };
 }
 
 const PART_LABELS: Record<Part, string> = { candles: "nến", technical: "chỉ báo kỹ thuật", notes: "nhận định" };
+const STRENGTH = "sức mạnh tương đối";
+const KEPT_PHRASE = "dữ liệu giữ từ một lượt cập nhật trước";
+/** Shown above values an earlier export kept ("một lượt": the exporter may keep a part over several runs). */
+export const KEPT_NOTE = "Dữ liệu giữ từ một lượt cập nhật trước";
 
 function joinVi(items: string[]): string {
   return items.length <= 1 ? (items[0] ?? "") : `${items.slice(0, -1).join(", ")} và ${items[items.length - 1]}`;
 }
 
+function because(reasons: string[]): string {
+  return reasons.length > 0 ? `: ${reasons.join("; ")}` : "";
+}
+
 /**
- * One Vietnamese sentence per group of unavailable parts of a ticker (parts with the same reasons share one
- * sentence), naming each part once and saying whether the page shows the previous run's values.
+ * The words naming a part in a sentence. An empty technical part names what the ticker's file actually lacks: both
+ * the indicators and the relative strength, or only the one that is null. Every other state names the whole part.
  */
-export function unavailableLines(meta: Meta, symbol: string): string[] {
-  const groups = new Map<string, { parts: Part[]; u: PartUnavailable }>();
+function partWords(part: Part, state: PartState, data: SymbolData): string[] {
+  if (part !== "technical" || state !== "empty") return [PART_LABELS[part]];
+  const noIndicators = data.indicators === null;
+  const noStrength = data.relativeStrength === null;
+  if (noIndicators && noStrength) return [PART_LABELS.technical, STRENGTH];
+  return noStrength ? [`${STRENGTH} so VNINDEX`] : [PART_LABELS.technical];
+}
+
+/** What a file kept whole after a candles failure actually holds: a part that is null in it is not named. */
+function keptWholeWords(data: SymbolData): string[] {
+  const words: string[] = [];
+  if (data.candles.length > 0) words.push("biểu đồ");
+  if (data.indicators !== null) words.push(PART_LABELS.technical);
+  if (data.relativeStrength !== null) words.push(STRENGTH);
+  if (data.score !== null) words.push(PART_LABELS.notes);
+  return words;
+}
+
+/**
+ * One Vietnamese sentence per group of parts of a ticker listed in meta.unavailable (parts with the same state and
+ * reasons share one sentence), naming each part once:
+ * - empty: "Chưa có <part>: <reasons>.";
+ * - missing: the latest export did not get it, and there is nothing earlier to show instead;
+ * - kept: the latest export did not get it, and what the page shows is data an earlier export kept. After a candles
+ *   failure the whole file is kept, and the sentence names only what that file holds.
+ */
+export function unavailableLines(meta: Meta, data: SymbolData): string[] {
+  const groups = new Map<string, { parts: Part[]; state: PartState; reasons: string[] }>();
   for (const part of PARTS) {
-    const u = partUnavailable(meta, symbol, part);
+    const u = partUnavailable(meta, data.symbol, part);
     if (!u) continue;
-    const key = JSON.stringify([u.kept, u.nothingKept, u.reasons]);
+    const state = partState(meta, data.symbol, part);
+    const key = JSON.stringify([state, u.reasons]);
     const group = groups.get(key);
     if (group) group.parts.push(part);
-    else groups.set(key, { parts: [part], u });
+    else groups.set(key, { parts: [part], state, reasons: u.reasons });
   }
-  return [...groups.values()].map(({ parts, u }) => {
-    const what = joinVi(parts.map((p) => PART_LABELS[p]));
-    const why = u.reasons.length > 0 ? `: ${u.reasons.join("; ")}` : "";
-    if (u.kept) {
-      const shown = parts.includes("candles")
-        ? "Biểu đồ, chỉ báo và nhận định trên trang này là của lượt cập nhật trước."
-        : `Phần ${what} trên trang này là của lượt cập nhật trước.`;
-      return `Lượt cập nhật gần nhất chưa lấy được ${what}${why}. ${shown}`;
-    }
-    if (u.nothingKept) return `Lượt cập nhật gần nhất chưa lấy được ${what}${why}. Chưa có dữ liệu lượt trước để hiện thay.`;
-    return `Chưa lấy được ${what}${why}.`;
+  return [...groups.values()].map(({ parts, state, reasons }) => {
+    const what = joinVi(parts.flatMap((p) => partWords(p, state, data)));
+    if (state === "empty") return `Chưa có ${what}${because(reasons)}.`;
+    const first = `Lượt cập nhật gần nhất chưa lấy được ${what}${because(reasons)}.`;
+    if (state === "missing") return `${first} Chưa có dữ liệu lượt trước để hiện thay.`;
+    if (!parts.includes("candles")) return `${first} Phần ${what} trên trang này là ${KEPT_PHRASE}.`;
+    const held = joinVi(keptWholeWords(data));
+    return held ? `${first} ${held.charAt(0).toUpperCase()}${held.slice(1)} trên trang này là ${KEPT_PHRASE}.` : first;
   });
+}
+
+/** A card's sentence in place of a null value, per state of its part (see nullText). */
+export type NullWords = { empty: string; missing: string; kept: string };
+
+export const NULL_WORDS = {
+  candles: {
+    empty: "Chưa có dữ liệu nến cho mã này",
+    missing: "Chưa lấy được dữ liệu nến của mã này ở lượt cập nhật gần nhất",
+    kept: `${KEPT_NOTE} không có nến của mã này`,
+  },
+  indicators: {
+    empty: "Chưa có chỉ báo kỹ thuật cho mã này",
+    missing: "Chưa lấy được chỉ báo kỹ thuật của mã này ở lượt cập nhật gần nhất",
+    kept: `${KEPT_NOTE} không có chỉ báo kỹ thuật của mã này`,
+  },
+  strength: {
+    empty: "Chưa có sức mạnh tương đối so VNINDEX",
+    missing: "Chưa lấy được sức mạnh tương đối của mã này ở lượt cập nhật gần nhất",
+    kept: `${KEPT_NOTE} không có sức mạnh tương đối so VNINDEX của mã này`,
+  },
+  notes: {
+    empty: "Chưa có nhận định",
+    missing: "Chưa lấy được nhận định của mã này ở lượt cập nhật gần nhất",
+    kept: `${KEPT_NOTE} không có nhận định của mã này`,
+  },
+  history: {
+    empty: "Chưa có nhận định",
+    missing: "Chưa lấy được lịch sử nhận định của mã này ở lượt cập nhật gần nhất",
+    kept: `${KEPT_NOTE} không có lịch sử nhận định của mã này`,
+  },
+} satisfies Record<string, NullWords>;
+
+/** A card's words in place of reasons that may concern the other value of its part (see technicalCardReasons). */
+const REASONS_AT_TOP = "lý do ghi ở đầu trang";
+
+/**
+ * The sentence a card shows in place of a null value, from its part's state only: an empty part says "chưa có" with
+ * the exporter's reasons (or, when `reasons` is null, sends the reader to the line at the top of the page that lists
+ * them), a missing part "chưa lấy được", and a kept part that the kept data has none (never "chưa lấy được": an
+ * earlier export simply had nothing for it).
+ */
+export function nullText(words: NullWords, state: PartState, reasons: string[] | null): string {
+  switch (state) {
+    case "empty":
+      return reasons === null ? `${words.empty} (${REASONS_AT_TOP}).` : `${words.empty}${because(reasons)}.`;
+    case "missing":
+      return `${words.missing}.`;
+    case "kept":
+      return `${words.kept}.`;
+    default:
+      return `${words.empty}.`; // fresh: the loader lets only candles be empty when read fresh (no candles at all)
+  }
+}
+
+/**
+ * The reasons the two technical cards (indicators, relative strength) give beside a null value. When the part is
+ * empty, both values are null and it has more than one reason, a reason may concern only one of the two values (the
+ * exporter writes one entry for a missing 1d indicator row and another for a VNINDEX benchmark that is not "ok"), and
+ * the page never reads the reason text to tell which: null then, so both cards point to the line at the top of the
+ * page, which names both values with every reason. Otherwise the part's reasons, which concern the one null value or
+ * both values alike.
+ */
+export function technicalCardReasons(meta: Meta, data: SymbolData): string[] | null {
+  const reasons = partReasons(meta, data.symbol, "technical");
+  const split = partState(meta, data.symbol, "technical") === "empty" && data.indicators === null
+    && data.relativeStrength === null && reasons.length > 1;
+  return split ? null : reasons;
 }
 
 /** True when the exporter cut the thesis (THESIS_MAX characters ending with the cut mark). */
@@ -504,6 +622,42 @@ function readJson(dir: string, rel: string): unknown {
   }
 }
 
+/**
+ * A ticker's values against the states of its parts, as the exporter writes them (data-contract.md, "Kept parts"):
+ * a part read fresh has no null of its own (every null gets an entry), an empty part (entries without a suffix)
+ * stands for values that are null, a part not read with nothing kept is written empty, and a part kept on its own
+ * holds something. Any other combination fails the build instead of reaching a page that contradicts itself.
+ */
+function checkPartStates(meta: Meta, data: SymbolData, rel: string): void {
+  const s = data.symbol;
+  const candles = partState(meta, s, "candles");
+  if ((candles === "empty" || candles === "missing") && data.candles.length > 0) {
+    fail(`${rel}.candles`, `không rỗng nhưng meta.unavailable ghi phần candles là "${candles}"`);
+  }
+  const technical = partState(meta, s, "technical");
+  const nulls = (["indicators", "relativeStrength"] as const).filter((k) => data[k] === null);
+  if (technical === "fresh" && nulls.length > 0) {
+    fail(`${rel}.${nulls[0]}`, "null nhưng meta.unavailable không có phần technical của mã này");
+  }
+  if (technical === "empty" && nulls.length === 0) {
+    fail(`${rel}.indicators`, "meta.unavailable ghi phần technical trống nhưng indicators và relativeStrength đều có");
+  }
+  if (technical === "missing" && nulls.length < 2) {
+    fail(`${rel}.indicators`, "meta.unavailable ghi chưa lấy được phần technical nhưng indicators hoặc relativeStrength không null");
+  }
+  if (partUnavailable(meta, s, "technical")?.kept && nulls.length === 2) {
+    fail(`${rel}.indicators`, "meta.unavailable ghi giữ phần technical nhưng indicators và relativeStrength đều null");
+  }
+  const notes = partState(meta, s, "notes");
+  if (notes === "fresh" && data.score === null) fail(`${rel}.score`, "null nhưng meta.unavailable không có phần notes của mã này");
+  if ((notes === "empty" || notes === "missing") && (data.notes.length > 0 || data.score !== null)) {
+    fail(`${rel}.notes`, `meta.unavailable ghi phần notes là "${notes}" nhưng notes không rỗng hoặc score không null`);
+  }
+  if (partUnavailable(meta, s, "notes")?.kept && data.score === null) {
+    fail(`${rel}.score`, "null nhưng meta.unavailable ghi giữ phần notes của mã này");
+  }
+}
+
 /** Reads and validates the whole data set once per process (memoised per directory). */
 const cache = new Map<string, SiteData>();
 
@@ -519,11 +673,7 @@ export function loadSiteData(dir = dataDir()): SiteData {
   for (const s of meta.symbols) {
     const rel = `symbols/${s}.json`;
     const data = parseSymbol(readJson(dir, rel), s);
-    const notesState = partState(meta, s, "notes");
-    // score null means "the notes part is unknown": meta.unavailable must say so.
-    if (data.score === null && notesState === "fresh") fail(`${rel}.score`, "null nhưng meta.unavailable không có phần notes của mã này");
-    // A part written empty (nothing kept, or not served) has no notes to show.
-    if (notesState === "missing" && data.notes.length > 0) fail(`${rel}.notes`, "meta.unavailable ghi chưa lấy được nhận định nhưng notes không rỗng");
+    checkPartStates(meta, data, rel);
     symbols[s] = data;
   }
   const data = { meta, screen, symbols };

@@ -1,4 +1,4 @@
-import type { Indicators, PartState } from "../lib/data.ts";
+import { KEPT_NOTE, NULL_WORDS, nullText, type Indicators, type PartState } from "../lib/data.ts";
 import { formatDate, formatNumber } from "../lib/format.ts";
 import { INDICATOR_DIGITS, indicatorsOlderThan, summarizeIndicators } from "../lib/indicators.ts";
 
@@ -22,26 +22,19 @@ const ROWS: [keyof Indicators, string, number][] = [
   ["atr14", "ATR14", P],
 ];
 
-/** `state` is the technical part's state in the latest export (fresh, kept from the previous run, or missing). */
+/**
+ * `state` is the technical part's in the latest export (lib/data.ts partState); `reasons` what the card gives beside a
+ * null value (technicalCardReasons: null sends the reader to the line at the top of the page).
+ */
 export default function IndicatorPanel({
-  indicators, session, state,
-}: { indicators: Indicators | null; session: string; state: PartState }) {
-  if (!indicators) {
-    return (
-      <p className="text-sm text-slate-600">
-        {state === "fresh"
-          ? "Chưa có dữ liệu chỉ báo kỹ thuật cho mã này."
-          : "Chưa lấy được chỉ báo kỹ thuật của mã này ở lượt cập nhật gần nhất."}
-      </p>
-    );
-  }
+  indicators, session, state, reasons,
+}: { indicators: Indicators | null; session: string; state: PartState; reasons: string[] | null }) {
+  if (!indicators) return <p className="text-sm text-slate-600">{nullText(NULL_WORDS.indicators, state, reasons)}</p>;
   const summary = summarizeIndicators(indicators);
   const older = indicatorsOlderThan(indicators.date, session);
   return (
     <div className="space-y-3">
-      {state === "kept" && (
-        <p className="text-xs text-amber-800">Số liệu của lượt cập nhật trước (lượt gần nhất chưa lấy được).</p>
-      )}
+      {state === "kept" && <p className="text-xs text-amber-800">{KEPT_NOTE} (lượt cập nhật gần nhất chưa lấy được).</p>}
       <p className="text-xs text-slate-600">
         Chỉ báo ngày, phiên {formatDate(indicators.date)}
         {older && <span className="text-amber-800"> (cũ hơn phiên dữ liệu {formatDate(session)})</span>}
