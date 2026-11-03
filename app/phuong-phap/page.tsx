@@ -69,7 +69,9 @@ export default function MethodPage() {
           hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và kết thúc bằng dấu “…”. Trước
           khi đăng, một bộ lọc dò theo từ khóa ẩn cả lập luận khi nghi lập luận nhắc tới vị thế, tiền, lệnh hay hành động
           giao dịch, đường dẫn hay mã nội bộ. Bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm
-          bắt hết mọi cách diễn đạt; vì vậy mô hình được dặn chỉ viết mô tả kỹ thuật về nến và chỉ báo.
+          bắt hết mọi cách diễn đạt; vì vậy hướng dẫn viết của mô hình, từ bản v7 (ngày 03/11/2026), dặn mô hình chỉ viết
+          mô tả kỹ thuật về nến và chỉ báo. Lập luận viết theo bản hướng dẫn cũ hơn, kể cả một số lập luận có ngày tín hiệu
+          03/11/2026, không được dặn như vậy; trang không ghi lập luận nào được viết theo bản nào.
         </p>
       </Section>
 
@@ -145,9 +147,9 @@ export default function MethodPage() {
 
       <Section title="Miễn trừ trách nhiệm">
         <p className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-950">
-          Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải khuyến nghị đầu tư. Trang này không đưa ra lời khuyên
-          giao dịch, không quản lý tiền của ai và không chịu trách nhiệm cho quyết định đầu tư dựa trên nội dung ở đây. Mọi
-          quyết định và rủi ro thuộc về người đọc.
+          Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải khuyến nghị đầu tư. Trang này không nhằm đưa ra lời
+          khuyên giao dịch, không quản lý tiền của ai và không chịu trách nhiệm cho quyết định đầu tư dựa trên nội dung ở
+          đây. Mọi quyết định và rủi ro thuộc về người đọc.
         </p>
       </Section>
     </article>

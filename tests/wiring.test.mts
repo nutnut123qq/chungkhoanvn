@@ -2,11 +2,35 @@
 // client-bundle boundary, and for repository hygiene. Line breaks are matched as \r?\n: a checkout may be CRLF.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = join(import.meta.dirname, "..");
 const src = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
+
+test("Y1: no page, card or document states as a fact that the site gives no advice (the filter cannot guarantee it)", () => {
+  // Theses are published verbatim after a keyword filter that does not catch every wording, so the site may say what
+  // it aims at, never that it gives, holds or contains no advice, however worded: "không" followed within four words
+  // by khuyên, khuyến nghị or tư vấn. Two phrases stay: the aim ("không nhằm đưa ra lời khuyên"), and "không phải
+  // khuyến nghị đầu tư", which says what the automated views are.
+  const ALLOWED = [/không\s+nhằm\s+đưa\s+ra\s+lời\s+khuyên/giu, /không\s+phải\s+khuyến\s+nghị\s+đầu\s+tư/giu];
+  const CLAIM = /không\s+(?:[^\s.!?;:]+\s+){0,4}?(?:khuyên|khuyến\s+nghị|tư\s+vấn)/iu;
+  const claims = (text: string) => ALLOWED.reduce((t, re) => t.replace(re, " "), text).match(CLAIM)?.[0] ?? null;
+  // The wordings tried so far, across a JSX line break, are claims; the two allowed phrases alone are not.
+  for (const claim of ["Trang không chứa lời khuyên giao dịch.", "không tư vấn đầu tư", "không đưa ra lời\r\n          khuyên",
+    "không có khuyến nghị nào", "Không khuyên ai mua", "không phải khuyến nghị đầu tư và không chứa lời khuyên"]) {
+    assert.notEqual(claims(claim), null, claim);
+  }
+  for (const phrase of ["không nhằm đưa ra lời\n          khuyên giao dịch", "Chỉ để tham khảo, không phải khuyến nghị đầu tư."]) {
+    assert.equal(claims(phrase), null, phrase);
+  }
+  const files = ["app", "components", "lib"].flatMap((dir) =>
+    readdirSync(join(ROOT, dir), { recursive: true, encoding: "utf8" }).filter((f) => /\.tsx?$/.test(f)).map((f) => join(dir, f)));
+  files.push("README.md");
+  assert.ok(files.length >= 14, String(files.length));
+  for (const rel of files) assert.equal(claims(src(rel)), null, rel);
+  assert.match(src("app/phuong-phap/page.tsx"), /Trang này không nhằm đưa ra lời\s+khuyên giao dịch, không quản lý tiền của ai/);
+});
 
 test("home page: the notes cells go through notesView (meta.unavailable), not straight from the data", () => {
   const page = src("app/page.tsx");
@@ -78,4 +102,7 @@ test("hygiene: 404 title, ignored local files, README on v2 and its part states"
   assert.doesNotMatch(readme, /theo hợp đồng `vn30-web-data\/v1`/);
   assert.match(readme, /không suy nghĩa từ chữ của lý do/);
   assert.match(readme, /dữ liệu giữ từ một lượt cập nhật trước/);
+  // Y2: the README says the kept line names only what the kept data holds, kept notes with no note included.
+  assert.match(readme, /chỉ kể những giá trị mà dữ liệu giữ thật sự có/);
+  assert.match(readme, /"phần nhận định" khi dữ liệu giữ không có\s+nhận định 20 phiên nào/);
 });

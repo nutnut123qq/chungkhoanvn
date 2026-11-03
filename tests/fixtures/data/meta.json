@@ -5,13 +5,16 @@
   "symbols": [
     "ACB",
     "FPT",
+    "GAS",
     "HPG",
+    "LPB",
     "MBB",
     "SSI",
     "STB",
     "TCB",
     "VCB",
-    "VIC"
+    "VIC",
+    "VPL"
   ],
   "unavailable": [
     {
@@ -30,6 +33,16 @@
       "reason": "backend chưa hỗ trợ mã này"
     },
     {
+      "symbol": "GAS",
+      "part": "technical",
+      "reason": "lỗi HTTP 500; giữ dữ liệu lượt trước"
+    },
+    {
+      "symbol": "GAS",
+      "part": "notes",
+      "reason": "lỗi HTTP 500; giữ dữ liệu lượt trước"
+    },
+    {
       "symbol": "HPG",
       "part": "technical",
       "reason": "lỗi HTTP 429; giữ dữ liệu lượt trước"
@@ -38,6 +51,11 @@
       "symbol": "HPG",
       "part": "notes",
       "reason": "lỗi HTTP 401; chưa có dữ liệu lượt trước"
+    },
+    {
+      "symbol": "LPB",
+      "part": "notes",
+      "reason": "thiếu quyền đọc nhật ký nhận định; giữ dữ liệu lượt trước"
     },
     {
       "symbol": "SSI",
@@ -58,6 +76,11 @@
       "symbol": "VCB",
       "part": "candles",
       "reason": "lỗi HTTP 502; giữ dữ liệu lượt trước"
+    },
+    {
+      "symbol": "VPL",
+      "part": "technical",
+      "reason": "lỗi HTTP 503; giữ dữ liệu lượt trước"
     }
   ],
   "source": "VCI, giá điều chỉnh, qua backend của dự án"

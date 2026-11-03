@@ -12,7 +12,7 @@ const DISCLAIMER = "Nhận định kỹ thuật tự động, chỉ để tham k
 const ADVICE = new Set(["nên", "mua", "bán", "khuyến", "khuyên"]);
 const adviceWords = (text: string) => text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter((w) => ADVICE.has(w));
 const count = (text: string, part: string) => text.split(part).length - 1;
-const TICKERS = ["ACB", "FPT", "HPG", "MBB", "SSI", "STB", "TCB", "VCB", "VIC"];
+const TICKERS = ["ACB", "FPT", "GAS", "HPG", "LPB", "MBB", "SSI", "STB", "TCB", "VCB", "VIC", "VPL"];
 const KEPT = "Dữ liệu giữ từ một lượt cập nhật trước";
 
 /** Visible text of each <td> of the overview row that links to /ma/<ticker>/ (Link drops the slash outside Next). */
@@ -52,6 +52,10 @@ test("home: notes cells say '—' when unknown, mark kept values, and show the s
   assert.deepEqual(cells("SSI"), ["Tăng 03/11/2026", "chưa chấm"]);
   assert.deepEqual(cells("ACB"), ["Tăng* (giữ từ một lượt cập nhật trước) 02/11/2026", "1/1 đúng mốc 0/1 · mẫu nhỏ"]);
   assert.deepEqual(cells("VCB"), ["Đi ngang* (giữ từ một lượt cập nhật trước) 02/11/2026", "chưa chấm"]);
+  assert.deepEqual(cells("GAS"), ["Đi ngang* (giữ từ một lượt cập nhật trước) 02/11/2026", "chưa chấm"]);
+  assert.deepEqual(cells("VPL"), ["Tăng 03/11/2026", "chưa chấm"]);
+  // Kept with no note (LPB): the kept "no note yet" and "not scored", marked as kept.
+  assert.deepEqual(cells("LPB"), ["Chưa có* (giữ từ một lượt cập nhật trước)", "chưa chấm"]);
   // Not served (FPT), not read with nothing kept (HPG), or null in a file kept whole (TCB): "—", never
   // "Chưa có" / "chưa chấm".
   for (const t of ["FPT", "HPG", "TCB"]) assert.deepEqual(cells(t), ["—", "—"], t);
@@ -61,7 +65,7 @@ test("home: notes cells say '—' when unknown, mark kept values, and show the s
   assert.doesNotMatch(text, /lấy từ lượt cập nhật trước|của lượt cập nhật trước/);
   assert.match(text, /trong toàn bộ y nhận định 20 phiên đã chấm của mã, x nhận định đúng; “mốc z\/y”/);
   // The screen-reader caption counts the rows; VN30-1 stays "top 10" whatever the screen's topK (3 here).
-  assert.match(text, /9 mã của rổ VN30 xếp theo lợi nhuận 6 tháng/);
+  assert.match(text, /12 mã của rổ VN30 xếp theo lợi nhuận 6 tháng/);
   assert.doesNotMatch(text, /30 mã/);
   assert.match(text, /★ = 3 mã có lợi nhuận 6 tháng cao nhất/);
   assert.match(text, /nắm giữ 10 mã có lợi nhuận 6 tháng cao nhất thắng VNINDEX/);
@@ -69,10 +73,13 @@ test("home: notes cells say '—' when unknown, mark kept values, and show the s
 });
 
 test("home: the '—' and '*' legends appear only when some row needs them", async () => {
-  // Every notes part read fresh with a score; the empty technical entries the exporter writes stay.
+  // Every notes part read fresh with a score; the empty technical entries the exporter writes stay, and the kept
+  // technical parts of GAS and VPL become empty ones for their null value.
   const dir = fixtureVariant((files) => {
     editUnavailable(files, (l) => l.filter((u) => u.part === "technical" && !u.reason.includes(";")));
-    editUnavailable(files, (l) => [...l, { symbol: "TCB", part: "technical", reason: "backend chưa hỗ trợ mã này" }]);
+    editUnavailable(files, (l) => [...l, { symbol: "TCB", part: "technical", reason: "backend chưa hỗ trợ mã này" },
+      { symbol: "GAS", part: "technical", reason: "dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã" },
+      { symbol: "VPL", part: "technical", reason: "backend chưa có chỉ báo 1d" }]);
     for (const s of ["HPG", "FPT", "TCB"]) {
       files.write(`symbols/${s}.json`, { ...files.read(`symbols/${s}.json`), score: { scored: 0, hits: 0, baselineHits: 0, sampleStatus: "no-data" } });
     }
@@ -139,11 +146,14 @@ test("ticker MBB (fresh): every status label, cut thesis, whole-journal score wi
 });
 
 test("ticker VIC: older indicator row flagged; a null thesis names the filter without claiming why; nothing scored", async () => {
-  const text = visibleText(await renderTicker("VIC"));
+  const html = await renderTicker("VIC");
+  const text = visibleText(html);
   assertClean(text, "VIC");
   assert.match(text, /Chỉ báo ngày, phiên 31\/10\/2026 \(cũ hơn phiên dữ liệu 03\/11\/2026\)/);
-  // T4: hidden by an automatic keyword filter (or empty), which sometimes hides a purely technical thesis too.
-  assert.match(text, /Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị bộ lọc tự động ẩn\. Bộ lọc dò theo từ khóa, vì vậy đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật\./);
+  // T4: hidden by an automatic keyword filter (or empty), which sometimes hides a purely technical thesis too. The
+  // whole paragraph is pinned, so no sentence claiming what the filter guarantees can join it.
+  const hidden = html.match(/<p class="[^"]*">[^<]*Không hiển thị lập luận gốc[^<]*<\/p>/);
+  assert.equal(visibleText(hidden?.[0] ?? ""), "Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị bộ lọc tự động ẩn. Bộ lọc dò theo từ khóa, vì vậy đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật.");
   assert.doesNotMatch(text, /bị ẩn vì nhắc tới thông tin ngoài phạm vi kỹ thuật|ngoài phạm vi kỹ thuật/);
   assert.doesNotMatch(text, /Lập luận gốc của AI/);
   // T5b: "chưa chấm" without a cause (none written, none due or waiting for a bar look the same in the totals).
@@ -183,7 +193,7 @@ test("ticker SSI: no 1d indicator row says 'chưa có' with the reason; relative
 test("ticker ACB: notes kept by an earlier export are shown with a note, never as fresh or missing", async () => {
   const text = visibleText(await renderTicker("ACB"));
   assertClean(text, "ACB");
-  assert.match(text, /Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500\. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước\./);
+  assert.match(text, /Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500\. Nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước\./);
   assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Tăng/);
   assert.match(text, /Điểm nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước\. Nhận định đúng 1\/1 đúng Mốc so sánh của luật 0\/1 đúng/);
   assert.match(text, /Lịch sử nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\./);
@@ -195,7 +205,7 @@ test("ticker ACB: notes kept by an earlier export are shown with a note, never a
 test("ticker HPG: notes not read and nothing kept → '—' / 'chưa lấy được'; technical kept → shown with a note", async () => {
   const text = visibleText(await renderTicker("HPG"));
   assertClean(text, "HPG");
-  assert.match(text, /Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429\. Phần chỉ báo kỹ thuật trên trang này là dữ liệu giữ từ một lượt cập nhật trước\./);
+  assert.match(text, /Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429\. Chỉ báo kỹ thuật và sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước\./);
   assert.match(text, /Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 401\. Chưa có dữ liệu lượt trước để hiện thay\./);
   assert.match(text, /Chỉ báo kỹ thuật Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được\)\. Chỉ báo ngày, phiên 02\/11\/2026/);
   assert.match(text, /Nhận định AI mới nhất Chưa lấy được nhận định của mã này ở lượt cập nhật gần nhất\./);
@@ -213,12 +223,59 @@ test("ticker HPG, one reason in two states (HTTP 500: technical kept, notes noth
   const text = visibleText(html);
   assertClean(text, "HPG");
   assert.deepEqual(topLines(html), [
-    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 500. Phần chỉ báo kỹ thuật trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 500. Chỉ báo kỹ thuật và sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
     "Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500. Chưa có dữ liệu lượt trước để hiện thay.",
   ]);
   assert.doesNotMatch(text, /chỉ báo kỹ thuật và nhận định/);
   assert.match(text, /Nhận định AI mới nhất Chưa lấy được nhận định của mã này ở lượt cập nhật gần nhất\./);
   assert.match(text, /Chỉ báo kỹ thuật Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được\)\./);
+});
+
+test("ticker VPL (Y2): technical kept with the relative strength only: the line names that alone, the indicator card says the kept data has none", async () => {
+  const html = await renderTicker("VPL");
+  const text = visibleText(html);
+  assertClean(text, "VPL");
+  assert.deepEqual(topLines(html), [
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 503. Sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.match(text, /Chỉ báo kỹ thuật Dữ liệu giữ từ một lượt cập nhật trước không có chỉ báo kỹ thuật của mã này\./);
+  assert.match(text, /Sức mạnh tương đối so với VNINDEX Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được\)\. 20 phiên \+4,8% 60 phiên \+12,1%/);
+  // The notes were read fresh: no kept note on their cards; the indicator card never says "chưa lấy được".
+  assert.match(text, /Nhận định AI mới nhất Tăng Kỳ hạn 20 phiên Ngày tín hiệu 03\/11\/2026/);
+  assert.equal(count(text, KEPT), 2);
+  assert.doesNotMatch(text, /Phần chỉ báo kỹ thuật|[Cc]hỉ báo kỹ thuật trên trang này|Chưa lấy được|Chưa có chỉ báo|Chưa có sức mạnh/);
+});
+
+test("ticker GAS (Y2): technical kept with the indicators only and notes kept, one reason: one line naming what is held; the RS card says the kept data has none", async () => {
+  const html = await renderTicker("GAS");
+  const text = visibleText(html);
+  assertClean(text, "GAS");
+  assert.deepEqual(topLines(html), [
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật và nhận định: lỗi HTTP 500. Chỉ báo kỹ thuật và nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.match(text, /Sức mạnh tương đối so với VNINDEX Dữ liệu giữ từ một lượt cập nhật trước không có sức mạnh tương đối so VNINDEX của mã này\./);
+  assert.match(text, /Chỉ báo kỹ thuật Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được\)\. Chỉ báo ngày, phiên 02\/11\/2026 \(cũ hơn phiên dữ liệu 03\/11\/2026\)/);
+  assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Đi ngang/);
+  assert.match(text, /Lịch sử nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\./);
+  assert.doesNotMatch(text, /[Ss]ức mạnh tương đối (?:và|trên trang này)|Chưa lấy được|Chưa có sức mạnh|Chưa có chỉ báo/);
+});
+
+test("ticker LPB (review of r4): notes kept with no note: the line names 'Phần nhận định', every notes card says so", async () => {
+  const html = await renderTicker("LPB");
+  const text = visibleText(html);
+  assertClean(text, "LPB");
+  // The earlier export read an empty journal: what is kept is the absence of a note and a "not scored" total, so the
+  // line does not say "Nhận định trên trang này", which would read as notes shown on the page.
+  assert.deepEqual(topLines(html), [
+    "Lượt cập nhật gần nhất chưa lấy được nhận định: thiếu quyền đọc nhật ký nhận định. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào cho mã này\./);
+  assert.match(text, /Điểm nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước\. chưa chấm: chưa có nhận định 20 phiên nào được chấm\./);
+  assert.match(text, /Lịch sử nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào\./);
+  // Candles and technical read fresh: the three notes cards are the only kept ones.
+  assert.equal(count(text, KEPT), 3);
+  assert.match(text, /Chỉ báo kỹ thuật Chỉ báo ngày, phiên 03\/11\/2026/);
+  assert.doesNotMatch(text, /Nhận định trên trang này|(?<!Phần )nhận định trên trang này|Chưa lấy được|chưa có dữ liệu lượt trước|— /);
 });
 
 test("ticker FPT (not served): 'chưa có' with the reason, one line at the top and on every card; no 'chưa lấy được', no '—'", async () => {
@@ -319,9 +376,12 @@ test("variants: newer indicator row, candles missing / not served / none, an 'ok
   assert.equal(count(stb, "backend chưa có chỉ báo 1d"), 1); // the line at the top only
   assert.equal(count(stb, "dữ liệu VNINDEX chưa khớp"), 1);
 
-  // A technical part kept on its own whose kept data had no relative strength.
+  // A technical part kept on its own whose kept data had no relative strength (Y2: the line names the indicators only).
   const keptOne = fixtureVariant(({ read, write }) => write("symbols/HPG.json", { ...read("symbols/HPG.json"), relativeStrength: null }));
-  const hpg = visibleText(await renderTicker("HPG", keptOne));
+  const hpgHtml = await renderTicker("HPG", keptOne);
+  const hpg = visibleText(hpgHtml);
+  assert.equal(topLines(hpgHtml)[0],
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429. Chỉ báo kỹ thuật trên trang này là dữ liệu giữ từ một lượt cập nhật trước.");
   assert.match(hpg, /Sức mạnh tương đối so với VNINDEX Dữ liệu giữ từ một lượt cập nhật trước không có sức mạnh tương đối so VNINDEX của mã này\./);
   assert.doesNotMatch(hpg, /Chưa lấy được sức mạnh/);
 });
@@ -339,6 +399,14 @@ test("the reason text is never interpreted: the words shown change, the state an
       : u.symbol === "SSI" ? { ...u, reason: "dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã" } : u)));
   assert.match(visibleText(await renderTicker("STB", swapped)), /Sức mạnh tương đối so với VNINDEX Chưa có sức mạnh tương đối so VNINDEX: backend chưa có chỉ báo 1d\./);
   assert.match(visibleText(await renderTicker("SSI", swapped)), /Chỉ báo kỹ thuật Chưa có chỉ báo kỹ thuật cho mã này: dữ liệu VNINDEX chưa khớp/);
+  // A kept part (Y2): what the line names follows the null values, not reasons that read as the other value missing.
+  const keptOdd = fixtureVariant((files) => editUnavailable(files, (l) => l.map((u) =>
+    u.symbol === "VPL" ? { ...u, reason: "dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã; giữ dữ liệu lượt trước" } : u)));
+  const vplHtml = await renderTicker("VPL", keptOdd);
+  assert.deepEqual(topLines(vplHtml), [
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã. Sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.match(visibleText(vplHtml), /Chỉ báo kỹ thuật Dữ liệu giữ từ một lượt cập nhật trước không có chỉ báo kỹ thuật của mã này\./);
   // The data of r2 (old reason strings) still renders, its words shown as written.
   const r2 = fixtureVariant((files) => editUnavailable(files, (l) => l.map((u) =>
     u.symbol === "FPT" ? { ...u, reason: "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)" } : u)));
@@ -370,9 +438,11 @@ test("method page: v2 rules in words, the three part states, the filter as it is
     "Trang chỉ hiển thị và chấm nhận định kỳ hạn 20 phiên",
     "Lập luận gốc của mô hình bằng tiếng Anh, hiển thị nguyên văn",
     "được cắt ở 1.500 ký tự và kết thúc bằng dấu “…”",
-    // T4: a keyword filter, may hide a purely technical thesis, does not catch every wording.
+    // T4: a keyword filter, may hide a purely technical thesis, does not catch every wording. Y1 (review of r4): the
+    // writing rule belongs to a version of the writing instructions (skill v7, from 03/11/2026), not to a date: the ACB
+    // thesis with signal date 03/11/2026 was written under v6. The page cannot tell which thesis followed which.
     "một bộ lọc dò theo từ khóa ẩn cả lập luận khi nghi lập luận nhắc tới vị thế, tiền, lệnh hay hành động giao dịch, đường dẫn hay mã nội bộ",
-    "Bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt; vì vậy mô hình được dặn chỉ viết mô tả kỹ thuật",
+    "Bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt; vì vậy hướng dẫn viết của mô hình, từ bản v7 (ngày 03/11/2026), dặn mô hình chỉ viết mô tả kỹ thuật về nến và chỉ báo. Lập luận viết theo bản hướng dẫn cũ hơn, kể cả một số lập luận có ngày tín hiệu 03/11/2026, không được dặn như vậy; trang không ghi lập luận nào được viết theo bản nào.",
     // T1: the three states of a part.
     "“Chưa có”: backend đã trả lời nhưng chưa có dữ liệu cho phần đó",
     "hoặc chưa hỗ trợ mã đó",
@@ -407,15 +477,22 @@ test("method page: v2 rules in words, the three part states, the filter as it is
   assert.doesNotMatch(text, /tần suất lịch sử của Tăng\/Giảm\/Đi ngang/);
   assert.doesNotMatch(text, /tại lúc chấm/);
   assert.doesNotMatch(text, /trang giữ số liệu của lượt trước cho phần đó/);
-  const disclaimer = /Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải khuyến nghị đầu tư\. Trang này không đưa ra lời khuyên giao dịch[^.]*\./;
-  assert.match(text, disclaimer);
-  assert.deepEqual(adviceWords(text.replace(disclaimer, "")), []);
+  // Y1: the filter cannot guarantee that no thesis gives advice, so the page states its aim, not a fact. The whole
+  // disclaimer is pinned, so no other claim (no advice, no consulting) can be added to it.
+  const disclaimer = "Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải khuyến nghị đầu tư. Trang này không nhằm đưa ra lời khuyên giao dịch, không quản lý tiền của ai và không chịu trách nhiệm cho quyết định đầu tư dựa trên nội dung ở đây. Mọi quyết định và rủi ro thuộc về người đọc.";
+  assert.equal(count(text, disclaimer), 1);
+  assert.doesNotMatch(text, /không đưa ra lời khuyên/);
+  // The date-bound wording of r4 (a v6 thesis is dated 03/11/2026) and its "không theo luật đó" (read as breaking it).
+  assert.doesNotMatch(text, /vì vậy mô hình được dặn|từ ngày 03\/11\/2026, mô hình|không theo luật đó/);
+  assert.deepEqual(adviceWords(text.split(disclaimer).join(" ")), []);
 });
 
 test("layout: the disclaimer twice, the data session and update time on every page", async () => {
   const text = visibleText(await renderLayout());
   assertClean(text, "layout");
   assert.equal(count(text, DISCLAIMER), 2);
+  // Outside the disclaimer, no advice word: the header and footer make no other claim about advice.
+  assert.deepEqual(adviceWords(text.split(DISCLAIMER).join(" ")), []);
   assert.match(text, /Dữ liệu phiên 03\/11\/2026\./);
   assert.match(text, /cập nhật 19:05 03\/11\/2026 \(giờ Việt Nam\)/);
   assert.match(text, /NỘI DUNG TRANG/);

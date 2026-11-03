@@ -488,13 +488,23 @@ function partWords(part: Part, state: PartState, data: SymbolData): string[] {
   return noStrength ? [`${STRENGTH} so VNINDEX`] : [PART_LABELS.technical];
 }
 
-/** What a file kept whole after a candles failure actually holds: a part that is null in it is not named. */
-function keptWholeWords(data: SymbolData): string[] {
+/**
+ * What kept data on the page actually holds, from null values only: of the given parts, or of the whole file when
+ * the parts include candles (a candles failure keeps the previous file whole). A value that is null in the kept data
+ * is not named: a technical part kept on its own may hold only the indicators or only the relative strength, when
+ * the earlier export had no 1d indicator row, or a VNINDEX benchmark that was not "ok". Kept notes (a score that is
+ * not null) are "nhận định" when they hold a 20-session note, and "phần nhận định" when they hold none (a "no-data"
+ * score only): their cards say there is no note yet, and "Nhận định trên trang này" would read as notes shown on the
+ * page.
+ */
+function keptWords(parts: Part[], data: SymbolData): string[] {
+  const whole = parts.includes("candles");
+  const has = (part: Part) => whole || parts.includes(part);
   const words: string[] = [];
-  if (data.candles.length > 0) words.push("biểu đồ");
-  if (data.indicators !== null) words.push(PART_LABELS.technical);
-  if (data.relativeStrength !== null) words.push(STRENGTH);
-  if (data.score !== null) words.push(PART_LABELS.notes);
+  if (whole && data.candles.length > 0) words.push("biểu đồ");
+  if (has("technical") && data.indicators !== null) words.push(PART_LABELS.technical);
+  if (has("technical") && data.relativeStrength !== null) words.push(STRENGTH);
+  if (has("notes") && data.score !== null) words.push(data.notes.length > 0 ? PART_LABELS.notes : `phần ${PART_LABELS.notes}`);
   return words;
 }
 
@@ -503,8 +513,9 @@ function keptWholeWords(data: SymbolData): string[] {
  * reasons share one sentence), naming each part once:
  * - empty: "Chưa có <part>: <reasons>.";
  * - missing: the latest export did not get it, and there is nothing earlier to show instead;
- * - kept: the latest export did not get it, and what the page shows is data an earlier export kept. After a candles
- *   failure the whole file is kept, and the sentence names only what that file holds.
+ * - kept: the latest export did not get it (the whole part is named), and the page shows data an earlier export
+ *   kept: the second sentence names only the values that kept data holds (keptWords), never a value that is null
+ *   in it, whose card says the kept data has none, and never notes when the kept notes hold none.
  */
 export function unavailableLines(meta: Meta, data: SymbolData): string[] {
   const groups = new Map<string, { parts: Part[]; state: PartState; reasons: string[] }>();
@@ -522,8 +533,7 @@ export function unavailableLines(meta: Meta, data: SymbolData): string[] {
     if (state === "empty") return `Chưa có ${what}${because(reasons)}.`;
     const first = `Lượt cập nhật gần nhất chưa lấy được ${what}${because(reasons)}.`;
     if (state === "missing") return `${first} Chưa có dữ liệu lượt trước để hiện thay.`;
-    if (!parts.includes("candles")) return `${first} Phần ${what} trên trang này là ${KEPT_PHRASE}.`;
-    const held = joinVi(keptWholeWords(data));
+    const held = joinVi(keptWords(parts, data));
     return held ? `${first} ${held.charAt(0).toUpperCase()}${held.slice(1)} trên trang này là ${KEPT_PHRASE}.` : first;
   });
 }

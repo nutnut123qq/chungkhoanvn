@@ -54,11 +54,11 @@ test("the v2 fixture set loads and keeps nulls as null", () => {
   const { meta, screen, symbols } = loadSiteData(FIXTURE);
   assert.equal(SCHEMA, "vn30-web-data/v2");
   assert.equal(meta.schema, "vn30-web-data/v2");
-  assert.deepEqual(meta.symbols, ["ACB", "FPT", "HPG", "MBB", "SSI", "STB", "TCB", "VCB", "VIC"]);
+  assert.deepEqual(meta.symbols, ["ACB", "FPT", "GAS", "HPG", "LPB", "MBB", "SSI", "STB", "TCB", "VCB", "VIC", "VPL"]);
   assert.deepEqual(Object.keys(symbols).sort(), meta.symbols);
-  assert.deepEqual(screen.rows.map((r) => r.symbol), ["VIC", "MBB", "ACB", "VCB", "STB", "HPG", "TCB", "SSI", "FPT"]);
-  assert.equal(screen.rows[8].rank, null);
-  assert.equal(screen.rows[8].returns["6"], null);
+  assert.deepEqual(screen.rows.map((r) => r.symbol), ["VIC", "MBB", "ACB", "LPB", "VCB", "STB", "GAS", "HPG", "TCB", "SSI", "FPT", "VPL"]);
+  assert.equal(screen.rows[10].rank, null);
+  assert.equal(screen.rows[10].returns["6"], null);
   assert.equal(symbols.FPT.indicators, null);
   assert.equal(symbols.FPT.relativeStrength, null);
   assert.equal(symbols.FPT.score, null);
@@ -73,6 +73,16 @@ test("the v2 fixture set loads and keeps nulls as null", () => {
   // TCB: kept whole from a run in which technical and notes were not served.
   assert.equal(symbols.TCB.candles.at(-1)?.[0], "2026-11-02");
   assert.deepEqual([symbols.TCB.indicators, symbols.TCB.relativeStrength, symbols.TCB.notes, symbols.TCB.score], [null, null, [], null]);
+  // GAS and VPL (written by the exporter itself, r4/W-site/make_fixtures.py): a technical part kept on its own whose
+  // earlier run had a VNINDEX benchmark that was not "ok" (GAS: indicators only) or no 1d indicator row (VPL: relative
+  // strength only).
+  assert.equal(symbols.GAS.relativeStrength, null);
+  assert.equal(symbols.GAS.indicators?.date, "2026-11-02");
+  assert.equal(symbols.VPL.indicators, null);
+  assert.deepEqual(symbols.VPL.relativeStrength, { "20": 0.0475, "60": 0.1206 });
+  // LPB (written by the exporter too): notes kept from a run that read an empty journal, so no note and a "no-data"
+  // score, the state of most real tickers whenever a notes read fails (review of r4).
+  assert.deepEqual([symbols.LPB.notes, symbols.LPB.score], [[], { scored: 0, hits: 0, baselineHits: 0, sampleStatus: "no-data" }]);
   // The score is the backend's whole-journal total, not a count of the exported notes (2 scored, 1 hit here).
   assert.deepEqual(symbols.MBB.score, { scored: 7, hits: 3, baselineHits: 4, sampleStatus: "insufficient-sample" });
   assert.deepEqual(symbols.MBB.notes.filter((n) => n.status === "scored").map((n) => n.hit), [true, false]);
@@ -85,19 +95,42 @@ test("the v2 fixture set loads and keeps nulls as null", () => {
 });
 
 test("fixtures are producer-shaped: every part state the exporter writes, with the r3 (E5) reasons", () => {
-  const { meta } = loadSiteData(FIXTURE);
+  const { meta, screen, symbols } = loadSiteData(FIXTURE);
   const states = Object.fromEntries(meta.symbols.map((s) => [s, PARTS.map((p) => partState(meta, s, p)).join(" ")]));
   assert.deepEqual(states, {
     ACB: "fresh fresh kept", // notes kept (HTTP error)
     FPT: "fresh empty empty", // technical and notes not served
+    GAS: "fresh kept kept", // technical and notes failed with one reason, both kept
     HPG: "fresh kept missing", // technical kept; notes failed with nothing to keep
+    LPB: "fresh fresh kept", // notes not read (no admin key), kept from a run that read an empty journal
     MBB: "fresh fresh fresh",
     SSI: "fresh empty fresh", // no 1d indicator row
     STB: "fresh empty fresh", // VNINDEX benchmark not "ok"
     TCB: "kept kept kept", // candles failed: the whole previous file, with null parts
     VCB: "kept kept kept", // candles failed: the whole previous file, every part with data
     VIC: "fresh fresh fresh",
+    VPL: "fresh kept fresh", // technical kept
   });
+  // A technical part kept on its own holds what the earlier run had (PreviousRun.kept_technical): both values (HPG),
+  // the indicators only (GAS: that run's VNINDEX benchmark was not "ok") or the relative strength only (VPL: no 1d
+  // indicator row). Never neither: with nothing to keep the exporter writes NOTHING_KEPT instead.
+  const keptTechnical = meta.symbols.filter((s) => partUnavailable(meta, s, "technical")?.kept)
+    .map((s) => [s, symbols[s].indicators !== null, symbols[s].relativeStrength !== null]);
+  assert.deepEqual(keptTechnical, [["GAS", true, false], ["HPG", true, true], ["VPL", false, true]]);
+  // A notes part kept on its own holds the earlier run's score, with notes (ACB, GAS) or with none (LPB: that run read
+  // an empty journal, PreviousRun.kept_notes returns ([], score)).
+  const keptNotes = meta.symbols.filter((s) => partUnavailable(meta, s, "notes")?.kept)
+    .map((s) => [s, symbols[s].notes.length, symbols[s].score?.sampleStatus]);
+  assert.deepEqual(keptNotes, [["ACB", 2, "insufficient-sample"], ["GAS", 1, "no-data"], ["LPB", 0, "no-data"]]);
+  // The screen ranks as vn30_screen does: by 6-month return, highest first (ties by symbol), null without one; rows by
+  // rank, the unranked last, then by symbol.
+  const scored = screen.rows.filter((r) => r.returns["6"] !== null)
+    .sort((a, b) => b.returns["6"]! - a.returns["6"]! || (a.symbol < b.symbol ? -1 : 1));
+  const rank = new Map(scored.map((r, i) => [r.symbol, i + 1]));
+  assert.deepEqual(screen.rows.map((r) => [r.symbol, r.rank]), screen.rows.map((r) => [r.symbol, rank.get(r.symbol) ?? null]));
+  const byRank = [...screen.rows].sort((a, b) =>
+    Number(a.rank === null) - Number(b.rank === null) || (a.rank ?? 0) - (b.rank ?? 0) || (a.symbol < b.symbol ? -1 : 1));
+  assert.deepEqual(screen.rows.map((r) => r.symbol), byRank.map((r) => r.symbol));
   for (const u of meta.unavailable) assert.match(u.reason, E5_REASON, `${u.symbol} ${u.part}`);
   // Entries in the exporter's order: tickers sorted, then candles, technical, notes.
   const order = meta.unavailable.map((u) => `${u.symbol} ${PARTS.indexOf(u.part)}`);
@@ -283,6 +316,8 @@ test("partUnavailable and partState read the suffixes of meta.unavailable, part 
   assert.deepEqual(partUnavailable(meta, "ACB", "notes"), { kept: true, nothingKept: false, reasons: ["lỗi HTTP 500"] });
   assert.deepEqual(partUnavailable(meta, "HPG", "notes"), { kept: false, nothingKept: true, reasons: ["lỗi HTTP 401"] });
   assert.deepEqual(partUnavailable(meta, "HPG", "technical"), { kept: true, nothingKept: false, reasons: ["lỗi HTTP 429"] });
+  assert.deepEqual(partUnavailable(meta, "VPL", "technical"), { kept: true, nothingKept: false, reasons: ["lỗi HTTP 503"] });
+  assert.deepEqual(partUnavailable(meta, "LPB", "notes"), { kept: true, nothingKept: false, reasons: ["thiếu quyền đọc nhật ký nhận định"] });
   assert.deepEqual(partUnavailable(meta, "FPT", "technical"), { kept: false, nothingKept: false, reasons: ["backend chưa hỗ trợ mã này"] });
   assert.deepEqual(partUnavailable(meta, "STB", "technical"), {
     kept: false, nothingKept: false, reasons: ["dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã"],
@@ -327,6 +362,10 @@ test("notesView: known only for a part read fresh or kept that has a score; stat
   assert.deepEqual(view("MBB"), { state: "fresh", known: true, kept: false, reasons: [] });
   assert.deepEqual(view("STB"), { state: "fresh", known: true, kept: false, reasons: [] });
   assert.deepEqual(view("ACB"), { state: "kept", known: true, kept: true, reasons: ["lỗi HTTP 500"] });
+  assert.deepEqual(view("GAS"), { state: "kept", known: true, kept: true, reasons: ["lỗi HTTP 500"] });
+  assert.deepEqual(view("VPL"), { state: "fresh", known: true, kept: false, reasons: [] });
+  // Kept with no note: still known (a "no-data" score), so the cards say there is no note yet, marked as kept.
+  assert.deepEqual(view("LPB"), { state: "kept", known: true, kept: true, reasons: ["thiếu quyền đọc nhật ký nhận định"] });
   assert.deepEqual(view("VCB"), { state: "kept", known: true, kept: true, reasons: [] });
   assert.deepEqual(view("HPG"), { state: "missing", known: false, kept: false, reasons: ["lỗi HTTP 401"] });
   assert.deepEqual(view("FPT"), { state: "empty", known: false, kept: false, reasons: ["backend chưa hỗ trợ mã này"] });
@@ -348,13 +387,23 @@ test("unavailableLines: one sentence per state and reasons, each part named once
   // An empty technical part is named by what the file lacks (T2).
   assert.deepEqual(of("STB"), ["Chưa có sức mạnh tương đối so VNINDEX: dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã."]);
   assert.deepEqual(of("SSI"), ["Chưa có chỉ báo kỹ thuật: backend chưa có chỉ báo 1d."]);
-  // missing and kept.
+  // missing and kept; a kept line names what the kept data holds (Y2).
   assert.deepEqual(of("HPG"), [
-    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429. Phần chỉ báo kỹ thuật trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429. Chỉ báo kỹ thuật và sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
     "Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 401. Chưa có dữ liệu lượt trước để hiện thay.",
   ]);
   assert.deepEqual(of("ACB"), [
-    "Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+    "Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500. Nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.deepEqual(of("VPL"), [
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 503. Sức mạnh tương đối trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.deepEqual(of("GAS"), [
+    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật và nhận định: lỗi HTTP 500. Chỉ báo kỹ thuật và nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  // Kept notes with no note: "phần nhận định", never "Nhận định trên trang này" (review of r4).
+  assert.deepEqual(of("LPB"), [
+    "Lượt cập nhật gần nhất chưa lấy được nhận định: thiếu quyền đọc nhật ký nhận định. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
   ]);
   // A file kept whole: the sentence names only what that file holds (T5e).
   assert.deepEqual(of("VCB"), [
@@ -367,15 +416,14 @@ test("unavailableLines: one sentence per state and reasons, each part named once
   for (const s of meta.symbols) for (const line of of(s)) assert.doesNotMatch(line, /của lượt cập nhật trước|lấy từ lượt/, s);
 });
 
-test("unavailableLines (T2): an empty technical part is named by its null values; missing and kept name the whole part", () => {
+test("unavailableLines (T2): an empty technical part is named by its null values; a failed read names the whole part", () => {
   const both = variant(stbBothNull);
   assert.deepEqual(lines(both, "STB"), [
     "Chưa có chỉ báo kỹ thuật và sức mạnh tương đối: backend chưa có chỉ báo 1d; dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã.",
   ]);
-  // Kept on its own without the relative strength: still the whole part.
+  // Kept on its own without the relative strength: the read that failed is the whole part (what it holds: Y2 test).
   const keptOne = variant((read, write) => write("symbols/HPG.json", { ...read("symbols/HPG.json"), relativeStrength: null }));
-  assert.equal(lines(keptOne, "HPG")[0],
-    "Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429. Phần chỉ báo kỹ thuật trên trang này là dữ liệu giữ từ một lượt cập nhật trước.");
+  assert.match(lines(keptOne, "HPG")[0], /^Lượt cập nhật gần nhất chưa lấy được chỉ báo kỹ thuật: lỗi HTTP 429\. /);
   // Not read with nothing kept (both values null): the whole part.
   const missing = variant((read, write) => {
     write("symbols/SSI.json", { ...read("symbols/SSI.json"), relativeStrength: null });
@@ -398,16 +446,91 @@ test("unavailableLines (T2): an empty technical part is named by its null values
   assert.deepEqual(lines(emptyCandles, "VIC"), ["Chưa có nến: backend chưa hỗ trợ mã này."]);
 });
 
+test("unavailableLines (Y2): a kept line names only the values the kept data holds, from null values only", () => {
+  const kept = (what: string, reason: string, held: string) =>
+    `Lượt cập nhật gần nhất chưa lấy được ${what}: ${reason}. ${held} trên trang này là dữ liệu giữ từ một lượt cập nhật trước.`;
+  const T = "chỉ báo kỹ thuật";
+  // The fixtures written by the exporter: kept with the relative strength only (VPL) and with the indicators only,
+  // grouped with kept notes of the same reason (GAS); both values (HPG).
+  const fixture = (s: string) => lines(FIXTURE, s)[0];
+  assert.equal(fixture("VPL"), kept(T, "lỗi HTTP 503", "Sức mạnh tương đối"));
+  assert.equal(fixture("GAS"), kept(`${T} và nhận định`, "lỗi HTTP 500", "Chỉ báo kỹ thuật và nhận định"));
+  assert.equal(fixture("HPG"), kept(T, "lỗi HTTP 429", "Chỉ báo kỹ thuật và sức mạnh tương đối"));
+  // The same producer states on HPG: the earlier run lacked the relative strength, or the indicator row.
+  const noStrength = variant((read, write) => write("symbols/HPG.json", { ...read("symbols/HPG.json"), relativeStrength: null }));
+  assert.equal(lines(noStrength, "HPG")[0], kept(T, "lỗi HTTP 429", "Chỉ báo kỹ thuật"));
+  const noIndicators = variant((read, write) => write("symbols/HPG.json", { ...read("symbols/HPG.json"), indicators: null }));
+  assert.equal(lines(noIndicators, "HPG")[0], kept(T, "lỗi HTTP 429", "Sức mạnh tương đối"));
+  // Technical (relative strength only) and notes kept with one reason: one line naming what both hold.
+  const grouped = variant((read, write) => {
+    write("symbols/ACB.json", { ...read("symbols/ACB.json"), indicators: null });
+    editUnavailable(read, write, (l) => {
+      const at = l.findIndex((u) => u.symbol === "ACB");
+      return [...l.slice(0, at), { symbol: "ACB", part: "technical", reason: "lỗi HTTP 500; giữ dữ liệu lượt trước" }, ...l.slice(at)];
+    });
+  });
+  assert.deepEqual(lines(grouped, "ACB"), [kept(`${T} và nhận định`, "lỗi HTTP 500", "Sức mạnh tương đối và nhận định")]);
+  // The reason text never picks what is named: reasons that read as the other value missing change nothing but the
+  // reason shown (VPL's reads as a VNINDEX problem, GAS's technical one as a missing indicator row).
+  const misleading = variant((read, write) => editUnavailable(read, write, (l) => l.map((u) =>
+    u.symbol === "VPL" ? { ...u, reason: "dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã; giữ dữ liệu lượt trước" }
+      : u.symbol === "GAS" && u.part === "technical" ? { ...u, reason: "backend chưa có chỉ báo 1d; giữ dữ liệu lượt trước" } : u)));
+  assert.deepEqual(lines(misleading, "VPL"), [kept(T, "dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã", "Sức mạnh tương đối")]);
+  assert.deepEqual(lines(misleading, "GAS"), [
+    kept(T, "backend chưa có chỉ báo 1d", "Chỉ báo kỹ thuật"),
+    kept("nhận định", "lỗi HTTP 500", "Nhận định"),
+  ]);
+  // No kept line on any fixture ticker names the whole technical part ("Phần chỉ báo kỹ thuật", r3) or a value the
+  // kept data lacks (kept notes with no note: next test).
+  const { meta, symbols } = loadSiteData(FIXTURE);
+  for (const s of meta.symbols) {
+    for (const line of unavailableLines(meta, symbols[s])) {
+      assert.doesNotMatch(line, /Phần chỉ báo kỹ thuật/, s);
+      const held = line.split(". ").slice(1).join(". ");
+      if (symbols[s].indicators === null) assert.doesNotMatch(held, /chỉ báo kỹ thuật/i, s);
+      if (symbols[s].relativeStrength === null) assert.doesNotMatch(held, /sức mạnh tương đối/i, s);
+    }
+  }
+});
+
+test("unavailableLines (review of r4): kept notes with no note are 'phần nhận định', never 'Nhận định trên trang này'", () => {
+  const kept = (what: string, reason: string, held: string) =>
+    `Lượt cập nhật gần nhất chưa lấy được ${what}: ${reason}. ${held} trên trang này là dữ liệu giữ từ một lượt cập nhật trước.`;
+  const noData = { scored: 0, hits: 0, baselineHits: 0, sampleStatus: "no-data" };
+  // LPB, written by the exporter: notes kept from a run that read an empty journal (no note, a "no-data" score).
+  assert.deepEqual(lines(FIXTURE, "LPB"), [kept("nhận định", "thiếu quyền đọc nhật ký nhận định", "Phần nhận định")]);
+  // Kept notes that hold a note (ACB): "Nhận định".
+  assert.deepEqual(lines(FIXTURE, "ACB"), [kept("nhận định", "lỗi HTTP 500", "Nhận định")]);
+  // Grouped with a kept technical part of the same reason, the earlier run having read an empty journal (GAS).
+  const gasNoNote = variant((read, write) => write("symbols/GAS.json", { ...read("symbols/GAS.json"), notes: [], score: noData }));
+  assert.deepEqual(lines(gasNoNote, "GAS"), [kept("chỉ báo kỹ thuật và nhận định", "lỗi HTTP 500", "Chỉ báo kỹ thuật và phần nhận định")]);
+  // A file kept whole whose notes part held no note (VCB): the same words.
+  const vcbNoNote = variant((read, write) => write("symbols/VCB.json", { ...read("symbols/VCB.json"), notes: [], score: noData }));
+  assert.deepEqual(lines(vcbNoNote, "VCB"), [
+    kept("nến", "lỗi HTTP 502", "Biểu đồ, chỉ báo kỹ thuật, sức mạnh tương đối và phần nhận định"),
+  ]);
+  // On every fixture ticker: "phần nhận định" exactly when the kept notes hold no note.
+  const { meta, symbols } = loadSiteData(FIXTURE);
+  let named = 0;
+  for (const s of meta.symbols) {
+    const held = unavailableLines(meta, symbols[s]).map((l) => l.split(". ").slice(1).join(". ")).join(" ");
+    if (!/nhận định/i.test(held)) continue;
+    named++;
+    assert.equal(/phần nhận định/i.test(held), symbols[s].notes.length === 0, s);
+  }
+  assert.equal(named, 4); // ACB, GAS, LPB, VCB
+});
+
 test("unavailableLines groups parts only when both the state and the reasons match (producer states of failed reads)", () => {
-  const keptLine = (what: string, reason: string) =>
-    `Lượt cập nhật gần nhất chưa lấy được ${what}: ${reason}. Phần ${what} trên trang này là dữ liệu giữ từ một lượt cập nhật trước.`;
+  const keptLine = (what: string, reason: string, held: string) =>
+    `Lượt cập nhật gần nhất chưa lấy được ${what}: ${reason}. ${held} trên trang này là dữ liệu giữ từ một lượt cập nhật trước.`;
   // One reason, two states (HTTP 500 on both reads; technical kept, nothing to keep for the notes): two sentences.
   // Grouped by reason alone, the notes would be called kept data while every notes card says "chưa lấy được".
   const twoStates = variant((read, write) => editUnavailable(read, write, (l) => l.map((u) => (u.symbol !== "HPG" ? u : {
     ...u, reason: u.part === "technical" ? "lỗi HTTP 500; giữ dữ liệu lượt trước" : "lỗi HTTP 500; chưa có dữ liệu lượt trước",
   }))));
   assert.deepEqual(lines(twoStates, "HPG"), [
-    keptLine("chỉ báo kỹ thuật", "lỗi HTTP 500"),
+    keptLine("chỉ báo kỹ thuật", "lỗi HTTP 500", "Chỉ báo kỹ thuật và sức mạnh tương đối"),
     "Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500. Chưa có dữ liệu lượt trước để hiện thay.",
   ]);
   for (const line of lines(twoStates, "HPG")) assert.doesNotMatch(line, /chỉ báo kỹ thuật và nhận định/);
@@ -417,7 +540,10 @@ test("unavailableLines groups parts only when both the state and the reasons mat
     const at = l.findIndex((u) => u.symbol === "ACB");
     return [...l.slice(0, at), { symbol: "ACB", part: "technical", reason: "lỗi HTTP 429; giữ dữ liệu lượt trước" }, ...l.slice(at)];
   }));
-  assert.deepEqual(lines(keptTwoReasons, "ACB"), [keptLine("chỉ báo kỹ thuật", "lỗi HTTP 429"), keptLine("nhận định", "lỗi HTTP 500")]);
+  assert.deepEqual(lines(keptTwoReasons, "ACB"), [
+    keptLine("chỉ báo kỹ thuật", "lỗi HTTP 429", "Chỉ báo kỹ thuật và sức mạnh tương đối"),
+    keptLine("nhận định", "lỗi HTTP 500", "Nhận định"),
+  ]);
   const emptyTwoReasons = variant((read, write) => {
     write("symbols/STB.json", { ...read("symbols/STB.json"), score: null });
     editUnavailable(read, write, (l) => {
@@ -446,6 +572,8 @@ test("technicalCardReasons: the cards point to the line at the top only for both
   assert.deepEqual(of("SSI"), ["backend chưa có chỉ báo 1d"]); // one value null
   assert.deepEqual(of("STB"), ["dữ liệu VNINDEX chưa khớp tới phiên mới nhất của mã"]);
   assert.deepEqual(of("HPG"), ["lỗi HTTP 429"]); // kept: the cards show data or say the kept data has none
+  assert.deepEqual(of("VPL"), ["lỗi HTTP 503"]);
+  assert.deepEqual(of("GAS"), ["lỗi HTTP 500"]);
   assert.deepEqual(of("MBB"), []);
   const both = loadSiteData(variant(stbBothNull));
   assert.equal(technicalCardReasons(both.meta, both.symbols.STB), null);

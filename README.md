@@ -27,7 +27,12 @@ Trang không gọi API lúc người dùng xem. Mọi số liệu nằm trong th
   - không hậu tố (backend trả rỗng thật hoặc chưa hỗ trợ mã): "Chưa có …: <lý do>";
   - `; chưa có dữ liệu lượt trước`: "chưa lấy được", hiện "—", không bao giờ là "chưa có nhận định" hay "chưa chấm";
   - `; giữ dữ liệu lượt trước`: hiện số liệu kèm ghi chú "dữ liệu giữ từ một lượt cập nhật trước" (exporter có thể
-    giữ qua nhiều lượt liên tiếp).
+    giữ qua nhiều lượt liên tiếp). Câu ở đầu trang chỉ kể những giá trị mà dữ liệu giữ thật sự có, theo giá trị nào
+    `null`: phần chỉ báo giữ riêng có thể chỉ có chỉ báo, hoặc chỉ có sức mạnh tương đối (lượt trước thiếu giá trị
+    kia); khi không đọc được nến và cả file được giữ, câu cũng chỉ kể những phần file đó có. Nhận định được giữ có
+    tên "nhận định" khi dữ liệu giữ có ít nhất một nhận định 20 phiên, và "phần nhận định" khi dữ liệu giữ không có
+    nhận định 20 phiên nào (chỉ có điểm `no-data`). Thẻ của giá trị `null` ghi "Dữ liệu giữ từ một lượt cập nhật
+    trước không có …", không bao giờ "chưa lấy được".
   - Phần chỉ báo trống, cả chỉ báo lẫn sức mạnh tương đối đều `null` và có hơn một lý do: dòng đầu trang nêu cả hai
     cùng mọi lý do, còn hai thẻ ghi "(lý do ghi ở đầu trang)" thay vì lặp lại mọi lý do, vì mỗi lý do có thể chỉ
     thuộc một trong hai giá trị mà trang không đọc chữ của lý do để biết.
@@ -61,7 +66,11 @@ Xem thử thư mục `out/` bằng một static server bất kỳ, ví dụ `pyt
 - `app/` — layout và các trang (Next.js App Router, `output: "export"`).
 - `components/` — biểu đồ (client component duy nhất), bảng chỉ báo, nhận định, điểm, lịch sử.
 - `lib/` — hàm thuần: định dạng vi-VN, nhãn, tóm tắt chỉ báo, SMA, đọc và kiểm tra dữ liệu, đọc `meta.unavailable`.
-- `tests/` — test `node:test`; `tests/fixtures/data/` là bộ dữ liệu mẫu theo đúng hợp đồng và đúng những gì exporter
-  ghi, gồm cả các trường hợp chưa có (backend chưa hỗ trợ mã, chưa có chỉ báo ngày, dữ liệu VNINDEX chưa khớp), chưa
-  lấy được, giữ từ một lượt cập nhật trước, và giữ cả file khi không đọc được nến. `tests/helpers/` render các trang ra
-  HTML tĩnh để test đọc đúng chữ người xem thấy.
+- `tests/` — test `node:test`; `tests/fixtures/data/` là bộ dữ liệu mẫu theo đúng hợp đồng, với trạng thái của từng
+  phần đúng như exporter ghi, gồm cả các trường hợp chưa có (backend chưa hỗ trợ mã, chưa có chỉ báo ngày, dữ liệu
+  VNINDEX chưa khớp), chưa lấy được, giữ từ một lượt cập nhật trước (kể cả phần chỉ báo mà dữ liệu giữ chỉ có chỉ báo,
+  GAS, hoặc chỉ có sức mạnh tương đối, VPL, và nhận định giữ từ một nhật ký rỗng, LPB), và giữ cả file khi không đọc
+  được nến. Ba file GAS, LPB và VPL do chính exporter ghi (hai lượt nối nhau, backend giả); các file khác dựng bằng
+  script riêng, không qua exporter, nên vài giá trị số trong cùng một file chưa khớp nhau như exporter sẽ ghi (ví dụ
+  giá đóng cửa của dòng chỉ báo và của nến cùng phiên). `tests/helpers/` render các trang ra HTML tĩnh để test đọc
+  đúng chữ người xem thấy.
