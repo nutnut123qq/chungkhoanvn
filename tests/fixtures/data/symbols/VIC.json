@@ -511,7 +511,7 @@
       "signalDate": "2026-11-03",
       "horizonSessions": 20,
       "direction": "up",
-      "thesis": "Trend intact above all short averages.",
+      "thesis": null,
       "status": "pending",
       "pendingReason": "immature",
       "targetDate": "2026-12-01",
@@ -521,6 +521,8 @@
   ],
   "score": {
     "scored": 0,
-    "hits": 0
+    "hits": 0,
+    "baselineHits": 0,
+    "sampleStatus": "no-data"
   }
 }

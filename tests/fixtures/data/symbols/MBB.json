@@ -1871,10 +1871,21 @@
       "signalDate": "2026-11-03",
       "horizonSessions": 20,
       "direction": "sideways",
-      "thesis": "Price closed below the 50-day SMA for the third session while RSI14 sits near 38 and the MACD histogram stays negative. The lower Bollinger band has not been tested yet. Over 20 sessions the base case is a range between the recent swing low and the SMA50.",
+      "thesis": "Point 1: The 1d close sits below the 50-session average while the 200-session average is still rising. Point 2: RSI14 is near 38 and the MACD histogram has been negative for six sessions. Point 3: The lower Bollinger band has not been tested yet, and volume is close to its 20-session average. Point 4: Over 20 sessions the base case is a range between the recent swing low and the 50-session average. Point 5: The 1d close sits below the 50-session average while the 200-session average is still rising. Point 6: RSI14 is near 38 and the MACD histogram has been negative for six sessions. Point 7: The lower Bollinger band has not been tested yet, and volume is close to its 20-session average. Point 8: Over 20 sessions the base case is a range between the recent swing low and the 50-session average. Point 9: The 1d close sits below the 50-session average while the 200-session average is still rising. Point 10: RSI14 is near 38 and the MACD histogram has been negative for six sessions. Point 11: The lower Bollinger band has not been tested yet, and volume is close to its 20-session average. Point 12: Over 20 sessions the base case is a range between the recent swing low and the 50-session average. Point 13: The 1d close sits below the 50-session average while the 200-session average is still rising. Point 14: RSI14 is near 38 and the MACD histogram has been negative for six sessions. Point 15: The lower Bollinger band has not been tested yet, and volume is close to its 20-session av…",
       "status": "pending",
       "pendingReason": "immature",
       "targetDate": "2026-12-01",
+      "returnPct": null,
+      "hit": null
+    },
+    {
+      "signalDate": "2026-10-02",
+      "horizonSessions": 20,
+      "direction": "up",
+      "thesis": "Higher lows above the 50-session average.",
+      "status": "pending",
+      "pendingReason": "target-bar-missing",
+      "targetDate": "2026-10-30",
       "returnPct": null,
       "hit": null
     },
@@ -1910,10 +1921,56 @@
       "targetDate": "2026-10-27",
       "returnPct": 0.004,
       "hit": null
+    },
+    {
+      "signalDate": "2026-09-25",
+      "horizonSessions": 20,
+      "direction": "up",
+      "thesis": "Range expansion on rising volume.",
+      "status": "pending",
+      "pendingReason": "signal-bar-missing",
+      "targetDate": "2026-10-23",
+      "returnPct": null,
+      "hit": null
+    },
+    {
+      "signalDate": "2026-09-24",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Inside day after a wide range.",
+      "status": "out-of-window-not-scored",
+      "pendingReason": null,
+      "targetDate": null,
+      "returnPct": null,
+      "hit": null
+    },
+    {
+      "signalDate": "2026-09-23",
+      "horizonSessions": 20,
+      "direction": "down",
+      "thesis": "Close under the 20-session low.",
+      "status": "window-undetermined-not-scored",
+      "pendingReason": null,
+      "targetDate": null,
+      "returnPct": null,
+      "hit": null
+    },
+    {
+      "signalDate": "2026-09-22",
+      "horizonSessions": 20,
+      "direction": "up",
+      "thesis": "Momentum turning up from oversold.",
+      "status": "pending",
+      "pendingReason": "calendar-coverage-expired",
+      "targetDate": null,
+      "returnPct": null,
+      "hit": null
     }
   ],
   "score": {
-    "scored": 2,
-    "hits": 1
+    "scored": 7,
+    "hits": 3,
+    "baselineHits": 4,
+    "sampleStatus": "insufficient-sample"
   }
 }

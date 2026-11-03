@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Không tìm thấy trang",
+  description: "Trang này không có hoặc mã không thuộc rổ VN30 hiện tại.",
+};
 
 export default function NotFound() {
   return (

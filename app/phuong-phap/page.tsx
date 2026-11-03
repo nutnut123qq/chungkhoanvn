@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { loadSiteData } from "../../lib/data.ts";
-import { formatDate } from "../../lib/format.ts";
+import { loadSiteData, NOTE_HORIZON, NOTE_LIMIT, THESIS_MAX } from "../../lib/data.ts";
+import { formatDate, formatNumber, noteStatusLabel, pendingLabel } from "../../lib/format.ts";
 
 export const metadata: Metadata = {
   title: "Phương pháp và giới hạn",
@@ -15,6 +15,10 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     </section>
   );
 }
+
+const H = NOTE_HORIZON;
+const notScored = (status: "no-view" | "out-of-window-not-scored" | "window-undetermined-not-scored") =>
+  noteStatusLabel({ status, pendingReason: null, hit: null, horizonSessions: H });
 
 export default function MethodPage() {
   const { meta, screen } = loadSiteData();
@@ -34,39 +38,74 @@ export default function MethodPage() {
           RSI, MACD, Bollinger, ATR) là giá trị khung ngày mới nhất. Đường SMA50 và SMA200 trên biểu đồ được tính lại từ
           chính các nến hiển thị.
         </p>
+        <p>
+          Mỗi mã có ba phần được đọc riêng: nến, chỉ báo kỹ thuật và nhận định. Nếu một lượt cập nhật không lấy được một phần
+          vì lỗi tạm thời, trang giữ số liệu của lượt trước cho phần đó và ghi rõ ở trang của mã; nếu không có gì để giữ, ô
+          hiện “—” và trang ghi “chưa lấy được”.
+        </p>
       </Section>
 
       <Section title="Nhận định hướng được tạo thế nào">
         <p>
-          Sau mỗi phiên, một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận định cho 20 phiên tới: Tăng, Giảm,
-          Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính hay sự kiện doanh nghiệp. Nhận định được
-          ghi vào nhật ký trước khi biết kết quả. Lập luận gốc của mô hình bằng tiếng Anh, hiển thị nguyên văn ở trang từng
-          mã.
+          Sau mỗi phiên, một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận định cho {H} phiên tới: Tăng,
+          Giảm, Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính hay sự kiện doanh nghiệp. Nhận
+          định được ghi vào nhật ký trước khi biết kết quả. Trang chỉ hiển thị và chấm nhận định kỳ hạn {H} phiên; nhận
+          định kỳ hạn khác (nếu có) không xuất hiện ở đây.
+        </p>
+        <p>
+          Lập luận gốc của mô hình bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất ở trang từng mã. Lập luận dài
+          hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và kết thúc bằng dấu “…”. Lập luận
+          bị ẩn hoàn toàn nếu nhắc tới thông tin ngoài phạm vi kỹ thuật, như vị thế hay số cổ phiếu đang nắm, tiền, giá vốn,
+          lệnh hay hành động giao dịch, đường dẫn, tên hoặc địa chỉ máy, mã nội bộ.
         </p>
       </Section>
 
       <Section title="Cách chấm điểm (luật direction-score-v1 của backend)">
         <ul className="list-disc space-y-1 pl-5">
           <li>
-            Phiên chấm là đúng 20 phiên giao dịch sau phiên tín hiệu theo lịch HOSE. Lợi nhuận R = giá đóng cửa phiên chấm ÷ giá
-            đóng cửa phiên tín hiệu − 1.
+            Phiên chấm là đúng {H} phiên giao dịch sau phiên tín hiệu theo lịch HOSE. Lợi nhuận R = giá đóng cửa điều chỉnh
+            phiên chấm ÷ giá đóng cửa điều chỉnh phiên tín hiệu − 1, tính trên giá điều chỉnh đang lưu tại lúc chấm. Giá
+            điều chỉnh được tính lại sau các sự kiện như chia cổ tức, vì vậy R có thể khác phép chia trên giá gốc.
           </li>
           <li>R từ +5% trở lên là Tăng, từ −4% trở xuống là Giảm, còn lại là Đi ngang.</li>
           <li>Nhận định “Đúng” khi trùng với kết quả thực tế, ngược lại là “Sai”. “Không nhận định” không được chấm.</li>
           <li>
-            Chỉ nhận định ghi trước giờ mở cửa phiên kế tiếp mới được chấm; nếu một phiên có nhiều nhận định, chỉ nhận định sớm
-            nhất được tính.
+            Chỉ nhận định ghi trước giờ mở cửa phiên kế tiếp mới được chấm; nếu một phiên có nhiều nhận định ghi trong hạn,
+            chỉ nhận định sớm nhất được chấm và hiển thị.
           </li>
-          <li>Khi chưa đủ 20 phiên, trạng thái là “Chờ đủ 20 phiên”.</li>
           <li>
-            Mốc so sánh của luật chấm: với mỗi nhận định, lấy kết quả (Tăng, Giảm hay Đi ngang) xảy ra nhiều nhất trong lịch
-            sử của chính mã đó tính tới phiên tín hiệu; hoà thì ưu tiên Đi ngang. Một cách đoán chỉ có ích nếu đúng nhiều hơn
-            mốc này trên cùng các phiên.
+            Mốc so sánh của luật: với mỗi nhận định đã chấm, lấy kết quả (Tăng, Giảm hay Đi ngang) xảy ra nhiều nhất trong
+            lịch sử của chính mã đó tính tới phiên tín hiệu; hoà thì ưu tiên Đi ngang. Một cách đoán chỉ có ích nếu đúng
+            nhiều hơn mốc này trên cùng các phiên.
+          </li>
+        </ul>
+        <p>Trạng thái của từng nhận định:</p>
+        <ul className="list-disc space-y-1 pl-5">
+          <li>“{pendingLabel("immature", H)}”: phiên chấm chưa tới hoặc chưa kết thúc.</li>
+          <li>
+            “{pendingLabel("target-bar-missing", H)}” và “{pendingLabel("signal-bar-missing", H)}”: phiên đã kết thúc nhưng
+            dữ liệu chưa có nến của phiên đó; nhận định chờ tới khi có nến, không dùng nến phiên khác thay.
+          </li>
+          <li>
+            “{pendingLabel("calendar-coverage-expired", H)}”: phiên chấm rơi vào khoảng thời gian chưa có lịch nghỉ của HOSE,
+            vì vậy chưa xác định được ngày chấm.
+          </li>
+          <li>“{notScored("no-view")}”: nhận định không chọn hướng.</li>
+          <li>“{notScored("out-of-window-not-scored")}”: nhận định ghi sau giờ mở cửa phiên kế tiếp phiên tín hiệu.</li>
+          <li>
+            “{notScored("window-undetermined-not-scored")}”: phiên kế tiếp phiên tín hiệu nằm ngoài phần lịch HOSE đã biết,
+            vì vậy chưa xác định được hạn ghi.
           </li>
         </ul>
         <p>
-          “x/y đúng” là số đếm thật trên các nhận định đã chấm của mã đó, không phải xác suất. Mẫu còn nhỏ, vì vậy tỷ lệ này dao
-          động mạnh.
+          Điểm “x/y đúng” của một mã là tổng trên toàn bộ y nhận định {H} phiên đã chấm của mã từ khi bắt đầu ghi, không chỉ
+          các nhận định đang hiển thị (bảng lịch sử chỉ hiện tối đa {NOTE_LIMIT} nhận định gần nhất). Bên cạnh là mốc so
+          sánh “z/y”: số lần mốc của luật đúng trên đúng y nhận định đó, để bạn tự so. Đây là số đếm, không phải xác suất.
+        </p>
+        <p>
+          Trạng thái mẫu: “mẫu nhỏ” khi chưa có 30 nhận định đã chấm có kỳ hạn {H} phiên không chồng lên nhau, “đủ mẫu” khi
+          đã có ít nhất 30. Nhận định ghi mỗi phiên cho {H} phiên tới chồng lên nhau nhiều, vì vậy y lớn hơn nhiều so với số
+          quan sát thật sự độc lập; khi mẫu còn nhỏ, tỷ lệ đúng dao động mạnh.
         </p>
       </Section>
 
@@ -82,7 +121,7 @@ export default function MethodPage() {
             Bảng xếp hạng chỉ đo sức mạnh giá trong quá khứ. Bài kiểm tra lịch sử VN30-1 kết luận chưa đủ bằng chứng rằng nắm
             giữ 10 mã mạnh nhất thắng VNINDEX.
           </li>
-          <li>Dữ liệu có thể trễ, thiếu hoặc sai do nguồn hoặc do lỗi xử lý; ô “—” nghĩa là không có dữ liệu.</li>
+          <li>Dữ liệu có thể trễ, thiếu hoặc sai do nguồn hoặc do lỗi xử lý; ô “—” nghĩa là không có dữ liệu hoặc chưa lấy được.</li>
         </ul>
       </Section>
 

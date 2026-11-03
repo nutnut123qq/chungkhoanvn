@@ -6,7 +6,8 @@ import IndicatorPanel from "../../../components/IndicatorPanel.tsx";
 import LatestNote from "../../../components/LatestNote.tsx";
 import NotesTable from "../../../components/NotesTable.tsx";
 import Pct from "../../../components/Pct.tsx";
-import { loadSiteData } from "../../../lib/data.ts";
+import ScoreSummary from "../../../components/ScoreSummary.tsx";
+import { loadSiteData, NOTE_HORIZON, NOTE_LIMIT, notesView, partState, unavailableLines } from "../../../lib/data.ts";
 import { formatDate, formatNumber } from "../../../lib/format.ts";
 
 type Props = { params: Promise<{ ticker: string }> };
@@ -21,11 +22,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { ticker } = await params;
   return {
     title: `${ticker} — biểu đồ, chỉ báo và nhận định`,
-    description: `Biểu đồ nến, chỉ báo kỹ thuật và nhận định tự động 20 phiên cho ${ticker}. Chỉ để tham khảo, không phải khuyến nghị đầu tư.`,
+    description: `Biểu đồ nến, chỉ báo kỹ thuật và nhận định kỹ thuật tự động kỳ hạn ${NOTE_HORIZON} phiên cho ${ticker}, có chấm điểm. Chỉ để tham khảo, không phải khuyến nghị đầu tư.`,
   };
 }
-
-const PART_LABELS: Record<string, string> = { technical: "chỉ báo kỹ thuật", notes: "nhận định", candles: "nến" };
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -47,7 +46,10 @@ export default async function TickerPage({ params }: Props) {
   const close = last ? last[4] : (row?.close ?? null);
   const closeDate = last ? last[0] : screen.session;
   const subtitle = data.label !== ticker && data.label !== `${ticker} (${ticker})` ? data.label : null;
-  const missingParts = meta.unavailable.filter((u) => u.symbol === ticker).map((u) => PART_LABELS[u.part] ?? u.part);
+  const missingLines = unavailableLines(meta, ticker);
+  const candles = partState(meta, ticker, "candles");
+  const technical = partState(meta, ticker, "technical");
+  const notes = notesView(meta, ticker, data.score);
   const rs = data.relativeStrength;
 
   return (
@@ -68,37 +70,53 @@ export default async function TickerPage({ params }: Props) {
           <span className="text-slate-600"> · phiên {formatDate(closeDate)}</span>
           {row?.rank != null && <span className="text-slate-600"> · hạng {row.rank} theo {screen.rankingMonths} tháng</span>}
         </p>
-        {missingParts.length > 0 && (
-          <p className="mt-1 text-xs text-slate-600">
-            Lượt cập nhật gần nhất chưa lấy được: {missingParts.join(", ")}.
-          </p>
+        {missingLines.length > 0 && (
+          <ul className="mt-2 space-y-1 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-950">
+            {missingLines.map((line) => <li key={line}>{line}</li>)}
+          </ul>
         )}
       </div>
 
       <Card title="Biểu đồ nến ngày">
-        <CandleChart symbol={ticker} candles={data.candles} />
+        {data.candles.length === 0 && candles !== "fresh" ? (
+          <p className="text-sm text-slate-600">Chưa lấy được dữ liệu nến của mã này ở lượt cập nhật gần nhất.</p>
+        ) : (
+          <CandleChart symbol={ticker} candles={data.candles} />
+        )}
       </Card>
 
       <div className="grid gap-6 md:grid-cols-2">
         <Card title="Chỉ báo kỹ thuật">
-          <IndicatorPanel indicators={data.indicators} session={meta.session} />
+          <IndicatorPanel indicators={data.indicators} session={meta.session} state={technical} />
         </Card>
         <div className="space-y-6">
           <Card title="Nhận định AI mới nhất">
-            <LatestNote note={data.notes[0]} score={data.score} />
+            <LatestNote note={data.notes[0]} view={notes} />
+          </Card>
+          <Card title={`Điểm nhận định ${NOTE_HORIZON} phiên`}>
+            <ScoreSummary score={data.score} view={notes} />
           </Card>
           <Card title="Sức mạnh tương đối so với VNINDEX">
             {rs ? (
-              <dl className="grid grid-cols-2 gap-2">
-                {(["20", "60"] as const).map((k) => (
-                  <div key={k} className="rounded-md bg-slate-50 px-3 py-2">
-                    <dt className="text-xs text-slate-600">{k} phiên</dt>
-                    <dd className="text-lg font-semibold"><Pct value={rs[k]} /></dd>
-                  </div>
-                ))}
-              </dl>
+              <>
+                {technical === "kept" && (
+                  <p className="mb-2 text-xs text-amber-800">Số liệu của lượt cập nhật trước (lượt gần nhất chưa lấy được).</p>
+                )}
+                <dl className="grid grid-cols-2 gap-2">
+                  {(["20", "60"] as const).map((k) => (
+                    <div key={k} className="rounded-md bg-slate-50 px-3 py-2">
+                      <dt className="text-xs text-slate-600">{k} phiên</dt>
+                      <dd className="text-lg font-semibold"><Pct value={rs[k]} /></dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
             ) : (
-              <p className="text-sm text-slate-600">Chưa có dữ liệu sức mạnh tương đối cho mã này.</p>
+              <p className="text-sm text-slate-600">
+                {technical === "fresh"
+                  ? "Chưa có dữ liệu sức mạnh tương đối cho mã này."
+                  : "Chưa lấy được sức mạnh tương đối của mã này ở lượt cập nhật gần nhất."}
+              </p>
             )}
             <p className="mt-2 text-xs text-slate-600">
               Chênh lệch lợi nhuận của {ticker} so với VNINDEX trong cùng số phiên.
@@ -109,10 +127,11 @@ export default async function TickerPage({ params }: Props) {
       </div>
 
       <section aria-labelledby="lich-su">
-        <h2 id="lich-su" className="mb-3 text-base font-semibold">Lịch sử nhận định</h2>
-        <NotesTable notes={data.notes} />
+        <h2 id="lich-su" className="mb-3 text-base font-semibold">Lịch sử nhận định {NOTE_HORIZON} phiên</h2>
+        <NotesTable notes={data.notes} view={notes} />
         <p className="mt-2 text-xs text-slate-600">
-          Lợi nhuận tính từ giá đóng cửa phiên tín hiệu tới phiên chấm.{" "}
+          Bảng hiện tối đa {NOTE_LIMIT} nhận định gần nhất. Lợi nhuận {NOTE_HORIZON} phiên tính trên giá đóng cửa điều
+          chỉnh của phiên tín hiệu và phiên chấm, theo giá lưu tại lúc chấm.{" "}
           <Link href="/phuong-phap/" className="underline">Cách chấm điểm</Link>
         </p>
       </section>

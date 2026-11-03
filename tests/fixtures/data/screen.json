@@ -10,7 +10,7 @@
     "12": 0.035
   },
   "rankingMonths": 6,
-  "topK": 10,
+  "topK": 3,
   "missingSessionBar": [],
   "notUpToDate": [],
   "rows": [
@@ -45,6 +45,70 @@
       },
       "rank": 2,
       "top": true
+    },
+    {
+      "symbol": "ACB",
+      "close": 23150,
+      "returns": {
+        "3": 0.021,
+        "6": 0.052,
+        "12": 0.118
+      },
+      "excessVsIndex": {
+        "3": 0.035,
+        "6": 0.14,
+        "12": 0.083
+      },
+      "rank": 3,
+      "top": true
+    },
+    {
+      "symbol": "VCB",
+      "close": 60650,
+      "returns": {
+        "3": -0.004,
+        "6": 0.011,
+        "12": 0.064
+      },
+      "excessVsIndex": {
+        "3": 0.01,
+        "6": 0.099,
+        "12": 0.029
+      },
+      "rank": 4,
+      "top": false
+    },
+    {
+      "symbol": "STB",
+      "close": 19877,
+      "returns": {
+        "3": 0.012,
+        "6": -0.006,
+        "12": 0.21
+      },
+      "excessVsIndex": {
+        "3": 0.026,
+        "6": 0.082,
+        "12": 0.175
+      },
+      "rank": 5,
+      "top": false
+    },
+    {
+      "symbol": "HPG",
+      "close": 26250,
+      "returns": {
+        "3": -0.051,
+        "6": -0.094,
+        "12": -0.02
+      },
+      "excessVsIndex": {
+        "3": -0.037,
+        "6": -0.006,
+        "12": -0.055
+      },
+      "rank": 6,
+      "top": false
     },
     {
       "symbol": "FPT",

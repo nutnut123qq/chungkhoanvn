@@ -2121,6 +2121,8 @@
   ],
   "score": {
     "scored": 0,
-    "hits": 0
+    "hits": 0,
+    "baselineHits": 0,
+    "sampleStatus": "no-data"
   }
 }

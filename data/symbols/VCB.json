@@ -2087,8 +2087,5 @@
   "indicators": null,
   "relativeStrength": null,
   "notes": [],
-  "score": {
-    "scored": 0,
-    "hits": 0
-  }
+  "score": null
 }

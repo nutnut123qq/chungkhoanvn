@@ -1,0 +1,63 @@
+// Source checks for the wiring the render tests cannot see by themselves (which helper feeds which cell), for the
+// client-bundle boundary, and for repository hygiene. Line breaks are matched as \r?\n: a checkout may be CRLF.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+const ROOT = join(import.meta.dirname, "..");
+const src = (rel: string) => readFileSync(join(ROOT, rel), "utf8");
+
+test("home page: the notes cells go through notesView (meta.unavailable), not straight from the data", () => {
+  const page = src("app/page.tsx");
+  assert.match(page, /const view = notesView\(meta, row\.symbol, data\.score\);/);
+  assert.match(page, /latest: latestNoteCell\(view, data\.notes\[0\]\), score: scoreCell\(view, data\.score\)/);
+  assert.doesNotMatch(page, /scoreText\(data\.score\)/);
+  assert.match(page, /\{screen\.rows\.length\} mã của rổ VN30/);
+  assert.doesNotMatch(page, /30 mã/);
+});
+
+test("home page: every cell holding sr-only text is positioned, so the text cannot widen the page on phones", () => {
+  // An absolutely positioned sr-only span inside the scrolling table escapes the scroll box unless its cell is
+  // positioned (sticky or relative); seen as a 558 px page at 390 px when a row carried the kept marker.
+  const cells = src("app/page.tsx").split("<td").slice(1).map((c) => c.split("</td>")[0]);
+  const withSrOnly = cells.filter((c) => c.includes("sr-only"));
+  assert.ok(withSrOnly.length >= 2);
+  for (const cell of withSrOnly) assert.match(cell, /^ className="(?:[^"]*\s)?(?:sticky|relative)\s/, cell.slice(0, 80));
+});
+
+test("ticker page: every card gets the part state of its own part", () => {
+  const page = src("app/ma/[ticker]/page.tsx");
+  assert.match(page, /const missingLines = unavailableLines\(meta, ticker\);/);
+  assert.match(page, /const candles = partState\(meta, ticker, "candles"\);\r?\n\s*const technical = partState\(meta, ticker, "technical"\);\r?\n\s*const notes = notesView\(meta, ticker, data\.score\);/);
+  assert.match(page, /<IndicatorPanel indicators=\{data\.indicators\} session=\{meta\.session\} state=\{technical\} \/>/);
+  assert.match(page, /<Card title="Nhận định AI mới nhất">\r?\n\s*<LatestNote note=\{data\.notes\[0\]\} view=\{notes\} \/>/);
+  assert.match(page, /<ScoreSummary score=\{data\.score\} view=\{notes\} \/>/);
+  assert.match(page, /<NotesTable notes=\{data\.notes\} view=\{notes\} \/>/);
+  assert.match(page, /\{missingLines\.map\(\(line\) => <li key=\{line\}>\{line\}<\/li>\)\}/);
+  assert.doesNotMatch(page, /PART_LABELS/);
+});
+
+test("indicator panel: the 'older' flag compares with <, through indicatorsOlderThan", () => {
+  const panel = src("components/IndicatorPanel.tsx");
+  assert.match(panel, /const older = indicatorsOlderThan\(indicators\.date, session\);/);
+  assert.doesNotMatch(panel, /!== session/);
+  assert.match(src("lib/indicators.ts"), /return date !== null && date < session;/);
+});
+
+test("modules bundled for the browser import data.ts for types only (it reads the file system)", () => {
+  for (const rel of ["lib/format.ts", "lib/indicators.ts", "components/CandleChart.tsx"]) {
+    const imports = src(rel).match(/^import .*from "\.\.?\/(?:lib\/)?data\.ts";\r?$/gm) ?? [];
+    assert.ok(imports.length > 0, rel);
+    for (const line of imports) assert.match(line, /^import type /, `${rel}: ${line}`);
+  }
+});
+
+test("hygiene: 404 title, ignored local files, README on v2", () => {
+  assert.match(src("app/not-found.tsx"), /export const metadata: Metadata = \{\r?\n\s*title: "Không tìm thấy trang",/);
+  const ignored = src(".gitignore").split(/\r?\n/);
+  for (const entry of [".env*", ".vercel", "*.tmp", "node_modules/", ".next/", "out/"]) assert.ok(ignored.includes(entry), entry);
+  const readme = src("README.md");
+  assert.match(readme, /vn30-web-data\/v2/);
+  assert.doesNotMatch(readme, /theo hợp đồng `vn30-web-data\/v1`/);
+});

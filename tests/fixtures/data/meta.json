@@ -1,22 +1,46 @@
 {
-  "schema": "vn30-web-data/v1",
+  "schema": "vn30-web-data/v2",
   "generatedAtUtc": "2026-11-03T12:05:00Z",
   "session": "2026-11-03",
   "symbols": [
+    "ACB",
     "FPT",
+    "HPG",
     "MBB",
+    "STB",
+    "VCB",
     "VIC"
   ],
   "unavailable": [
     {
+      "symbol": "ACB",
+      "part": "notes",
+      "reason": "HTTP 500; giữ dữ liệu lượt trước"
+    },
+    {
       "symbol": "FPT",
       "part": "technical",
-      "reason": "backend chưa phục vụ phân tích kỹ thuật cho mã này"
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
     },
     {
       "symbol": "FPT",
       "part": "notes",
-      "reason": "chưa có nhận định"
+      "reason": "backend chưa hỗ trợ mã này (UNSUPPORTED_CAPABILITY)"
+    },
+    {
+      "symbol": "HPG",
+      "part": "technical",
+      "reason": "HTTP 429; giữ dữ liệu lượt trước"
+    },
+    {
+      "symbol": "HPG",
+      "part": "notes",
+      "reason": "HTTP 401; chưa có dữ liệu lượt trước"
+    },
+    {
+      "symbol": "VCB",
+      "part": "candles",
+      "reason": "HTTP 502; giữ dữ liệu lượt trước"
     }
   ],
   "source": "VCI, giá điều chỉnh, qua backend của dự án"
