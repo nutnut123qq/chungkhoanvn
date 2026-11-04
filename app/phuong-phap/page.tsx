@@ -70,18 +70,19 @@ export default function MethodPage() {
           bằng dấu “…”.
         </p>
         <p>
-          Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: lập luận chỉ được đăng khi nhận định
-          ghi hành động “chờ” hoặc “không có” và ghi là không dựa vào vị thế. Luật thứ hai là một bộ lọc dò theo từ khóa,
-          ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ
-          lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang
-          không ghi lập luận nào bị ẩn theo luật nào.
+          Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: chỉ một số loại nhận định được đăng
+          lập luận, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận
+          khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn
+          oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập
+          luận nào bị ẩn theo luật nào.
         </p>
         <p>
           Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết
-          lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào; không nhắc
-          vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản trước v7 cũng giới hạn mô hình
-          ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu 03/11/2026 có thể được viết theo
-          bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản nào.
+          lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào, trừ vài cụm
+          mô tả biểu đồ; không nhắc vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản
+          trước v7 cũng giới hạn mô hình ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu
+          03/11/2026 có thể được viết theo bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản
+          nào.
         </p>
       </Section>
 

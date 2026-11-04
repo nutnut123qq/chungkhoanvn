@@ -513,20 +513,22 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
   const html = await renderMethod();
   const text = visibleText(html);
   assertClean(text, "phuong-phap");
-  // C1 (r4b): both automatic rules, in general terms (the action-field rule of r4 X1 and the keyword filter); the filter
-  // may hide a purely technical thesis and does not catch every wording; the page does not say which rule hid a thesis,
-  // so a hidden thesis on a ticker page points at no rule. Pinned whole, so no claim of a guarantee or a cause can join.
-  // Review of r4b (NIT): rule 1 reads only the note's two fields, so the page says what the note records ("ghi là không
-  // dựa vào vị thế"), not a fact about the session that wrote it.
+  // C1 (r4b): both automatic rules, in general terms; the filter may hide a purely technical thesis and does not catch
+  // every wording; the page does not say which rule hid a thesis. Pinned whole, so no claim of a guarantee or a cause
+  // can join. r4c: rule 1 is kept general on purpose (it says only that some kinds of notes get their thesis published,
+  // judged by other fields of the note, never by the text); the next test locks its words whatever this pin says.
   const rules = paragraph(html, "Hai luật tự động");
-  assert.equal(rules, "Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: lập luận chỉ được đăng khi nhận định ghi hành động “chờ” hoặc “không có” và ghi là không dựa vào vị thế. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập luận nào bị ẩn theo luật nào.");
+  assert.equal(rules, "Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: chỉ một số loại nhận định được đăng lập luận, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập luận nào bị ẩn theo luật nào.");
   // C2 (r4b): what v7 (03/11/2026) added is the rules for writing a thesis for the public page (Step 4; "trong đó có":
   // it also asks for English, 1500 characters and number formats); the versions before it already kept the model to
   // candles and indicators (skill v1-v6 "Technical-only (candles and indicators)") and had none of these rules. Y1
   // (review of r4): the rules belong to a version, not to a date: the ACB thesis with signal date 03/11/2026 was written
   // under v6, MBB and BID of that date under v7; the page cannot tell which thesis followed which, nor how many.
+  // r4c (cold-check r4b, NIT of the states lens): v7 Step 4 allows a few chart phrases built on those action words
+  // ("selling pressure", "buying pressure", "support held", "price stopped at the low"), so "in any form" has its
+  // exception ("trừ vài cụm mô tả biểu đồ").
   const v7 = paragraph(html, "từ bản v7");
-  assert.equal(v7, "Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào; không nhắc vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản trước v7 cũng giới hạn mô hình ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu 03/11/2026 có thể được viết theo bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản nào.");
+  assert.equal(v7, "Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào, trừ vài cụm mô tả biểu đồ; không nhắc vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản trước v7 cũng giới hạn mô hình ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu 03/11/2026 có thể được viết theo bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản nào.");
   // The r4 sentence named the wrong gap (candles and indicators only) and counted one older thesis as "một số".
   assert.doesNotMatch(text, /dặn mô hình chỉ viết mô tả kỹ thuật|không được dặn như vậy|một số lập luận|gắn với vị thế/);
   // Review of r4b (NIT): only v7 asks for English and nothing enforces it, so a thesis is "thường" in English.
@@ -585,6 +587,46 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
   // The date-bound wording of r4 (a v6 thesis is dated 03/11/2026) and its "không theo luật đó" (read as breaking it).
   assert.doesNotMatch(text, /vì vậy mô hình được dặn|từ ngày 03\/11\/2026, mô hình|không theo luật đó/);
   assert.deepEqual(adviceWords(text.split(disclaimer).join(" ")), []);
+});
+
+// r4c: /phuong-phap/ is read together with the hidden-thesis card of a ticker page, so rule 1 stays general and must
+// not name the field values it looks at. The words: action and holding words in Vietnamese, and the English values.
+const RULE_ONE_WORDS = ["chờ", "vị thế", "hành động", "không có", "giữ", "nắm", "mua", "bán", "lệnh", "tiền", "danh mục",
+  "wait", "none", "hold", "reduce", "sell", "buy", "position", "market", "action"].map((w) => w.normalize("NFC"));
+/** `word` as whole syllables: no letter, mark or digit right before or right after it. */
+const syllables = (word: string) => new RegExp(`(?<![\\p{L}\\p{M}\\p{N}])${word}(?![\\p{L}\\p{M}\\p{N}])`, "u");
+
+/**
+ * Rule 1 as a visitor reads it, found by the page's structure rather than by its wording, so a reworded or re-pinned
+ * paragraph is read too: the one <p> that holds "Luật thứ nhất" (named once on the page), without the keyword filter's
+ * sentence ("Luật thứ hai" up to the full stop that ends it), whose list of what it looks for is where such words
+ * belong. NFC (Vietnamese typed as base letter + combining marks reads the same) and lower case; visibleText already
+ * folds a JSX line break into one space.
+ */
+function ruleOne(html: string): string {
+  const fold = (markup: string) => visibleText(markup).normalize("NFC").toLowerCase();
+  const page = fold(html);
+  assert.equal(count(page, "luật thứ nhất"), 1, "rule 1 is named once on the page");
+  assert.equal(count(page, "luật thứ hai"), 1, "rule 2 is named once on the page");
+  const own = (html.match(/<p\b[^>]*>(?:(?!<\/p>)[\s\S])*<\/p>/g) ?? []).map(fold).filter((p) => p.includes("luật thứ nhất"));
+  assert.equal(own.length, 1, "rule 1 stands in a paragraph");
+  const text = own[0];
+  const filter = text.indexOf("luật thứ hai");
+  if (filter < 0) return text;
+  const end = text.slice(filter).search(/\.(?=\s|$)/);
+  const rest = text.slice(0, filter) + (end < 0 ? "" : text.slice(filter + end + 1));
+  assert.ok(rest.includes("luật thứ nhất"), `rule 1 outside the filter's sentence: ${rest}`);
+  return rest;
+}
+
+test("method page: the rule-1 sentence names none of the listed action, holding or field-value words", async () => {
+  const html = await renderMethod();
+  const rule = ruleOne(html);
+  for (const word of RULE_ONE_WORDS) assert.doesNotMatch(rule, syllables(word), `rule 1 says "${word}": ${rule}`);
+  // Scoped on purpose: elsewhere on the page "Chờ" starts the status labels and the filter's sentence names "hành
+  // động" and "vị thế", so a page-wide check could not tell rule 1 from them.
+  const page = visibleText(html).normalize("NFC").toLowerCase();
+  for (const word of ["chờ", "vị thế", "hành động"]) assert.match(page, syllables(word), word);
 });
 
 test("layout: the disclaimer twice, the data session and update time on every page", async () => {
