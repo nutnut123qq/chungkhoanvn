@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-16",
-      21865.38,
-      22065.61,
-      21745.24,
-      21785.28,
-      26521526
-    ],
-    [
       "2025-10-17",
       21825.33,
       22265.84,
@@ -2082,31 +2074,50 @@
       18600,
       18750,
       23936700
+    ],
+    [
+      "2026-11-03",
+      18800,
+      18900,
+      18550,
+      18900,
+      20614600
     ]
   ],
   "indicators": {
-    "date": "2026-11-02",
-    "close": 18750,
-    "sma50": 19877.0,
-    "sma200": 20499.344,
-    "ema12": 19474.963354766263,
-    "ema26": 19574.30581706919,
-    "ema50": 19701.53495145902,
-    "ema200": 19869.046360193453,
-    "rsi14": 34.0150002722898,
-    "macd": -99.34246230292918,
-    "macdSignal": -55.67761539436991,
-    "macdHistogram": -43.66484690855927,
-    "bollingerUpper": 20195.21754448862,
-    "bollingerMiddle": 19462.5,
-    "bollingerLower": 18729.78245551138,
-    "atr14": 343.23248032326586
+    "date": "2026-11-03",
+    "close": 18900,
+    "sma50": 19849.0,
+    "sma200": 20480.91295,
+    "ema12": 19386.50745403299,
+    "ema26": 19524.357238027027,
+    "ema50": 19670.10220826455,
+    "ema200": 19859.40410785322,
+    "rsi14": 37.616721464613114,
+    "macd": -137.8497839940379,
+    "macdSignal": -72.11204911430353,
+    "macdHistogram": -65.73773487973436,
+    "bollingerUpper": 20212.663381247057,
+    "bollingerMiddle": 19447.5,
+    "bollingerLower": 18682.336618752943,
+    "atr14": 343.7158745858897
   },
   "relativeStrength": {
-    "20": 0.003342,
-    "60": -0.036697
+    "20": 0.018177,
+    "60": -0.013744
   },
   "notes": [
+    {
+      "signalDate": "2026-11-03",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view over the next 20 sessions. The daily close on 2026-11-03 was 18900, a 0.8% gain on the session that followed a 2.8% decline on 2026-11-02 with volume 2.1x its 20-session average; the latest session carried 1.7x its average. Over five sessions the close fell 3.8%, over 20 sessions 1.6% and over 60 sessions 5.1%. The close sits below EMA12 at 19387, below EMA26 at 19524, below SMA50 at 19849 and below SMA200 at 20481, and the daily MACD is negative with a widening negative histogram. Wilder RSI14 is 37.6 on the daily bars, while the simple-average RSI14 in the conditions module reads 42.1, both in the neutral zone. The latest bar has a hammer shape with a low of 18550, which is also the 20- and 60-session low; range position is 0.23 of the 20-session range and 0.13 of the 60-session range. The close is just above the 100-bar value-area low near 18852 and below the point of control near 20133. The regime label is sideways with normal volatility. Relative to the market index the 20-session return is 1.8 points better and the 60-session return 1.4 points worse; against the bank peers it is ahead of two of three on both windows. The daily trend is weak but the decline met heavy volume near a prior low, so the evidence is mixed. The view is sideways: a move to plus 5% near 19845 or minus 4% near 18144 within 20 sessions is not yet confirmed by the candles. For reference only; this kind of call has not beaten an always-sideways answer in blind tests.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-01",
+      "returnPct": null,
+      "hit": null
+    },
     {
       "signalDate": "2026-11-02",
       "horizonSessions": 20,
