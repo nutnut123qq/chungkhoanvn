@@ -43,9 +43,9 @@ export default function ScoreSummary({ score, view }: { score: Score | null; vie
         ))}
       </dl>
       <p className="text-xs text-slate-600">
-        Tính trên toàn bộ {score.scored} nhận định {NOTE_HORIZON} phiên đã chấm của mã, kể cả những nhận định không còn
-        trong bảng lịch sử. Mốc so sánh là số lần đúng nếu mỗi lần chỉ đoán kết quả xảy ra nhiều nhất trong lịch sử của
-        mã tính tới phiên tín hiệu. Đây là số đếm, không phải xác suất.
+        Tính trên toàn bộ {score.scored} nhận định {NOTE_HORIZON} phiên đã chấm của mã, kể cả nhận định không hiện trên
+        trang. Mốc so sánh là số lần đúng nếu mỗi lần chỉ đoán kết quả xảy ra nhiều nhất trong lịch sử của mã tính tới
+        phiên tín hiệu. Đây là số đếm, không phải xác suất.
       </p>
     </div>
   );

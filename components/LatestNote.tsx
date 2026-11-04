@@ -21,7 +21,7 @@ export default function LatestNote({ note, view }: { note: Note | undefined; vie
     return (
       <div className="space-y-2">
         {kept}
-        <p className="text-sm text-slate-600">Chưa có nhận định {NOTE_HORIZON} phiên nào cho mã này.</p>
+        <p className="text-sm text-slate-600">Chưa có nhận định {NOTE_HORIZON} phiên nào được đăng cho mã này.</p>
       </div>
     );
   }
@@ -57,7 +57,8 @@ export default function LatestNote({ note, view }: { note: Note | undefined; vie
           )}
         </details>
       ) : (
-        // Generic on purpose: the page never says which rule hid this thesis, so nothing here can point at one note.
+        // Generic on purpose: a note with no thesis, or a thesis the keyword filter hid. The first rule leaves a note out
+        // whole (r5), so it is never the cause here; the card names no rule, so nothing here can point at one note.
         <p className="text-xs text-slate-600">
           Không hiển thị lập luận gốc: nhận định không có lập luận, hoặc lập luận đã bị luật tự động ẩn. Luật tự động
           đôi khi ẩn cả lập luận chỉ có nội dung kỹ thuật; xem trang{" "}

@@ -119,10 +119,10 @@ export default function HomePage() {
             lệch so với VNINDEX cùng kỳ.
           </p>
           <p>
-            Nhận định mới nhất là hướng của nhận định kỳ hạn {NOTE_HORIZON} phiên gần nhất, kèm ngày tín hiệu. Điểm “x/y
-            đúng”: trong toàn bộ y nhận định {NOTE_HORIZON} phiên đã chấm của mã, x nhận định đúng; “mốc z/y”: mốc so sánh
-            của luật đúng z lần trên cùng y nhận định; “mẫu nhỏ”: chưa đủ 30 nhận định đã chấm có kỳ hạn không chồng lên
-            nhau. Đây là số đếm, không phải xác suất.
+            Nhận định mới nhất là hướng của nhận định kỳ hạn {NOTE_HORIZON} phiên gần nhất hiện trên trang của mã, kèm
+            ngày tín hiệu. Điểm “x/y đúng”: trong toàn bộ y nhận định {NOTE_HORIZON} phiên đã chấm của mã, kể cả nhận định
+            không hiện trên trang, x nhận định đúng; “mốc z/y”: mốc so sánh của luật đúng z lần trên cùng y nhận định;
+            “mẫu nhỏ”: chưa đủ 30 nhận định đã chấm có kỳ hạn không chồng lên nhau. Đây là số đếm, không phải xác suất.
           </p>
           {anyUnknown && (
             <p>

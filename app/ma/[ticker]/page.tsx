@@ -135,9 +135,10 @@ export default async function TickerPage({ params }: Props) {
         <h2 id="lich-su" className="mb-3 text-base font-semibold">Lịch sử nhận định {NOTE_HORIZON} phiên</h2>
         <NotesTable notes={data.notes} view={notes} />
         <p className="mt-2 text-xs text-slate-600">
-          Bảng hiện tối đa {NOTE_LIMIT} nhận định gần nhất. Lợi nhuận {NOTE_HORIZON} phiên tính trên giá đóng cửa điều
-          chỉnh của phiên tín hiệu và phiên chấm. Mỗi lượt cập nhật, backend chấm lại cả nhật ký trên giá điều chỉnh đang
-          lưu, vì vậy lợi nhuận và kết quả Đúng/Sai của nhận định đã chấm có thể đổi khi giá được điều chỉnh lại.{" "}
+          Bảng hiện tối đa {NOTE_LIMIT} nhận định được đăng gần nhất. Lợi nhuận {NOTE_HORIZON} phiên tính trên giá đóng
+          cửa điều chỉnh của phiên tín hiệu và phiên chấm. Mỗi lượt cập nhật, backend chấm lại cả nhật ký trên giá điều
+          chỉnh đang lưu, vì vậy lợi nhuận và kết quả Đúng/Sai của nhận định đã chấm có thể đổi khi giá được điều chỉnh
+          lại.{" "}
           <Link href="/phuong-phap/" className="underline">Cách chấm điểm</Link>
         </p>
       </section>

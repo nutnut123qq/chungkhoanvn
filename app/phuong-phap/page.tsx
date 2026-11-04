@@ -65,16 +65,16 @@ export default function MethodPage() {
           định kỳ hạn {H} phiên; nhận định kỳ hạn khác (nếu có) không xuất hiện ở đây.
         </p>
         <p>
-          Lập luận gốc của mô hình, thường viết bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất ở trang từng
-          mã. Lập luận dài hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và kết thúc
-          bằng dấu “…”.
+          Lập luận gốc của mô hình, thường viết bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất được đăng ở
+          trang từng mã. Lập luận dài hơn {formatNumber(THESIS_MAX)} ký tự được cắt ở {formatNumber(THESIS_MAX)} ký tự và
+          kết thúc bằng dấu “…”.
         </p>
         <p>
-          Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: chỉ một số loại nhận định được đăng
-          lập luận, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận
-          khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn
-          oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập
-          luận nào bị ẩn theo luật nào.
+          Trước khi đăng, nhận định đi qua hai luật tự động. Luật thứ nhất không đọc lập luận: trang chỉ đăng một số loại
+          nhận định, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa trên lập luận của
+          nhận định được đăng, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường
+          dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi
+          cách diễn đạt.
         </p>
         <p>
           Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết
@@ -98,7 +98,8 @@ export default function MethodPage() {
           <li>Nhận định “Đúng” khi trùng với kết quả thực tế, ngược lại là “Sai”. “Không nhận định” không được chấm.</li>
           <li>
             Chỉ nhận định ghi trước giờ mở cửa phiên kế tiếp mới được chấm; nếu một phiên có nhiều nhận định ghi trong hạn,
-            chỉ nhận định sớm nhất được chấm và hiển thị.
+            chỉ nhận định sớm nhất được chấm, còn các nhận định khác ghi trong hạn của phiên đó không được chấm và không
+            hiển thị.
           </li>
           <li>
             Mốc so sánh của luật: với mỗi nhận định đã chấm, lấy kết quả (Tăng, Giảm hay Đi ngang) xảy ra nhiều nhất trong
@@ -106,7 +107,10 @@ export default function MethodPage() {
             chưa có lịch sử nào, mốc là Đi ngang. Một cách đoán chỉ có ích nếu đúng nhiều hơn mốc này trên cùng các phiên.
           </li>
         </ul>
-        <p>Trạng thái của từng nhận định:</p>
+        <p>
+          Bảng lịch sử ở trang từng mã hiện tối đa {NOTE_LIMIT} nhận định được đăng gần nhất, mới nhất trước. Trạng thái
+          của từng nhận định:
+        </p>
         <ul className="list-disc space-y-1 pl-5">
           <li>“{pendingLabel("immature", H)}”: phiên chấm chưa tới hoặc chưa kết thúc.</li>
           <li>
@@ -125,9 +129,9 @@ export default function MethodPage() {
           </li>
         </ul>
         <p>
-          Điểm “x/y đúng” của một mã là tổng trên toàn bộ y nhận định {H} phiên đã chấm của mã từ khi bắt đầu ghi, không chỉ
-          các nhận định đang hiển thị (bảng lịch sử chỉ hiện tối đa {NOTE_LIMIT} nhận định gần nhất). Bên cạnh là mốc so
-          sánh “z/y”: số lần mốc của luật đúng trên đúng y nhận định đó, để bạn tự so. Đây là số đếm, không phải xác suất.
+          Điểm “x/y đúng” của một mã là tổng trên toàn bộ y nhận định {H} phiên đã chấm của mã từ khi bắt đầu ghi, kể cả
+          nhận định không hiện trên trang. Bên cạnh là mốc so sánh “z/y”: số lần mốc của luật đúng trên đúng y nhận định đó,
+          để bạn tự so. Đây là số đếm, không phải xác suất.
         </p>
         <p>
           Trạng thái mẫu: “mẫu nhỏ” khi chưa có 30 nhận định đã chấm có kỳ hạn {H} phiên không chồng lên nhau, “đủ mẫu” khi

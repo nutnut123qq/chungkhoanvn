@@ -8,7 +8,7 @@ export const SCHEMA = "vn30-web-data/v2";
 
 /** The site shows and scores 20-session notes only (the exporter drops every other horizon). */
 export const NOTE_HORIZON = 20;
-/** At most this many notes per ticker, newest first; the score counts the whole journal, not only these. */
+/** At most this many published notes per ticker, newest first; the score counts the whole journal, not only these. */
 export const NOTE_LIMIT = 60;
 export const CANDLE_LIMIT = 260;
 /** A longer thesis is cut to THESIS_MAX - 1 characters followed by THESIS_CUT_MARK. */
@@ -493,9 +493,9 @@ function partWords(part: Part, state: PartState, data: SymbolData): string[] {
  * the parts include candles (a candles failure keeps the previous file whole). A value that is null in the kept data
  * is not named: a technical part kept on its own may hold only the indicators or only the relative strength, when
  * the earlier export had no 1d indicator row, or a VNINDEX benchmark that was not "ok". Kept notes (a score that is
- * not null) are "nhận định" when they hold a 20-session note, and "phần nhận định" when they hold none (a "no-data"
- * score only): their cards say there is no note yet, and "Nhận định trên trang này" would read as notes shown on the
- * page.
+ * not null) are "nhận định" when they hold a 20-session note, and "phần nhận định" when they hold none (a score only,
+ * "no-data" unless the exporter left out every note it had, r5): their cards say no note is published yet, and "Nhận
+ * định trên trang này" would read as notes shown on the page.
  */
 function keptWords(parts: Part[], data: SymbolData): string[] {
   const whole = parts.includes("candles");

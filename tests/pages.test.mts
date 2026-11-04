@@ -5,7 +5,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import {
-  cleanupVariants, FIXTURE, fixtureVariant, renderHome, renderLayout, renderMethod, renderTicker, visibleText,
+  cleanupVariants, FIXTURE, fixtureVariant, renderHome, renderLayout, renderMethod, renderTicker, visibleText, WEB_ROOT,
 } from "./helpers/render.mts";
 
 after(cleanupVariants);
@@ -26,6 +26,30 @@ const CUT_NOTE = "Lập luận dài hơn 1.500 ký tự đã được cắt; d�
 const TIE = ["vị thế", "hành động", "luật thứ", "bộ lọc", "từ khóa", "gắn với", "nắm giữ", "đang giữ", "người viết",
   "danh mục", "bảo đảm"];
 const TIE_WORDS = new RegExp(TIE.join("|"), "iu");
+// The legend under the overview table. Review of r5 (MINOR 2): the exporter may leave out the newest notes, so the
+// "Nhận định mới nhất" column is the newest note shown on the ticker's page, not the newest note written. E2 (r5): the
+// score counts every scored 20-session note, notes not shown included, and gives no reason.
+const HOME_LEGEND = "Nhận định mới nhất là hướng của nhận định kỳ hạn 20 phiên gần nhất hiện trên trang của mã, kèm ngày tín hiệu. Điểm “x/y đúng”: trong toàn bộ y nhận định 20 phiên đã chấm của mã, kể cả nhận định không hiện trên trang, x nhận định đúng; “mốc z/y”: mốc so sánh của luật đúng z lần trên cùng y nhận định; “mẫu nhỏ”: chưa đủ 30 nhận định đã chấm có kỳ hạn không chồng lên nhau. Đây là số đếm, không phải xác suất.";
+// The footnote under every ticker's history, the same on every page (review of r5, MINOR 2: the 60 newest notes that
+// are published, which need not be the 60 newest written; T5d: scored again on every update).
+const FOOTNOTE = "Bảng hiện tối đa 60 nhận định được đăng gần nhất. Lợi nhuận 20 phiên tính trên giá đóng cửa điều chỉnh của phiên tín hiệu và phiên chấm. Mỗi lượt cập nhật, backend chấm lại cả nhật ký trên giá điều chỉnh đang lưu, vì vậy lợi nhuận và kết quả Đúng/Sai của nhận định đã chấm có thể đổi khi giá được điều chỉnh lại. Cách chấm điểm";
+/** What a score card says under a score with `n` scored notes (E2), the same on every page whatever the list shows. */
+const scoreNote = (n: number) => `Tính trên toàn bộ ${n} nhận định 20 phiên đã chấm của mã, kể cả nhận định không hiện trên trang. Mốc so sánh là số lần đúng nếu mỗi lần chỉ đoán kết quả xảy ra nhiều nhất trong lịch sử của mã tính tới phiên tín hiệu. Đây là số đếm, không phải xác suất.`;
+const SAMPLE_SMALL = "Mẫu mẫu còn nhỏ: chưa đủ 30 nhận định đã chấm có kỳ hạn 20 phiên không chồng lên nhau";
+const NO_NOTE = "Chưa có nhận định 20 phiên nào được đăng cho mã này.";
+const NO_HISTORY = "Chưa có nhận định 20 phiên nào được đăng.";
+const KEPT_NOTES = `${KEPT} (lượt cập nhật gần nhất chưa lấy được nhận định).`;
+
+/** The markup of a ticker page's card (<section aria-label=…>) or of its history section (aria-labelledby="lich-su"). */
+function section(html: string, attr: string): string {
+  const all = html.match(new RegExp(`<section\\b[^>]*\\s${attr}[^>]*>(?:(?!<\\/section>)[\\s\\S])*<\\/section>`, "g")) ?? [];
+  assert.equal(all.length, 1, `one section with ${attr}`);
+  return all[0];
+}
+const card = (html: string, title: string) => visibleText(section(html, `aria-label="${title}"`));
+const history = (html: string) => visibleText(section(html, 'aria-labelledby="lich-su"'));
+/** Every number as "#": two renders that differ only in their counts read the same. */
+const masked = (text: string) => text.replace(/\d+/g, "#");
 
 /** A ticker's fixture file as the exporter wrote it (the expectations below follow its notes, not a list). */
 const fixtureSymbol = (ticker: string) => JSON.parse(readFileSync(join(FIXTURE, "symbols", `${ticker}.json`), "utf8"));
@@ -78,7 +102,10 @@ test("home: notes cells say '—' when unknown, mark kept values, and show the s
   assert.match(text, /Ô “—” ở hai cột này: mã chưa có nhận định, hoặc lượt cập nhật gần nhất chưa lấy được nhận định của mã; trang của mã ghi rõ lý do\./);
   assert.match(text, /Dấu \* : nhận định và điểm của mã là dữ liệu giữ từ một lượt cập nhật trước, vì lượt cập nhật gần nhất chưa lấy được\./);
   assert.doesNotMatch(text, /lấy từ lượt cập nhật trước|của lượt cập nhật trước/);
-  assert.match(text, /trong toàn bộ y nhận định 20 phiên đã chấm của mã, x nhận định đúng; “mốc z\/y”/);
+  // E2 (r5): the score counts every scored 20-session note of the ticker, notes not shown included, and gives no reason
+  // why a note is not shown; review of r5: the latest-note column is the newest note shown on the ticker's page. The
+  // caption is pinned whole; "score sentences" and "recency" below also read it by structure.
+  assert.equal(paragraph(html, "Nhận định mới nhất là hướng"), HOME_LEGEND);
   // The screen-reader caption counts the rows; VN30-1 stays "top 10" whatever the screen's topK (3 here).
   assert.match(text, /12 mã của rổ VN30 xếp theo lợi nhuận 6 tháng/);
   assert.doesNotMatch(text, /30 mã/);
@@ -139,14 +166,18 @@ test("home: the '—' legend shows whatever state is behind the '—' rows (not 
 });
 
 test("ticker MBB (fresh): every status label, cut thesis, whole-journal score with baseline and sample", async () => {
-  const text = visibleText(await renderTicker("MBB"));
+  const html = await renderTicker("MBB");
+  const text = visibleText(html);
   assertClean(text, "MBB");
   assert.doesNotMatch(text, /[Cc]hưa lấy được|[Cc]hưa có|lượt cập nhật trước/);
   assert.match(text, /Nhận định AI mới nhất Đi ngang Kỳ hạn 20 phiên Ngày tín hiệu 03\/11\/2026 Ngày chấm 01\/12\/2026 Trạng thái Chờ đủ 20 phiên/);
   assert.match(text, /Point 1: The 1d close sits below/);
   assert.match(text, /…\s*Lập luận dài hơn 1\.500 ký tự đã được cắt; dấu … đánh dấu chỗ cắt\./);
   assert.match(text, /Nhận định đúng 3\/7 đúng Mốc so sánh của luật 4\/7 đúng Mẫu mẫu còn nhỏ: chưa đủ 30 nhận định đã chấm/);
-  assert.match(text, /Tính trên toàn bộ 7 nhận định 20 phiên đã chấm của mã, kể cả những nhận định không còn trong bảng lịch sử\./);
+  // E2 (r5): every scored note of the ticker, notes not shown on the page included, with no reason. The r4c wording
+  // ("không còn trong bảng lịch sử") gave one, and a note the exporter leaves out was never in the table.
+  assert.equal(paragraph(html, "Tính trên toàn bộ"), scoreNote(7));
+  assert.doesNotMatch(text, /không còn trong bảng lịch sử/);
   const rows = [
     "03/11/2026 Đi ngang 01/12/2026 — Chờ đủ 20 phiên",
     "02/10/2026 Tăng 30/10/2026 — Chờ nến phiên chấm (đang thiếu)",
@@ -159,8 +190,10 @@ test("ticker MBB (fresh): every status label, cut thesis, whole-journal score wi
     "22/09/2026 Tăng — — Chờ lịch nghỉ HOSE để định phiên chấm",
   ];
   assert.ok(text.includes(rows.join(" ")), "history rows in order");
-  // T5d: the backend scores the whole journal again on every update, on the adjusted prices stored then.
-  assert.match(text, /Bảng hiện tối đa 60 nhận định gần nhất\. Lợi nhuận 20 phiên tính trên giá đóng cửa điều chỉnh của phiên tín hiệu và phiên chấm\. Mỗi lượt cập nhật, backend chấm lại cả nhật ký trên giá điều chỉnh đang lưu, vì vậy lợi nhuận và kết quả Đúng\/Sai của nhận định đã chấm có thể đổi khi giá được điều chỉnh lại\./);
+  // T5d: the backend scores the whole journal again on every update, on the adjusted prices stored then. Review of r5:
+  // the table holds the 60 newest published notes; the footnote is pinned whole, so nothing about this ticker's notes
+  // (the score counts 7, the table shows 2 scored) can join it.
+  assert.equal(paragraph(html, "Bảng hiện tối đa"), FOOTNOTE);
   assert.doesNotMatch(text, /tại lúc chấm/);
 });
 
@@ -169,14 +202,15 @@ test("ticker VIC: older indicator row flagged; a null thesis says 'luật tự �
   const text = visibleText(html);
   assertClean(text, "VIC");
   assert.match(text, /Chỉ báo ngày, phiên 31\/10\/2026 \(cũ hơn phiên dữ liệu 03\/11\/2026\)/);
-  // T4 + C1 (r4b): an empty thesis, or one hidden by the automatic rules (the action-field rule since r4, or the keyword
-  // filter), which sometimes hide a purely technical thesis too. The card names neither rule and says nothing about an
+  // T4 + C1 (r4b) + E3 (r5): an empty thesis, or one the keyword filter hid, which sometimes hides a purely technical
+  // thesis too. Since r5 the first rule leaves a note out whole, so it is never the cause of this card, and the card
+  // still names no rule (none of the first rule's words: fields, kinds of notes, publishing) and says nothing about an
   // action, a position or money, so it cannot point at this note; /phuong-phap/ describes the rules. The whole paragraph
   // is pinned, so no sentence claiming a cause or what the rules guarantee can join it.
   const hidden = html.match(/<p class="[^"]*">(?:(?!<\/p>)[\s\S])*Không hiển thị lập luận gốc(?:(?!<\/p>)[\s\S])*<\/p>/)?.[0] ?? "";
   assert.equal(visibleText(hidden), CARD);
   assert.match(hidden, /<a\b[^>]*\shref="\/phuong-phap\/?"[^>]*>Phương pháp và giới hạn<\/a>/); // Link drops the slash outside Next
-  assert.doesNotMatch(visibleText(hidden), /vị thế|hành động|tiền|lệnh|giữ|chờ|gắn với|từ khóa/i);
+  assert.doesNotMatch(visibleText(hidden), /vị thế|hành động|tiền|lệnh|giữ|chờ|gắn với|từ khóa|trường|loại nhận định|đăng/i);
   // Review of r4b: the whole "Nhận định AI mới nhất" card is pinned, so no sibling sentence (a cause for this note, a
   // holding) can join the paragraph above, whatever its words. Its class is pinned too: static text cannot see a class
   // that hides it (sr-only, hidden, invisible), and a reader would then see no card at all.
@@ -199,8 +233,9 @@ test("ticker STB: relative strength empty (VNINDEX not aligned) says 'chưa có'
   assert.match(text, /Sức mạnh tương đối so với VNINDEX Chưa có sức mạnh tương đối so VNINDEX: dữ liệu VNINDEX/);
   assert.match(text, /Chỉ báo kỹ thuật Chỉ báo ngày, phiên 03\/11\/2026/);
   assert.doesNotMatch(text, /Chưa có chỉ báo kỹ thuật|Chưa có dữ liệu/);
-  assert.match(text, /Chưa có nhận định 20 phiên nào cho mã này\./);
-  assert.match(text, /Chưa có nhận định 20 phiên nào\./);
+  // r5: "được đăng": the exporter may leave notes out, so an empty list says none is published, which stays true then.
+  assert.match(text, /Nhận định AI mới nhất Chưa có nhận định 20 phiên nào được đăng cho mã này\./);
+  assert.match(text, /Lịch sử nhận định 20 phiên Chưa có nhận định 20 phiên nào được đăng\./);
   assert.match(text, /Điểm nhận định 20 phiên chưa chấm: chưa có nhận định 20 phiên nào được chấm\./);
   assert.match(text, /Giá đóng cửa 19\.877 nằm ở mức SMA50 \(19\.877\) và trên SMA200 \(19\.650\)\./);
   assert.match(text, /RSI14 = 70,0 \(từ 70 trở lên\)\./);
@@ -220,8 +255,14 @@ test("ticker SSI: no 1d indicator row says 'chưa có' with the reason; relative
 });
 
 test("ticker ACB: notes kept by an earlier export are shown with a note, never as fresh or missing", async () => {
-  const text = visibleText(await renderTicker("ACB"));
+  const html = await renderTicker("ACB");
+  const text = visibleText(html);
   assertClean(text, "ACB");
+  // Review of r5 (MINOR 3): the score counts exactly the scored note the table shows (1 and 1), and the score card and
+  // the footnote still say what they say on every page, the E2 phrase included: none of their words depends on whether
+  // the score counts notes that are not listed.
+  assert.equal(paragraph(html, "Tính trên toàn bộ"), scoreNote(1));
+  assert.equal(paragraph(html, "Bảng hiện tối đa"), FOOTNOTE);
   assert.match(text, /Lượt cập nhật gần nhất chưa lấy được nhận định: lỗi HTTP 500\. Nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước\./);
   assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Tăng/);
   assert.match(text, /Điểm nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước\. Nhận định đúng 1\/1 đúng Mốc so sánh của luật 0\/1 đúng/);
@@ -298,9 +339,9 @@ test("ticker LPB (review of r4): notes kept with no note: the line names 'Phần
   assert.deepEqual(topLines(html), [
     "Lượt cập nhật gần nhất chưa lấy được nhận định: thiếu quyền đọc nhật ký nhận định. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
   ]);
-  assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào cho mã này\./);
+  assert.match(text, /Nhận định AI mới nhất Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào được đăng cho mã này\./);
   assert.match(text, /Điểm nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước\. chưa chấm: chưa có nhận định 20 phiên nào được chấm\./);
-  assert.match(text, /Lịch sử nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào\./);
+  assert.match(text, /Lịch sử nhận định 20 phiên Dữ liệu giữ từ một lượt cập nhật trước \(lượt cập nhật gần nhất chưa lấy được nhận định\)\. Chưa có nhận định 20 phiên nào được đăng\./);
   // Candles and technical read fresh: the three notes cards are the only kept ones.
   assert.equal(count(text, KEPT), 3);
   assert.match(text, /Chỉ báo kỹ thuật Chỉ báo ngày, phiên 03\/11\/2026/);
@@ -514,11 +555,19 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
   const text = visibleText(html);
   assertClean(text, "phuong-phap");
   // C1 (r4b): both automatic rules, in general terms; the filter may hide a purely technical thesis and does not catch
-  // every wording; the page does not say which rule hid a thesis. Pinned whole, so no claim of a guarantee or a cause
-  // can join. r4c: rule 1 is kept general on purpose (it says only that some kinds of notes get their thesis published,
-  // judged by other fields of the note, never by the text); the next test locks its words whatever this pin says.
-  const rules = paragraph(html, "Hai luật tự động");
-  assert.equal(rules, "Hai luật tự động có thể ẩn cả lập luận. Luật thứ nhất không đọc lập luận: chỉ một số loại nhận định được đăng lập luận, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt. Trang không ghi lập luận nào bị ẩn theo luật nào.");
+  // every wording. Pinned whole, so no claim of a guarantee or a cause can join. r4c: rule 1 is kept general on purpose
+  // (judged by other fields of the note, never by the text); the rule-1 tests below lock its words whatever this pin
+  // says. E1 (r5): rule 1 decides which notes are published at all (the exporter leaves the others out whole), and the
+  // keyword filter reads the thesis of a published note; with no thesis hidden by rule 1 any more, the r4c "Trang không
+  // ghi lập luận nào bị ẩn theo luật nào" has nothing left to say and is gone.
+  const rules = paragraph(html, "Trước khi đăng");
+  assert.equal(rules, "Trước khi đăng, nhận định đi qua hai luật tự động. Luật thứ nhất không đọc lập luận: trang chỉ đăng một số loại nhận định, xét theo các trường khác của nhận định. Luật thứ hai là một bộ lọc dò theo từ khóa trên lập luận của nhận định được đăng, ẩn cả lập luận khi nghi lập luận nhắc tới hành động giao dịch, vị thế, tiền, lệnh, đường dẫn hay mã nội bộ; bộ lọc có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật, và không bảo đảm bắt hết mọi cách diễn đạt.");
+  // The r4c wording r5 replaces: rule 1 published theses only, two rules could hide a thesis, the score sentence gave
+  // the 60-note table as the reason a note is not shown, and the earliest note of a session was said to be shown.
+  assert.doesNotMatch(text, /được đăng lập luận|có thể ẩn cả lập luận|theo luật nào|không chỉ các nhận định đang hiển thị|được chấm và hiển thị/);
+  // E2 (r5): every scored 20-session note of the ticker, notes not shown included, and no reason; pinned whole.
+  const score = paragraph(html, "Điểm “x/y đúng”");
+  assert.equal(score, "Điểm “x/y đúng” của một mã là tổng trên toàn bộ y nhận định 20 phiên đã chấm của mã từ khi bắt đầu ghi, kể cả nhận định không hiện trên trang. Bên cạnh là mốc so sánh “z/y”: số lần mốc của luật đúng trên đúng y nhận định đó, để bạn tự so. Đây là số đếm, không phải xác suất.");
   // C2 (r4b): what v7 (03/11/2026) added is the rules for writing a thesis for the public page (Step 4; "trong đó có":
   // it also asks for English, 1500 characters and number formats); the versions before it already kept the model to
   // candles and indicators (skill v1-v6 "Technical-only (candles and indicators)") and had none of these rules. Y1
@@ -531,20 +580,27 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
   assert.equal(v7, "Vì lập luận được đăng nguyên văn, từ bản v7 (ngày 03/11/2026), hướng dẫn viết của mô hình có thêm các luật viết lập luận cho trang công khai, trong đó có: không dùng từ chỉ hành động giao dịch ở bất kỳ dạng nào, trừ vài cụm mô tả biểu đồ; không nhắc vị thế, tiền hay T+n; không ghi đường dẫn, mã nội bộ hay chuỗi ký tự dài. Các bản trước v7 cũng giới hạn mô hình ở nến và chỉ báo, nhưng chưa có các luật viết này. Lập luận có ngày tín hiệu 03/11/2026 có thể được viết theo bản v7 hoặc theo bản cũ hơn; trang không ghi lập luận nào được viết theo bản nào.");
   // The r4 sentence named the wrong gap (candles and indicators only) and counted one older thesis as "một số".
   assert.doesNotMatch(text, /dặn mô hình chỉ viết mô tả kỹ thuật|không được dặn như vậy|một số lập luận|gắn với vị thế/);
-  // Review of r4b (NIT): only v7 asks for English and nothing enforces it, so a thesis is "thường" in English.
+  // Review of r4b (NIT): only v7 asks for English and nothing enforces it, so a thesis is "thường" in English. Review of
+  // r5 (MINOR 2): the thesis shown is the one of the newest published note, which need not be the newest note written.
   const intro = paragraph(html, "Lập luận gốc của mô hình");
-  assert.equal(intro, "Lập luận gốc của mô hình, thường viết bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất ở trang từng mã. Lập luận dài hơn 1.500 ký tự được cắt ở 1.500 ký tự và kết thúc bằng dấu “…”.");
+  assert.equal(intro, "Lập luận gốc của mô hình, thường viết bằng tiếng Anh, hiển thị nguyên văn với nhận định mới nhất được đăng ở trang từng mã. Lập luận dài hơn 1.500 ký tự được cắt ở 1.500 ký tự và kết thúc bằng dấu “…”.");
   const made = paragraph(html, "Với mỗi mã backend đã hỗ trợ");
   assert.equal(made, "Với mỗi mã backend đã hỗ trợ, sau mỗi phiên một mô hình AI đọc nến và chỉ báo kỹ thuật của mã rồi ghi một nhận định cho 20 phiên tới: Tăng, Giảm, Đi ngang hoặc Không nhận định. Mô hình không đọc tin tức, báo cáo tài chính hay sự kiện doanh nghiệp. Nhận định được ghi vào nhật ký trước khi biết kết quả. Trang chỉ hiển thị và chấm nhận định kỳ hạn 20 phiên; nhận định kỳ hạn khác (nếu có) không xuất hiện ở đây.");
   // Review of r4b (MINOR): locked on the whole page, not only in the pinned paragraphs. The thesis section is pinned
   // whole (its heading and these four paragraphs), so no sentence about theses, positions or the rules can join it; and
   // the words such a sentence needs appear nowhere else on the page (the VN30-1 limit is the one other "nắm giữ").
-  const section = html.match(/<section\b[^>]*>(?:(?!<\/section>)[\s\S])*Nhận định hướng được tạo thế nào(?:(?!<\/section>)[\s\S])*<\/section>/)?.[0] ?? "";
-  assert.equal(visibleText(section), ["Nhận định hướng được tạo thế nào", made, intro, rules, v7].join(" "));
-  const page = text.split("rằng nắm giữ 10 mã mạnh nhất thắng VNINDEX").join(" ").toLowerCase();
-  for (const word of [...TIE, "lập luận", "luật tự động", "v7", "tiếng anh"]) {
-    assert.equal(count(page, word), count(visibleText(section).toLowerCase(), word), word);
+  // Review of r5 (NIT): also the words that would tie a note, or the score, to what the first rule leaves out ("đăng",
+  // "loại") or to a holding ("sở hữu", "người dùng", "đứng ngoài"; "đang giữ" is in TIE). The one "đăng" outside the
+  // thesis section is the history table's own sentence (the 60 newest published notes), pinned in the list below.
+  const TABLE = "Bảng lịch sử ở trang từng mã hiện tối đa 60 nhận định được đăng gần nhất, mới nhất trước.";
+  const thesis = html.match(/<section\b[^>]*>(?:(?!<\/section>)[\s\S])*Nhận định hướng được tạo thế nào(?:(?!<\/section>)[\s\S])*<\/section>/)?.[0] ?? "";
+  assert.equal(visibleText(thesis), ["Nhận định hướng được tạo thế nào", made, intro, rules, v7].join(" "));
+  assert.equal(count(text, TABLE), 1);
+  const page = text.split("rằng nắm giữ 10 mã mạnh nhất thắng VNINDEX").join(" ").split(TABLE).join(" ").toLowerCase();
+  for (const word of [...TIE, "lập luận", "luật tự động", "v7", "tiếng anh", "đăng", "loại", "sở hữu", "người dùng", "đứng ngoài"]) {
+    assert.equal(count(page, word), count(visibleText(thesis).toLowerCase(), word), word);
   }
+  assert.ok(count(visibleText(thesis), "đăng") >= 4, "the check on 'đăng' is not vacuous");
   for (const phrase of [
     // T1: the three states of a part.
     "“Chưa có”: backend đã trả lời nhưng chưa có dữ liệu cho phần đó",
@@ -565,7 +621,12 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
     "mới có cho MBB và BID, và trang này không hiển thị. Tỷ lệ nền khác với mốc so sánh của luật chấm",
     "R từ +5% trở lên là Tăng, từ −4% trở xuống là Giảm",
     "là tổng trên toàn bộ y nhận định 20 phiên đã chấm của mã từ khi bắt đầu ghi",
-    "bảng lịch sử chỉ hiện tối đa 60 nhận định gần nhất",
+    // r5: the 60-note table is a fact about the table, stated with the statuses, no longer the score's reason; review of
+    // r5 (MINOR 2): the 60 newest published notes.
+    "Bảng lịch sử ở trang từng mã hiện tối đa 60 nhận định được đăng gần nhất, mới nhất trước. Trạng thái của từng nhận định:",
+    // r5: the earliest note of a session holds the scored slot; only the later ones are said not to be shown, since the
+    // earliest one may be a note the page does not publish.
+    "chỉ nhận định sớm nhất được chấm, còn các nhận định khác ghi trong hạn của phiên đó không được chấm và không hiển thị",
     "mốc so sánh “z/y”",
     "“mẫu nhỏ” khi chưa có 30 nhận định đã chấm có kỳ hạn 20 phiên không chồng lên nhau",
     "28/74", "34/74",
@@ -591,8 +652,16 @@ test("method page: v2 rules in words, the three part states, both thesis rules, 
 
 // r4c: /phuong-phap/ is read together with the hidden-thesis card of a ticker page, so rule 1 stays general and must
 // not name the field values it looks at. The words: action and holding words in Vietnamese, and the English values.
+// r5: rule 1 now decides which notes are published at all; it stays general for the same reason (both repositories are
+// public, and a reader must not be able to tell what kind of note the page leaves out). Review of r5 (NIT): the list
+// also has the Vietnamese ways of saying the values themselves (standing aside, watching, the market or its data only,
+// missing input) and of saying a holding (owning, the user, an investor, an account, shares, trading); the E1 test
+// below also locks rule 1 word for word, so a wording this list lacks cannot slip in either.
 const RULE_ONE_WORDS = ["chờ", "vị thế", "hành động", "không có", "giữ", "nắm", "mua", "bán", "lệnh", "tiền", "danh mục",
-  "wait", "none", "hold", "reduce", "sell", "buy", "position", "market", "action"].map((w) => w.normalize("NFC"));
+  "đứng ngoài", "quan sát", "theo dõi", "đợi", "thị trường", "dữ liệu", "thông tin", "đầu vào", "thiếu", "đủ",
+  "sở hữu", "người dùng", "nhà đầu tư", "tài khoản", "cổ phiếu", "giao dịch",
+  "wait", "none", "hold", "reduce", "sell", "buy", "position", "market", "action", "only", "insufficient", "input",
+  "basis", "view"].map((w) => w.normalize("NFC"));
 /** `word` as whole syllables: no letter, mark or digit right before or right after it. */
 const syllables = (word: string) => new RegExp(`(?<![\\p{L}\\p{M}\\p{N}])${word}(?![\\p{L}\\p{M}\\p{N}])`, "u");
 
@@ -627,6 +696,188 @@ test("method page: the rule-1 sentence names none of the listed action, holding 
   // động" and "vị thế", so a page-wide check could not tell rule 1 from them.
   const page = visibleText(html).normalize("NFC").toLowerCase();
   for (const word of ["chờ", "vị thế", "hành động"]) assert.match(page, syllables(word), word);
+});
+
+test("method page (r5, E1): rule 1 decides which notes are published, not only their thesis; the filter reads a published note's thesis", async () => {
+  const html = await renderMethod();
+  // Read by structure like the test above, so a re-pinned paragraph is checked too: rule 1 is about the notes themselves
+  // (the r4c "được đăng lập luận" published or withheld a thesis), judged by their other fields, never by the text.
+  const rule = ruleOne(html);
+  assert.match(rule, /chỉ đăng một số loại nhận định/, rule);
+  assert.match(rule, /xét theo các trường khác của nhận định/, rule);
+  assert.match(rule, /không đọc lập luận/, rule);
+  assert.doesNotMatch(rule, /đăng lập luận|ẩn cả lập luận/, rule);
+  // Review of r5 (NIT): the paragraph outside the filter's sentence, found by structure, is locked word for word apart
+  // from the paragraph pin, so re-pinning that pin cannot add a value or a holding to rule 1 in words the list lacks.
+  assert.equal(rule.trim(), "trước khi đăng, nhận định đi qua hai luật tự động. luật thứ nhất không đọc lập luận: trang chỉ đăng một số loại nhận định, xét theo các trường khác của nhận định.");
+  // The keyword filter's sentence (from "Luật thứ hai" to its full stop) reads the thesis of a published note, may hide
+  // a purely technical one and does not catch every wording.
+  const page = visibleText(html).normalize("NFC");
+  const at = page.indexOf("Luật thứ hai");
+  const filter = page.slice(at, at + page.slice(at).search(/\.(?=\s|$)/) + 1);
+  assert.match(filter, /^Luật thứ hai là một bộ lọc dò theo từ khóa trên lập luận của nhận định được đăng, /, filter);
+  assert.match(filter, /có thể ẩn oan một lập luận chỉ có nội dung kỹ thuật/, filter);
+  assert.match(filter, /không bảo đảm bắt hết mọi cách diễn đạt\.$/, filter);
+});
+
+// E2 (r5): the phrase every score sentence carries, and the words that would give a reason a note is not shown or tie
+// the score to a rule. "luật" alone is allowed: the score's own baseline is "mốc so sánh của luật".
+const NOT_SHOWN = "kể cả nhận định không hiện trên trang";
+const REASON_WORDS = ["tối đa", "bảng", "luật thứ", "luật tự động", "bộ lọc", "từ khóa", "đăng", "vị thế", "hành động",
+  "lập luận", "ẩn", "bỏ", "lọc", "loại", "trường", "vì", "do", "bởi"];
+
+/** The one <p> of `html` that says the score counts notes not shown, as a visitor reads it (found by its words). */
+function notShownParagraph(html: string): string {
+  const own = (html.match(/<p\b[^>]*>(?:(?!<\/p>)[\s\S])*<\/p>/g) ?? []).map((p) => visibleText(p).normalize("NFC"))
+    .filter((p) => p.includes(NOT_SHOWN));
+  assert.equal(own.length, 1, `one paragraph holds "${NOT_SHOWN}"`);
+  return own[0];
+}
+
+test("score sentences (r5, E2): /phuong-phap/, / and a ticker page count every scored note, notes not shown included, and give no reason", async () => {
+  // MBB's score counts notes its table does not show (7 scored, 2 listed); ACB's counts exactly the one it shows (review
+  // of r5, MINOR 3): the phrase is on both, so it marks no ticker.
+  const pages = [["phuong-phap", await renderMethod()], ["home", await renderHome()], ["MBB", await renderTicker("MBB")],
+    ["ACB", await renderTicker("ACB")]];
+  for (const [where, html] of pages) {
+    assert.equal(count(visibleText(html).normalize("NFC"), NOT_SHOWN), 1, where);
+    const p = notShownParagraph(html);
+    // The sentence holding the phrase counts every scored 20-session note of the ticker.
+    const at = p.indexOf(NOT_SHOWN);
+    const sentence = p.slice(p.lastIndexOf(". ", at) + 1, at + p.slice(at).search(/\.(?=\s|$)/) + 1).trim();
+    assert.match(sentence, /toàn bộ (?:y|\d+) nhận định 20 phiên đã chấm của mã(?: từ khi bắt đầu ghi)?, kể cả nhận định không hiện trên trang[,.]/,
+      `${where}: ${sentence}`);
+    // Its whole paragraph gives no reason why a note is not shown and names no rule, whatever the pins say.
+    for (const word of REASON_WORDS) assert.doesNotMatch(p.toLowerCase(), syllables(word), `${where} says "${word}": ${p}`);
+  }
+});
+
+/** `html` (the overview) with the "Điểm" cell of each of `tickers` emptied: what / shows apart from those scores. */
+function withoutScoreCells(html: string, tickers: string[]): string {
+  return html.replace(/<tr\b(?:(?!<\/tr>)[\s\S])*<\/tr>/g, (row) =>
+    tickers.some((t) => new RegExp(`href="/ma/${t}/?"`).test(row))
+      ? row.replace(/<td\b(?:(?!<td\b)[\s\S])*<\/td>(?=<\/tr>)/, "<td></td>")
+      : row);
+}
+
+test("r5: no published note but a score above zero: the cards, the history and the home row are pinned whole, and apart from the score each page reads as for a ticker with nothing scored", async () => {
+  // The exporter leaves out whole the notes the first rule does not publish, and the score stays the backend's
+  // whole-journal total (contract D2), so a ticker can have scored notes and none listed: STB read fresh, and LPB kept
+  // from an earlier run, each with an empty list and a score above zero. The score itself still differs from a ticker
+  // with nothing scored; whether it should is a contract decision (review of r5, MINOR 1, open), not this test's. What
+  // this test locks is the site's own words (review of r5, MINOR 3): no sentence, mark or row depends on that state.
+  const dir = fixtureVariant(({ read, write }) => {
+    write("symbols/STB.json", { ...read("symbols/STB.json"), notes: [], score: { scored: 2, hits: 1, baselineHits: 1, sampleStatus: "insufficient-sample" } });
+    write("symbols/LPB.json", { ...read("symbols/LPB.json"), notes: [], score: { scored: 1, hits: 0, baselineHits: 1, sampleStatus: "insufficient-sample" } });
+  });
+  // The whole rows on / ("Chưa có" says no note is listed; the score cell is the backend's total, as for every row) …
+  const home = await renderHome(dir);
+  assert.deepEqual(homeCells(home, "STB"), ["6", "STB", "19.877", "+1,2% +2,6%", "-0,6% +8,2%", "+21,0% +17,5%", "Chưa có", "1/2 đúng mốc 1/2 · mẫu nhỏ"]);
+  assert.deepEqual(homeCells(home, "LPB"), ["4", "LPB", "35.750", "+1,8% +3,2%", "+3,4% +12,2%", "+14,1% +10,6%", "Chưa có* (giữ từ một lượt cập nhật trước)", "0/1 đúng mốc 1/1 · mẫu nhỏ"]);
+  // … and apart from those two scores, / reads word for word as with nothing scored for them (the fixture), legend
+  // included: no sentence, mark or row appears because a score counts notes that are not listed.
+  assert.equal(visibleText(withoutScoreCells(home, ["STB", "LPB"])), visibleText(withoutScoreCells(await renderHome(), ["STB", "LPB"])));
+  assert.equal(paragraph(home, "Nhận định mới nhất là hướng"), HOME_LEGEND);
+  // The three notes cards and the history section, footnote included, pinned whole like the VIC card: "được đăng"
+  // stays true ("Chưa có nhận định … nào cho mã này" would deny the scored notes the score card counts), and the score
+  // card says what it says on every page.
+  const stbHtml = await renderTicker("STB", dir);
+  assert.equal(card(stbHtml, "Nhận định AI mới nhất"), `Nhận định AI mới nhất ${NO_NOTE}`);
+  assert.equal(card(stbHtml, "Điểm nhận định 20 phiên"), `Điểm nhận định 20 phiên Nhận định đúng 1/2 đúng Mốc so sánh của luật 1/2 đúng ${SAMPLE_SMALL} ${scoreNote(2)}`);
+  assert.equal(history(stbHtml), `Lịch sử nhận định 20 phiên ${NO_HISTORY} ${FOOTNOTE}`);
+  const lpbHtml = await renderTicker("LPB", dir);
+  assert.deepEqual(topLines(lpbHtml), [
+    "Lượt cập nhật gần nhất chưa lấy được nhận định: thiếu quyền đọc nhật ký nhận định. Phần nhận định trên trang này là dữ liệu giữ từ một lượt cập nhật trước.",
+  ]);
+  assert.equal(card(lpbHtml, "Nhận định AI mới nhất"), `Nhận định AI mới nhất ${KEPT_NOTES} ${NO_NOTE}`);
+  assert.equal(card(lpbHtml, "Điểm nhận định 20 phiên"), `Điểm nhận định 20 phiên ${KEPT}. Nhận định đúng 0/1 đúng Mốc so sánh của luật 1/1 đúng ${SAMPLE_SMALL} ${scoreNote(1)}`);
+  assert.equal(history(lpbHtml), `Lịch sử nhận định 20 phiên ${KEPT_NOTES} ${NO_HISTORY} ${FOOTNOTE}`);
+  // Outside the score card each page reads word for word as with nothing scored (the fixture's STB and LPB).
+  const withoutScoreCard = (html: string) => html.replace(section(html, 'aria-label="Điểm nhận định 20 phiên"'), "");
+  for (const [ticker, html] of [["STB", stbHtml], ["LPB", lpbHtml]]) {
+    const text = visibleText(html);
+    assertClean(text, ticker);
+    assert.equal(visibleText(withoutScoreCard(html)), visibleText(withoutScoreCard(await renderTicker(ticker))), ticker);
+    assert.doesNotMatch(text, TIE_WORDS, ticker);
+    assert.doesNotMatch(text, /lập luận|luật tự động|không được đăng|bị loại/iu, ticker);
+    for (const word of ["ẩn", "bỏ", "lọc"]) assert.doesNotMatch(text.toLowerCase(), syllables(word), `${ticker}: ${word}`);
+  }
+});
+
+test("r5 review: whether a score counts scored notes the list does not show changes only the numbers, on the ticker pages and on /", async () => {
+  // Review of r5 (MINOR 3): a word, a sentence or a mark that depends on the score counting more scored notes than the
+  // table shows would mark the tickers whose notes the exporter left out. MBB (read fresh, 9 notes) and ACB (kept, 2
+  // notes) list scored notes. "even": each score counts exactly the scored notes its list shows, and so does every
+  // other ticker of the fixture (none listed, none scored); "gap": five more scored notes that are not listed. With
+  // every number masked, each page reads the same in both.
+  const variant = (extra: number) => fixtureVariant(({ read, write }) => {
+    for (const ticker of ["MBB", "ACB"]) {
+      const doc = read(`symbols/${ticker}.json`);
+      const listed = doc.notes.filter((n: { status: string }) => n.status === "scored");
+      const hits = listed.filter((n: { hit: boolean | null }) => n.hit === true).length;
+      doc.score = { scored: listed.length + extra, hits: hits + 2 * Math.sign(extra), baselineHits: 1 + 3 * Math.sign(extra), sampleStatus: "insufficient-sample" };
+      write(`symbols/${ticker}.json`, doc);
+    }
+  });
+  const even = variant(0);
+  const gap = variant(5);
+  // Not vacuous: which tickers' scores count scored notes their list does not show, in each data set.
+  const unlisted = (dir: string) => TICKERS.filter((ticker) => {
+    const doc = JSON.parse(readFileSync(join(dir, "symbols", `${ticker}.json`), "utf8"));
+    return doc.score !== null && doc.score.scored > doc.notes.filter((n: { status: string }) => n.status === "scored").length;
+  });
+  assert.deepEqual(unlisted(even), []);
+  assert.deepEqual(unlisted(gap), ["ACB", "MBB"]);
+  assert.deepEqual(unlisted(FIXTURE), ["MBB"]);
+  for (const ticker of ["MBB", "ACB"]) {
+    const [a, b] = [await renderTicker(ticker, even), await renderTicker(ticker, gap)];
+    assert.notEqual(visibleText(a), visibleText(b), `${ticker}: the counts differ`);
+    assert.equal(masked(visibleText(a)), masked(visibleText(b)), ticker);
+    // The score card and the footnote, pinned whole where nothing is left unlisted.
+    assert.equal(paragraph(a, "Tính trên toàn bộ"), scoreNote(ticker === "MBB" ? 2 : 1), ticker);
+    assert.equal(paragraph(a, "Bảng hiện tối đa"), FOOTNOTE, ticker);
+  }
+  const [homeEven, homeGap] = [await renderHome(even), await renderHome(gap)];
+  assert.equal(masked(visibleText(homeEven)), masked(visibleText(homeGap)));
+  // The legend keeps the E2 phrase where no ticker's score counts a note its list does not show.
+  assert.equal(paragraph(homeEven, "Nhận định mới nhất là hướng"), HOME_LEGEND);
+});
+
+// Review of r5 (MINOR 2): the exporter may leave out the newest notes, so a sentence that picks notes by how recent they
+// are says they are the ones published or shown on the page. A phrase "nhận định … gần nhất / mới nhất" (up to four
+// words apart, within one clause) carries "được đăng" or "hiện trên trang" between the two or within the next five
+// words. Not checked: the column and card labels (<th>, <h2>), which the home legend and the method page define, the
+// legend's own "Nhận định mới nhất là …", and "mới nhất trước" (newest first, an order).
+const RECENT = /nhận định((?: [^\s.,;:()“”"]+){0,4}?) (gần nhất|mới nhất)(?=((?: [^\s.,;:()“”"]+){0,5}))/gu;
+function recencyClaims(markup: string): { claim: string; ok: boolean }[] {
+  const text = visibleText(markup.replace(/<(th|h2)\b[\s\S]*?<\/\1>/g, " ")).normalize("NFC").toLowerCase();
+  return [...text.matchAll(RECENT)].flatMap(([whole, between, which, after]) => {
+    if (which === "mới nhất" && (after.startsWith(" trước") || (between === "" && after.startsWith(" là ")))) return [];
+    return [{ claim: whole + after, ok: /được đăng|hiện trên trang/.test(between + after) }];
+  });
+}
+
+test("r5 review: every phrase about the most recent notes says they are the ones published or shown (/, /phuong-phap/, ticker pages, README)", async () => {
+  const sources: [string, string][] = [["home", await renderHome()], ["phuong-phap", await renderMethod()]];
+  for (const ticker of TICKERS) sources.push([ticker, await renderTicker(ticker)]);
+  sources.push(["README", readFileSync(join(WEB_ROOT, "README.md"), "utf8")]);
+  const found = new Map<string, number>();
+  for (const [where, markup] of sources) {
+    for (const { claim, ok } of recencyClaims(markup)) assert.ok(ok, `${where}: "${claim}"`);
+    found.set(where, recencyClaims(markup).length);
+  }
+  // Not vacuous: the legend's second clause on /, the footnote of every ticker page, the thesis and table sentences of
+  // /phuong-phap/, the two page descriptions of README.
+  assert.deepEqual(Object.fromEntries(found), Object.fromEntries([["home", 1], ["phuong-phap", 2],
+    ...TICKERS.map((t) => [t, 1] as const), ["README", 2]]));
+  // The matcher itself: the r5 sentences it replaces are claims without the qualifier, the labels and orders are not.
+  for (const [old, n] of [
+    ["<p>Nhận định mới nhất là hướng của nhận định kỳ hạn 20 phiên gần nhất, kèm ngày tín hiệu.</p>", 1],
+    ["<p>Nhận định mới nhất là hướng của nhận định kỳ hạn 20 phiên gần nhất trong nhật ký, kèm ngày tín hiệu.</p>", 1],
+    ["<p>Bảng hiện tối đa 60 nhận định gần nhất. Lợi nhuận</p>", 1],
+    ["<p>hiển thị nguyên văn với nhận định mới nhất ở trang từng mã.</p>", 1],
+    ["<th>Nhận định mới nhất</th><h2>Nhận định AI mới nhất</h2><p>nhận định sai thứ tự mới nhất trước</p>", 0],
+  ] as const) assert.equal(recencyClaims(old).filter((c) => !c.ok).length, n, old);
 });
 
 test("layout: the disclaimer twice, the data session and update time on every page", async () => {

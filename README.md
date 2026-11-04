@@ -3,9 +3,9 @@
 Trang web tĩnh, tiếng Việt, cho rổ VN30:
 
 - `/` — bảng VN30 của phiên: hạng theo lợi nhuận 6 tháng, giá đóng cửa, lợi nhuận 3/6/12 tháng và chênh lệch so với
-  VNINDEX, nhận định 20 phiên mới nhất, và điểm “x/y đúng” kèm mốc so sánh của luật và trạng thái mẫu.
+  VNINDEX, nhận định 20 phiên mới nhất được đăng, và điểm “x/y đúng” kèm mốc so sánh của luật và trạng thái mẫu.
 - `/ma/<MÃ>/` — biểu đồ nến ngày kèm SMA50/SMA200, chỉ báo mới nhất kèm câu tóm tắt tự động (chỉ nêu sự kiện),
-  sức mạnh tương đối so với VNINDEX, nhận định AI mới nhất, điểm của mã và lịch sử chấm điểm.
+  sức mạnh tương đối so với VNINDEX, nhận định AI mới nhất được đăng, điểm của mã và lịch sử chấm điểm.
 - `/phuong-phap/` — nguồn dữ liệu, cách chấm, giới hạn đã biết và miễn trừ.
 
 Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải khuyến nghị đầu tư.
@@ -15,7 +15,9 @@ Nhận định kỹ thuật tự động, chỉ để tham khảo, không phải
 Trang không gọi API lúc người dùng xem. Mọi số liệu nằm trong thư mục `data/` và được đọc **lúc build**:
 
 - `data/meta.json`, `data/screen.json`, `data/symbols/<MÃ>.json`, theo hợp đồng `vn30-web-data/v2`. Bộ dữ liệu
-  `vn30-web-data/v1` cũ làm build dừng, vì v2 đổi nghĩa của `notes`, `score` và `thesis`.
+  `vn30-web-data/v1` cũ làm build dừng, vì v2 đổi nghĩa của `notes`, `score` và `thesis`. `notes` chỉ gồm các nhận
+  định exporter xuất, còn `score` là tổng của backend trên toàn bộ nhận định 20 phiên đã chấm của mã, nên có thể đếm
+  cả nhận định không có trong `notes`.
 - Script `ai/export_vn30_web.py` của dự án chính ghi các file này từ backend sau mỗi phiên. Tác vụ hằng tối commit và
   push repo này khi dữ liệu đổi; Vercel tự build lại sau mỗi lần push.
 - Mọi file đều được kiểm tra khi build (`lib/data.ts`). Sai schema, giá trị ngoài danh sách cho phép, nhận định không
@@ -31,7 +33,7 @@ Trang không gọi API lúc người dùng xem. Mọi số liệu nằm trong th
     `null`: phần chỉ báo giữ riêng có thể chỉ có chỉ báo, hoặc chỉ có sức mạnh tương đối (lượt trước thiếu giá trị
     kia); khi không đọc được nến và cả file được giữ, câu cũng chỉ kể những phần file đó có. Nhận định được giữ có
     tên "nhận định" khi dữ liệu giữ có ít nhất một nhận định 20 phiên, và "phần nhận định" khi dữ liệu giữ không có
-    nhận định 20 phiên nào (chỉ có điểm `no-data`). Thẻ của giá trị `null` ghi "Dữ liệu giữ từ một lượt cập nhật
+    nhận định 20 phiên nào (chỉ có điểm). Thẻ của giá trị `null` ghi "Dữ liệu giữ từ một lượt cập nhật
     trước không có …", không bao giờ "chưa lấy được".
   - Phần chỉ báo trống, cả chỉ báo lẫn sức mạnh tương đối đều `null` và có hơn một lý do: dòng đầu trang nêu cả hai
     cùng mọi lý do, còn hai thẻ ghi "(lý do ghi ở đầu trang)" thay vì lặp lại mọi lý do, vì mỗi lý do có thể chỉ

@@ -12,7 +12,7 @@ export default function NotesTable({ notes, view }: { notes: Note[]; view: Notes
     return (
       <>
         {kept}
-        <p className="text-sm text-slate-600">Chưa có nhận định {NOTE_HORIZON} phiên nào.</p>
+        <p className="text-sm text-slate-600">Chưa có nhận định {NOTE_HORIZON} phiên nào được đăng.</p>
       </>
     );
   }

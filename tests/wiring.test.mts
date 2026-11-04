@@ -104,5 +104,21 @@ test("hygiene: 404 title, ignored local files, README on v2 and its part states"
   assert.match(readme, /dữ liệu giữ từ một lượt cập nhật trước/);
   // Y2: the README says the kept line names only what the kept data holds, kept notes with no note included.
   assert.match(readme, /chỉ kể những giá trị mà dữ liệu giữ thật sự có/);
-  assert.match(readme, /"phần nhận định" khi dữ liệu giữ không có\s+nhận định 20 phiên nào/);
+  assert.match(readme, /"phần nhận định" khi dữ liệu giữ không có\s+nhận định 20 phiên nào \(chỉ có điểm\)/);
+  // r5: notes the exporter leaves out still count in the backend's score, so kept data with no note may hold a score
+  // above zero, and a maintainer must not tie the two.
+  assert.doesNotMatch(readme, /chỉ có điểm `no-data`/);
+  assert.match(readme, /`notes` chỉ gồm các nhận\s+định exporter xuất, còn `score` là tổng của backend trên toàn bộ nhận định 20 phiên đã chấm của mã,\s+nên có thể đếm\s+cả nhận định không có trong `notes`\./);
+  // Review of r5 (NIT): the README is public like the pages, so it names no holding, action or rule value either: the
+  // words of TIE in tests/pages.test.mts (what would tie a note to a holding or to one of the rules), owning, the ways
+  // of saying a kind of note is not exported or not published, and the field values in English.
+  const README_TIE = ["vị thế", "hành động", "luật thứ", "bộ lọc", "từ khóa", "gắn với", "nắm giữ", "đang giữ", "người viết",
+    "danh mục", "bảo đảm", "sở hữu", "không được xuất", "không xuất", "không được đăng", "không đăng", "bị loại", "bị bỏ",
+    "hold", "position", "actionview", "actionbasis", "market-only", "insufficient-input"];
+  const words = readme.normalize("NFC").toLowerCase().replace(/\s+/g, " ");
+  for (const word of README_TIE) assert.ok(!words.includes(word), `README says "${word}"`);
+  // Review of r5 (MINOR 2): the overview and ticker descriptions say the newest published note (the exporter may leave
+  // out the newest notes); tests/pages.test.mts "every phrase about the most recent notes" checks the README too.
+  assert.match(readme, /nhận định 20 phiên mới nhất được đăng,/);
+  assert.match(readme, /nhận định AI mới nhất được đăng,/);
 });
