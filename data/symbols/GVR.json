@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      27013.66,
-      27260.14,
-      26717.89,
-      26717.89,
-      2040568
-    ],
-    [
       "2025-10-20",
       26619.3,
       26915.07,
@@ -2082,31 +2074,51 @@
       29150,
       29600,
       1055100
+    ],
+    [
+      "2026-11-04",
+      29800,
+      30300,
+      29250,
+      30200,
+      1356000
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 29600,
-    "sma50": 31990.0,
-    "sma200": 33568.25,
-    "ema12": 31075.534296053047,
-    "ema26": 31549.67458840271,
-    "ema50": 31686.251378972127,
-    "ema200": 31947.967603922676,
-    "rsi14": 35.129602232673705,
-    "macd": -474.1402923496644,
-    "macdSignal": -210.0579029673397,
-    "macdHistogram": -264.08238938232466,
-    "bollingerUpper": 33960.11210480688,
-    "bollingerMiddle": 31730.0,
-    "bollingerLower": 29499.88789519312,
-    "atr14": 982.1976403447644
+    "date": "2026-11-04",
+    "close": 30200,
+    "sma50": 31952.0,
+    "sma200": 33549.25,
+    "ema12": 30940.836712044886,
+    "ema26": 31449.698692965474,
+    "ema50": 31627.967011169298,
+    "ema200": 31930.574891445835,
+    "rsi14": 40.53326250344063,
+    "macd": -508.86198092058754,
+    "macdSignal": -269.81871855798937,
+    "macdHistogram": -239.04326236259817,
+    "bollingerUpper": 33605.57498048514,
+    "bollingerMiddle": 31540.0,
+    "bollingerLower": 29474.42501951486,
+    "atr14": 987.0406660344241
   },
   "relativeStrength": {
-    "20": -0.063759,
-    "60": 0.099759
+    "20": -0.100147,
+    "60": 0.034944
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only. On 2026-11-02 the price fell about 6.9% in one session to 29100 on volume 1.9x its 20-session average, the lowest level of the last 60 sessions. The next two sessions recovered to 30200 on volume of only 0.5x and 0.7x the average, so the rebound is not yet confirmed. The close is 11.2% below the level of 20 sessions earlier and 1.5% above the level of 60 sessions earlier, with a 20-session range position of 0.19. The close is below SMA50 31952 and SMA200 33549, the fast moving average is below the slow one and the MACD histogram is negative (-239). Wilder RSI14 is 40.5 (the simple-average version reads 44.5), a neutral zone. The regime module labels the market sideways with high volatility, and the close sits just above the lower Bollinger band 29474 and the value-area low near 29766. Over 20 sessions the trend measures point lower while the location near the range low and the band points to a range; neither side is confirmed, so the view is sideways: a move of +5% would need a close near 31710, around the 50-session averages, and -4% a close near 28992, under the recent low. Against the VNINDEX the stock is 10 points weaker over 20 sessions and 3.5 points stronger over 60. For reference only; this kind of view has never been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

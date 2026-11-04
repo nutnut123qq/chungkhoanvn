@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      79963.74,
-      81206.24,
-      78188.74,
-      78188.74,
-      8423276
-    ],
-    [
       "2025-10-20",
       78366.24,
       81472.49,
@@ -2082,31 +2074,51 @@
       49550,
       50400,
       9249300
+    ],
+    [
+      "2026-11-04",
+      50600,
+      53900,
+      50400,
+      53900,
+      12822500
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 50400,
-    "sma50": 61505.3284,
-    "sma200": 68336.3011,
-    "ema12": 54172.982851633795,
-    "ema26": 56971.20937649559,
-    "ema50": 59508.2384319267,
-    "ema200": 67905.5732006096,
-    "rsi14": 16.423491558202088,
-    "macd": -2798.2265248617973,
-    "macdSignal": -2296.936352318591,
-    "macdHistogram": -501.29017254320615,
-    "bollingerUpper": 61403.37381160588,
-    "bollingerMiddle": 56085.0,
-    "bollingerLower": 50766.62618839412,
-    "atr14": 1609.6275294785112
+    "date": "2026-11-04",
+    "close": 53900,
+    "sma50": 61274.2244,
+    "sma200": 68162.36505,
+    "ema12": 54130.98548984398,
+    "ema26": 56743.71238564407,
+    "ema50": 59288.30751302761,
+    "ema200": 67766.2142632901,
+    "rsi14": 38.07675173633756,
+    "macd": -2612.726895800087,
+    "macdSignal": -2360.0944610148913,
+    "macdHistogram": -252.63243478519553,
+    "bollingerUpper": 60922.36774573222,
+    "bollingerMiddle": 55795.0,
+    "bollingerLower": 50667.63225426778,
+    "atr14": 1744.6541345157605
   },
   "relativeStrength": {
-    "20": -0.131761,
-    "60": -0.178927
+    "20": -0.085535,
+    "60": -0.142761
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. On 2026-11-04 the close of 53900 rose 6.9% in one session, near the top of the range (body 0.94 of the range), on volume 1.6x its 20-session average, one session after a 100-bar low of 49550. The stored recognizer marks a three-bar morning star and the conditions show the RSI leaving oversold. Against that, the broader trend is down: the close sits below EMA12 54131, EMA26 56744, SMA50 61274 and SMA200 68162, the MACD histogram is still negative, the close is below the volume-profile value area high and point of control (near 66400), and the stock fell 9.7% over 20 sessions and 16.3% over 60 sessions, lagging the main index by 8.6 and 14.3 points. Wilder RSI14 is 38.1. A single strong session inside a downtrend is not yet confirmed as a turn, while the overhead averages cap the rebound. The base case is that 20 sessions later the close lies between about 51700 and 56600, the band the scoring rule treats as sideways. A daily close above the 20-session Bollinger middle near 55800 and then the EMA26 would favor the up case; a close back below 50400 and the 49550 low would favor the down case.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

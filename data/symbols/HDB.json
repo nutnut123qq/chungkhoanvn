@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      19899.52,
-      19899.52,
-      19276.73,
-      19276.73,
-      19446314
-    ],
-    [
       "2025-10-20",
       18980.16,
       19098.79,
@@ -2082,31 +2074,51 @@
       21400,
       21800,
       13534600
+    ],
+    [
+      "2026-11-04",
+      21800,
+      22250,
+      21500,
+      22200,
+      14181500
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 21800,
-    "sma50": 21655.3036,
-    "sma200": 20707.2526,
-    "ema12": 22253.627338716073,
-    "ema26": 22102.99863531873,
-    "ema50": 21731.34570488956,
-    "ema200": 20451.992043371112,
-    "rsi14": 45.95285755428192,
-    "macd": 150.62870339734187,
-    "macdSignal": 265.37939313749536,
-    "macdHistogram": -114.75068974015349,
-    "bollingerUpper": 23312.553605616973,
-    "bollingerMiddle": 22387.606,
-    "bollingerLower": 21462.658394383026,
-    "atr14": 601.9466090082661
+    "date": "2026-11-04",
+    "close": 22200,
+    "sma50": 21679.3204,
+    "sma200": 20708.8339,
+    "ema12": 22245.3769789136,
+    "ema26": 22110.18392159142,
+    "ema50": 21749.72430469781,
+    "ema200": 20469.385157367422,
+    "rsi14": 51.4318246778027,
+    "macd": 135.19305732218257,
+    "macdSignal": 239.3421259744329,
+    "macdHistogram": -104.14906865225032,
+    "bollingerUpper": 23276.88407813001,
+    "bollingerMiddle": 22416.88,
+    "bollingerLower": 21556.875921869992,
+    "atr14": 612.5218512219615
   },
   "relativeStrength": {
-    "20": 0.044181,
-    "60": 0.104385
+    "20": 0.038705,
+    "60": 0.106867
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only, for reference only. On 2026-11-04 the stock closed 22200, up 1.8% on the day, forming a bullish engulfing pair with the prior session, on volume 0.79x its 20-session average. The close sits above SMA50 21679 and SMA200 20709, and EMA12 is above EMA26, but the MACD histogram is negative and the close is below the Bollinger middle 22417. Wilder RSI14 is 51.4 and the simple-average RSI14 is 42.5, both neutral. The regime label is bear trend with normal volatility. Price is at range position 0.41 of the 20-session range (21345 to 23450) after falling 2.8% over five sessions from the late-October level near 22850. Against VNINDEX the 20- and 60-session excess returns are positive (+3.9% and +10.7%). The +5% level for the 20-session horizon (about 23310) lies just under the 20-session high, and the -4% level (about 21312) lies near the 20-session low and the Bollinger lower band 21557. With trend, momentum and regime signals pointing different ways and price in the middle of its range, the view for the next 20 sessions is sideways.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

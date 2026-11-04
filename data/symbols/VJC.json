@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      133533.12,
-      137686.8,
-      129994.8,
-      134610,
-      3074510
-    ],
-    [
       "2025-10-20",
       134225.4,
       138456,
@@ -2082,31 +2074,51 @@
       130900,
       132200,
       896100
+    ],
+    [
+      "2026-11-04",
+      131200,
+      137000,
+      130100,
+      134400,
+      1143800
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 132200,
-    "sma50": 128706.0,
-    "sma200": 130822.0892,
-    "ema12": 130927.98773259197,
-    "ema26": 130049.39205962371,
-    "ema50": 129562.33005295874,
-    "ema200": 128317.80621995055,
-    "rsi14": 61.12257655980164,
-    "macd": 878.5956729682453,
-    "macdSignal": 538.7102247884175,
-    "macdHistogram": 339.8854481798278,
-    "bollingerUpper": 133378.26231817482,
-    "bollingerMiddle": 129545.0,
-    "bollingerLower": 125711.73768182518,
-    "atr14": 2640.22895690669
+    "date": "2026-11-04",
+    "close": 134400,
+    "sma50": 128904.0,
+    "sma200": 130744.1192,
+    "ema12": 131462.14346603936,
+    "ema26": 130371.65931446641,
+    "ema50": 129752.04259990153,
+    "ema200": 128378.32556104558,
+    "rsi14": 68.21971849475777,
+    "macd": 1090.4841515729483,
+    "macdSignal": 649.065010145324,
+    "macdHistogram": 441.41914142762437,
+    "bollingerUpper": 134168.61475970363,
+    "bollingerMiddle": 129865.0,
+    "bollingerLower": 125561.38524029635,
+    "atr14": 2944.498317127641
   },
   "relativeStrength": {
-    "20": 0.060199,
-    "60": 0.086129
+    "20": 0.061617,
+    "60": 0.090735
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view over 20 sessions, for reference only; this kind of call has never been tested on this symbol. On the daily chart the close of 134400 on 2026-11-04 rose 1.7% in the session and 5.0% over 20 sessions, a bullish engulfing over the prior bar on volume 1.2x its 20-session average. The close sits above SMA50 128904 and SMA200 130744, with EMA12 above EMA26 and a positive MACD histogram. Momentum is stretched: the Wilder RSI14 is 68.2 while the simple-average RSI14 of the conditions module reads 84.5, overbought, and the close is slightly above the upper Bollinger band at 134169. The regime label is sideways with high volatility, and the close is below the value-area high near 138142 of the 100-bar volume profile and below the 60-session high of 138000. Relative strength is strong, about 6.2 points above the index over 20 sessions. A move of +5% would need a close near 141120, above both the value-area high and the 60-session high, while -4% would mean about 129024, close to SMA50. With an overbought reading inside a sideways high-volatility regime and resistance overhead, the balance favours a range between these levels over 20 sessions; a daily close above 138142 would weaken this view, and a close below 128904 would point lower.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

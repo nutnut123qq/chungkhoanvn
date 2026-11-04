@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      81000,
-      82000,
-      79000,
-      79000,
-      588000
-    ],
-    [
       "2025-10-20",
       74600,
       78500,
@@ -2082,31 +2074,51 @@
       89600,
       90100,
       755900
+    ],
+    [
+      "2026-11-04",
+      90100,
+      90600,
+      88800,
+      90600,
+      757200
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 90100,
-    "sma50": 81464,
-    "sma200": 83830,
-    "ema12": 86907.40796620329,
-    "ema26": 84160.7769182249,
-    "ema50": 82602.91718624768,
-    "ema200": 83392.09346806916,
-    "rsi14": 72.62087046357509,
-    "macd": 2746.6310479783933,
-    "macdSignal": 1846.2384274953615,
-    "macdHistogram": 900.3926204830318,
-    "bollingerUpper": 92890.84556996379,
-    "bollingerMiddle": 83385,
-    "bollingerLower": 73879.15443003621,
-    "atr14": 2427.2789813368277
+    "date": "2026-11-04",
+    "close": 90600,
+    "sma50": 81738,
+    "sma200": 83808.5,
+    "ema12": 87475.49904832586,
+    "ema26": 84637.7564057638,
+    "ema50": 82916.52827698307,
+    "ema200": 83463.81393107344,
+    "rsi14": 73.60649457502512,
+    "macd": 2837.7426425620674,
+    "macdSignal": 2044.5392705087033,
+    "macdHistogram": 793.2033720533641,
+    "bollingerUpper": 93760.39097540184,
+    "bollingerMiddle": 83945,
+    "bollingerLower": 74129.60902459816,
+    "atr14": 2382.4733398127687
   },
   "relativeStrength": {
-    "20": 0.147522,
-    "60": 0.150643
+    "20": 0.152675,
+    "60": 0.166654
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. The close of 90600 on 2026-11-04 follows a rise of 14.1% over 20 sessions and 8.5% over 10 sessions, with the close near the top of its 20- and 60-session range (range position 0.98). Over the last five sessions the close has been flat between 90100 and 90600, below the 20-session high of 91000, on volume near or below its 20-session average (0.8x on the latest session). Wilder RSI14 is 73.6 and the simple-average RSI14 used by the conditions modules is 100, both in the overbought zone. The close is above SMA50 81738 and SMA200 83809, EMA12 is above EMA26 and the MACD histogram is positive, so the trend structure is up. The close sits at the upper edge of the 100-bar volume-profile value area and below the upper Bollinger band near 93760; the latest bar has a hammer shape. The regime label is sideways with normal volatility. Momentum is strong but extended, the last five sessions show no follow-through, and an up score over 20 sessions needs a 5% gain to about 95100, above the 100-bar high of 93900. The view over 20 sessions is sideways. Relative strength against the VNINDEX is strongly positive (excess 15.3% over 20 sessions). This kind of view has never been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

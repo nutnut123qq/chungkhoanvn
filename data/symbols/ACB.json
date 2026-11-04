@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      22660.08,
-      22746.24,
-      22186.2,
-      22186.2,
-      16312948
-    ],
-    [
       "2025-10-20",
       22056.96,
       22100.04,
@@ -2082,31 +2074,50 @@
       20150,
       20250,
       7178500
+    ],
+    [
+      "2026-11-04",
+      20300,
+      20550,
+      20150,
+      20500,
+      11819700
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 20250,
-    "sma50": 21430.0,
-    "sma200": 21266.7698,
-    "ema12": 20778.252417315125,
-    "ema26": 20928.369059437187,
-    "ema50": 21235.171694457524,
-    "ema200": 21327.620741131388,
-    "rsi14": 36.522955661062625,
-    "macd": -150.11664212206247,
-    "macdSignal": -172.5340515063362,
-    "macdHistogram": 22.417409384273725,
-    "bollingerUpper": 21491.023465372957,
-    "bollingerMiddle": 20660.0,
-    "bollingerLower": 19828.976534627043,
-    "atr14": 420.77530053279986
+    "date": "2026-11-04",
+    "close": 20500,
+    "sma50": 21385.0,
+    "sma200": 21262.0006,
+    "ema12": 20735.444353112798,
+    "ema26": 20896.638017997393,
+    "ema50": 21206.341431929777,
+    "ema200": 21319.385708881324,
+    "rsi14": 42.151344045952854,
+    "macd": -161.1936648845976,
+    "macdSignal": -170.26597418198855,
+    "macdHistogram": 9.072309297390944,
+    "bollingerUpper": 21486.451437435346,
+    "bollingerMiddle": 20652.5,
+    "bollingerLower": 19818.548562564654,
+    "atr14": 419.29135049474274
   },
   "relativeStrength": {
-    "20": 0.016811,
-    "60": -0.048856
+    "20": 0.004354,
+    "60": -0.065003
   },
   "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles over 20 sessions, for reference only. The close of 20500 on 2026-11-04 sits below SMA50 21385 and SMA200 21262 and below both the EMA50 and the EMA200, while the EMA12 is below the EMA26, with the regime labelled bearish with normal volatility. Over 60 sessions the price fell 8.5% and lags the index by 6.5 points, and the close is near the bottom of its 60-session range (range position 0.16). Against that, the last two bars formed a tweezer-bottom shape near the 20050 low, the close is just above the volume-profile value-area low 20446, the MACD histogram turned slightly positive, and Wilder RSI14 is 42, neither oversold nor strong. Volume on the latest bar was 1.24x its 20-session average. The 20-session range of 20050 to 21450 is about 7% wide, narrower than the +5% and -4% scoring bands combined, so the base case is a range: a daily close above 21450 and SMA50 would point higher, a close below 20050 would extend the decline. No historical condition statistics or base rates exist for this stock, and this kind of call has never been tested on it.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    },
     {
       "signalDate": "2026-11-03",
       "horizonSessions": 20,

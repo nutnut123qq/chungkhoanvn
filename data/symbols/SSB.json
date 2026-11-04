@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      15722.82,
-      15722.82,
-      15307.96,
-      15307.96,
-      2764673
-    ],
-    [
       "2025-10-20",
       15473.9,
       15598.36,
@@ -2082,31 +2074,51 @@
       14800,
       15000,
       1923700
+    ],
+    [
+      "2026-11-04",
+      15000,
+      15200,
+      14800,
+      15150,
+      2378700
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 15000,
-    "sma50": 17609.0,
-    "sma200": 15336.2942,
-    "ema12": 15690.801782083987,
-    "ema26": 16387.57898636722,
-    "ema50": 16751.080429312657,
-    "ema200": 15927.264693302928,
-    "rsi14": 34.857259914904844,
-    "macd": -696.7772042832336,
-    "macdSignal": -637.1259782474713,
-    "macdHistogram": -59.651226035762306,
-    "bollingerUpper": 17221.99369572576,
-    "bollingerMiddle": 16012.5,
-    "bollingerLower": 14803.00630427424,
-    "atr14": 649.6692053871974
+    "date": "2026-11-04",
+    "close": 15150,
+    "sma50": 17606.0,
+    "sma200": 15338.61575,
+    "ema12": 15607.60150791722,
+    "ema26": 16295.906468858537,
+    "ema50": 16688.292961496474,
+    "ema200": 15919.530716255138,
+    "rsi14": 36.87446125487687,
+    "macd": -688.3049609413179,
+    "macdSignal": -647.3617747862406,
+    "macdHistogram": -40.94318615507723,
+    "bollingerUpper": 17044.7246362005,
+    "bollingerMiddle": 15910.0,
+    "bollingerLower": 14775.2753637995,
+    "atr14": 631.8356907166833
   },
   "relativeStrength": {
-    "20": -0.073341,
-    "60": 0.023765
+    "20": -0.107569,
+    "60": 0.026463
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. The close was 15150 on 2026-11-04, up 1.0% on the day with volume 1.07x its 20-session average, completing a two-bar bullish engulfing shape. Over 20 sessions the stock fell 11.9% and trailed the VN-Index by about 10.8 points; over 60 sessions it is roughly flat, because the September run-up to a 24800 high has been fully retraced back to the July-August base near 15000-15550. The close sits below the SMA50 at 17606, below the SMA200 at 15339 and below the EMA200 at 15920, and the EMA12 is under the EMA26 with a slightly negative MACD histogram, so the trend reading is still bearish. Wilder RSI14 is 36.9 and the simple-average RSI14 is 40.3, both neutral rather than oversold. The volume profile places the close between the value-area low near 14715 and the point of control near 15573, and the 20-session range position is 0.14 with a low of 14700 on 2026-11-02. The regime label is sideways with normal volatility. Over the next 20 sessions the scoring bands are +5% near 15908 and -4% near 14544; the first is near the 0.618 retracement of the latest down-leg and the EMA200, the second is below the 100-session low of 14500. The base case is a range between those bands: the reversal shape is small and not yet confirmed, while the moving averages still slope down. No edge has been shown for this kind of view, and it has never been tested on this symbol.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

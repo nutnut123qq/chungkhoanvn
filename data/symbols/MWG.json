@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      82400.33,
-      83469.2,
-      81428.62,
-      82108.82,
-      9887629
-    ],
-    [
       "2025-10-20",
       84538.07,
       85412.6,
@@ -2082,31 +2074,51 @@
       71400,
       72300,
       2048900
+    ],
+    [
+      "2026-11-04",
+      72600,
+      74500,
+      72200,
+      74500,
+      2700200
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 72300,
-    "sma50": 73173.4704,
-    "sma200": 77231.9325,
-    "ema12": 74221.50796567579,
-    "ema26": 74028.8021015601,
-    "ema50": 73599.1956906106,
-    "ema200": 74725.38047489915,
-    "rsi14": 41.625674450600656,
-    "macd": 192.70586411569133,
-    "macdSignal": 578.5148738407435,
-    "macdHistogram": -385.80900972505214,
-    "bollingerUpper": 77357.86184868951,
-    "bollingerMiddle": 74810.0,
-    "bollingerLower": 72262.13815131049,
-    "atr14": 1509.7864046058053
+    "date": "2026-11-04",
+    "close": 74500,
+    "sma50": 73183.2704,
+    "sma200": 77181.2563,
+    "ema12": 74264.35289403336,
+    "ema26": 74063.70564959268,
+    "ema50": 73634.52134980235,
+    "ema200": 74723.13788310911,
+    "rsi14": 52.01365119991077,
+    "macd": 200.64724444067662,
+    "macdSignal": 502.94134796073024,
+    "macdHistogram": -302.2941035200536,
+    "bollingerUpper": 77052.11769393644,
+    "bollingerMiddle": 74690.0,
+    "bollingerLower": 72327.88230606356,
+    "atr14": 1566.2302328482476
   },
   "relativeStrength": {
-    "20": -0.002157,
-    "60": 0.065955
+    "20": -0.019592,
+    "60": 0.08315
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. The latest session rose 3.0% to close at 74500 on volume 0.98x its 20-session average, after a hammer shape two sessions earlier near the 20-session low of 71300. The close sits above the SMA50 at 73183 and near the 20-session Bollinger middle of 74690, but below the SMA200 at 77181 and the EMA200 at 74723. Wilder RSI14 is 52, a neutral reading. The MACD line is above zero while its histogram is negative, so momentum is not yet confirmed. The regime label is a bearish trend with high volatility, and the latest Fibonacci leg is bearish. Over 20 sessions the stock fell 3.1% and trails the index by 2.0 points, while over 60 sessions it rose 6.3% and leads the index by 8.3 points. Price has moved between 71300 and 77300 for 20 sessions, range position 0.53. An up outcome would need a close near 78200, above that range high and the SMA200, while a down outcome would need a close near 71500, close to the range low. With mixed signals the base case is a range over the next 20 sessions.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

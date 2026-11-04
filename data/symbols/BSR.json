@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-17",
-      17204.65,
-      17572,
-      16959.74,
-      16959.74,
-      8954428
-    ],
-    [
       "2025-10-20",
       17051.58,
       17296.49,
@@ -2082,31 +2074,51 @@
       26300,
       26300,
       6113900
+    ],
+    [
+      "2026-11-04",
+      26300,
+      26750,
+      25800,
+      26500,
+      11872000
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 26300,
-    "sma50": 29129.0,
-    "sma200": 27087.634,
-    "ema12": 28165.04097918146,
-    "ema26": 28821.86157721282,
-    "ema50": 28683.15360070977,
-    "ema200": 25756.27429796814,
-    "rsi14": 32.197730775132314,
-    "macd": -656.8205980313629,
-    "macdSignal": -314.69024200883496,
-    "macdHistogram": -342.13035602252796,
-    "bollingerUpper": 32029.3040521156,
-    "bollingerMiddle": 29097.5,
-    "bollingerLower": 26165.6959478844,
-    "atr14": 1110.474911581957
+    "date": "2026-11-04",
+    "close": 26500,
+    "sma50": 29122.0,
+    "sma200": 27116.5572,
+    "ema12": 27908.880828538156,
+    "ema26": 28649.871830752614,
+    "ema50": 28597.53973401527,
+    "ema200": 25763.674553709752,
+    "rsi14": 34.05008483966817,
+    "macd": -740.9910022144553,
+    "macdSignal": -399.95039404995896,
+    "macdHistogram": -341.04060816449635,
+    "bollingerUpper": 31709.38689114764,
+    "bollingerMiddle": 28835.0,
+    "bollingerLower": 25960.61310885236,
+    "atr14": 1099.0124178975316
   },
   "relativeStrength": {
-    "20": -0.120539,
-    "60": 0.098715
+    "20": -0.153737,
+    "60": 0.042725
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. The close of 26500 on 2026-11-04 is 16.5% lower than 20 sessions earlier, while the index fell 1.2% over the same window; over 60 sessions the stock is up 2.3%. The close sits below the 50-day simple average (29122) and below the 200-day simple average (27117), but above the 200-day exponential average (25764). Price is near the lower Bollinger band (25961) and at range position 0.11 within the 20-session range of 25800 to 32400. Wilder RSI14 is 34.1; the simple-average RSI14 of the conditions module is 36.5 and has just moved back above 30, while the MACD line is below its signal line with a negative histogram and on-balance volume is under its 50-bar average. The last bar opened at the low end, dipped to 25800 and closed near the middle of its range on volume 1.4x its 20-session average, forming a bullish harami with the prior bar, not yet confirmed. The regime label is a bear trend with normal volatility. Momentum is still down, but the decline is stretched and the oversold reading is easing, so these signals do not favour a move of 5% or more either way over the next 20 sessions; the base case is a range of roughly 25000 to 28500. A daily close below 25000 would point to continued weakness; a close back above 28500 would point to a recovery toward the 50-day average.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      59000,
-      59300,
-      58100,
-      59000,
-      6674400
-    ],
-    [
       "2025-10-20",
       58600,
       58800,
@@ -2082,31 +2074,51 @@
       65200,
       66600,
       2535500
+    ],
+    [
+      "2026-11-04",
+      66700,
+      68800,
+      66300,
+      67700,
+      3662900
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 66600,
-    "sma50": 71268,
-    "sma200": 68558,
-    "ema12": 66281.40734471347,
-    "ema26": 67522.24732377194,
-    "ema50": 69348.13235946672,
-    "ema200": 67148.29617302818,
-    "rsi14": 46.221111372010604,
-    "macd": -1240.8399790584663,
-    "macdSignal": -1745.0362727221727,
-    "macdHistogram": 504.19629366370646,
-    "bollingerUpper": 69695.07003594335,
-    "bollingerMiddle": 65590,
-    "bollingerLower": 61484.92996405664,
-    "atr14": 1968.492230707016
+    "date": "2026-11-04",
+    "close": 67700,
+    "sma50": 71128,
+    "sma200": 68626,
+    "ema12": 66499.65236860371,
+    "ema26": 67535.41418867772,
+    "ema50": 69283.499717919,
+    "ema200": 67153.78576334631,
+    "rsi14": 50.256423836473964,
+    "macd": -1035.7618200740137,
+    "macdSignal": -1603.18138219254,
+    "macdHistogram": 567.4195621185263,
+    "bollingerUpper": 69811.2543026018,
+    "bollingerMiddle": 65635,
+    "bollingerLower": 61458.7456973982,
+    "atr14": 2006.4570713708006
   },
   "relativeStrength": {
-    "20": 0.017554,
-    "60": -0.04064
+    "20": 0.025091,
+    "60": -0.072675
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only. The close of 2026-11-04 was 67700, up 1.7% on the day with volume 1.1x its 20-session average. Over 60 sessions the price fell about 9%, from the 2026-09-10 high of 79000 to the 2026-10-20 low of 61100, then rebounded; since 2026-10-23 it has moved between about 65100 and 69300. The close sits below SMA50 71128 and SMA200 68626 and just above EMA200 67154. The EMA12 66500 is below EMA26 67535, while the MACD histogram is positive (567) and the MACD line is rising toward its signal line. Wilder RSI14 is 50.3; the conditions module's simple-average RSI14 reads 66.4, and the two are reported separately. The regime label is sideways with normal volatility. In the 100-bar volume profile the close is just above the value-area low 66694 and below the point of control 71915. Range position is 0.81 of the 20-session range and 0.37 of the 60-session range; daily ATR14 is about 3.0% of price. Over 20 sessions the stock outperformed the index by 2.5 points; over 60 sessions it lagged by 7.3 points. The signals are mixed: a rebound from the October low against a close still under SMA50 and SMA200. The base view over 20 sessions is a range without a move beyond +5% or -4%. For reference only; this kind of call has not been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

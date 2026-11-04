@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      48667.5,
-      48856.5,
-      46777.5,
-      46777.5,
-      3495104
-    ],
-    [
       "2025-10-20",
       46966.5,
       48006,
@@ -2082,31 +2074,51 @@
       34500,
       34700,
       1545600
+    ],
+    [
+      "2026-11-04",
+      35000,
+      36550,
+      34850,
+      36300,
+      1676800
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 34700,
-    "sma50": 43552.0,
-    "sma200": 45647.98,
-    "ema12": 37415.89881352362,
-    "ema26": 39632.761111795124,
-    "ema50": 42487.08182610202,
-    "ema200": 44946.35953683511,
-    "rsi14": 29.67084570896847,
-    "macd": -2216.862298271507,
-    "macdSignal": -2063.758795195279,
-    "macdHistogram": -153.10350307622775,
-    "bollingerUpper": 42296.02888408914,
-    "bollingerMiddle": 38505.0,
-    "bollingerLower": 34713.97111591086,
-    "atr14": 1475.3711616106211
+    "date": "2026-11-04",
+    "close": 36300,
+    "sma50": 43278.0,
+    "sma200": 45631.5025,
+    "ema12": 37244.22207298152,
+    "ema26": 39385.88991832882,
+    "ema50": 42244.451166254876,
+    "ema200": 44860.32610860789,
+    "rsi14": 37.6568996917308,
+    "macd": -2141.6678453472964,
+    "macdSignal": -2079.3406052256832,
+    "macdHistogram": -62.32724012161316,
+    "bollingerUpper": 41766.32203839388,
+    "bollingerMiddle": 38220.0,
+    "bollingerLower": 34673.67796160612,
+    "atr14": 1502.1303643527197
   },
   "relativeStrength": {
-    "20": -0.175765,
-    "60": -0.29577
+    "20": -0.124097,
+    "60": -0.293981
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "down",
+      "thesis": "Daily candles only, for reference only. The close of 36300 on 2026-11-04 is 31% below its level 60 sessions earlier and 13.6% below the level 20 sessions earlier, while VNINDEX fell about 1.2% and 2.0% over the same 20- and 60-session spans. Price sits far under SMA50 43278 and SMA200 45632, the EMA12 is below the EMA26, and the MACD histogram is slightly negative. The latest three bars form a stored Morning Star shape: after a low of 33900 on 2026-11-02, the close rose 4.6% on 2026-11-04, but on volume only 0.83x its 20-session average, so the rebound is not yet confirmed by participation. Wilder RSI14 is 37.7 and the close is just above the lower Bollinger band near 34674. The regime label is sideways with high volatility, and ATR14 is about 4.1% of the close, so a 20-session move beyond the scoring band is common in either direction. The view leans down over 20 sessions: the dominant structure is a falling trend with weak relative strength, and a three-bar rebound inside it has not changed that structure. A daily close back above 40000 and the 20-session high zone near 42900 would weaken this view; a close below 33900 would extend the decline. No historical statistics or base rates exist for this symbol, and this kind of call has never been tested on it.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

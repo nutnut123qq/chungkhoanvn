@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      27196.03,
-      27196.03,
-      26412.47,
-      26543.07,
-      18702266
-    ],
-    [
       "2025-10-20",
       26543.07,
       26543.07,
@@ -2081,32 +2073,52 @@
       21650,
       21150,
       21400,
-      10786700
+      10800994
+    ],
+    [
+      "2026-11-04",
+      21400,
+      21900,
+      21150,
+      21850,
+      12234200
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 21400,
-    "sma50": 21804.6692,
-    "sma200": 21464.0738,
-    "ema12": 21998.52671508791,
-    "ema26": 21970.810464441085,
-    "ema50": 21766.719625393653,
-    "ema200": 21482.123810506477,
-    "rsi14": 39.73994507505997,
-    "macd": 27.71625064682738,
-    "macdSignal": 170.81344300277107,
-    "macdHistogram": -143.0971923559437,
-    "bollingerUpper": 23071.865765666727,
-    "bollingerMiddle": 22071.719,
-    "bollingerLower": 21071.572234333275,
-    "atr14": 495.9987131338638
+    "date": "2026-11-04",
+    "close": 21850,
+    "sma50": 21819.648,
+    "sma200": 21451.3824,
+    "ema12": 21975.676451228235,
+    "ema26": 21961.861541149152,
+    "ema50": 21769.98552243704,
+    "ema200": 21485.784270103428,
+    "rsi14": 48.2360707705947,
+    "macd": 13.814910079080729,
+    "macdSignal": 139.413736418033,
+    "macdHistogram": -125.59882633895228,
+    "bollingerUpper": 23062.89034592064,
+    "bollingerMiddle": 22087.4985,
+    "bollingerLower": 21112.10665407936,
+    "atr14": 514.1416621957306
   },
   "relativeStrength": {
-    "20": 0.022967,
-    "60": 0.136183
+    "20": 0.026273,
+    "60": 0.123299
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only. The latest session closed 21850, up 2.1% on the day, completing a two-bar bullish engulfing pattern after a hammer two sessions earlier near the 20600 low. Volume on the latest session was 0.65x its 20-session average, so the rebound is not confirmed by volume. The close sits just above SMA50 21820 and above SMA200 21451, while EMA12 and EMA26 are nearly equal. The MACD histogram is negative and the MACD line has fallen close to zero, so momentum from the October high has faded. Wilder RSI14 is 48, in the neutral zone. The regime label is sideways with high volatility, and the Fibonacci module reads the operative leg as bearish. Over 20 sessions the stock rose 1.5% while the VN-Index fell 1.2%; over 60 sessions it rose 10.3% against a 2.0% decline in the index, so relative strength is positive. Range position is 0.54 in the 20-session range (20600 to 22934) and 0.57 in the 60-session range. A 5% rise would need a close near 22940, the top of the 20-session range; a 4% fall would need a close near 20980, above the recent low. With mixed signals inside a range, the view over 20 sessions is sideways, for reference only.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

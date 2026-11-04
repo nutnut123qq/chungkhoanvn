@@ -4,14 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-17",
-      36778.13,
-      36824.39,
-      36130.47,
-      36130.47,
-      4180594
-    ],
-    [
       "2025-10-20",
       36037.94,
       36130.47,
@@ -2082,31 +2074,50 @@
       31600,
       31700,
       5029600
+    ],
+    [
+      "2026-11-04",
+      31800,
+      32700,
+      31800,
+      32450,
+      4384800
     ]
   ],
   "indicators": {
-    "date": "2026-11-03",
-    "close": 31700,
-    "sma50": 35094.0,
-    "sma200": 38432.8584,
-    "ema12": 33243.447283621856,
-    "ema26": 33904.68466721324,
-    "ema50": 34668.255732901715,
-    "ema200": 36639.24458732065,
-    "rsi14": 26.3315161091828,
-    "macd": -661.2373835913866,
-    "macdSignal": -544.6208617815885,
-    "macdHistogram": -116.61652180979809,
-    "bollingerUpper": 34874.00152206877,
-    "bollingerMiddle": 33560.0,
-    "bollingerLower": 32245.99847793123,
-    "atr14": 747.0628043270954
+    "date": "2026-11-04",
+    "close": 32450,
+    "sma50": 35005.0,
+    "sma200": 38359.1732,
+    "ema12": 33121.37847075695,
+    "ema26": 33796.93024741967,
+    "ema50": 34581.26531200361,
+    "ema200": 36597.56056157617,
+    "rsi14": 36.395703538312496,
+    "macd": -675.5517766627137,
+    "macdSignal": -570.8070447578135,
+    "macdHistogram": -104.74473190490016,
+    "bollingerUpper": 34781.99046806651,
+    "bollingerMiddle": 33457.5,
+    "bollingerLower": 32133.009531933487,
+    "atr14": 765.12974687516
   },
   "relativeStrength": {
-    "20": -0.050013,
-    "60": -0.069475
+    "20": -0.047803,
+    "60": -0.092376
   },
   "notes": [
+    {
+      "signalDate": "2026-11-04",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view over 20 sessions, for reference only. The daily trend is down: the close of 32450 sits below the 50-session simple average (35005) and the 200-session simple average (38359), the 12-period exponential average is below the 26-period one, and the daily momentum histogram is negative. Wilder RSI on the daily bars is 36.4, near but not in oversold; the simple-average RSI of the conditions module reads 43.7. Over the last 20 sessions the stock fell 5.9% while the broad index fell 1.2%, and it lagged all four bank peers over 20 and 60 sessions. The session of 2026-11-04 rose 2.4% from the 60-session low of 31600 set one session earlier, on volume 1.21x its 20-session average, after a 4.2% drop on 2026-11-02 on volume about 2.9x its average. The close is in the lower part of the 20-session range (range position 0.27) and just above the lower Bollinger band (32133). The rebound is not yet confirmed. A rise of at least 5% in 20 sessions would need a close near 34070, above the 26-period exponential average (33797) and below the late-October high of 34800, while a fall of at least 4% would need a close near 31150, below the recent low. The trend and weak relative strength lean lower, but the one-day rebound from the low leaves the 20-session view as sideways.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-02",
+      "returnPct": null,
+      "hit": null
+    },
     {
       "signalDate": "2026-11-03",
       "horizonSessions": 20,
