@@ -7,7 +7,7 @@ import { formatDate, formatVnDateTime } from "../lib/format.ts";
 export const metadata: Metadata = {
   title: { default: "Bảng VN30 — phân tích kỹ thuật tự động", template: "%s — Bảng VN30" },
   description:
-    "Bảng sức mạnh giá rổ VN30, biểu đồ, chỉ báo và nhận định kỹ thuật tự động có chấm điểm thật. Chỉ để tham khảo, không phải khuyến nghị đầu tư.",
+    "Bảng sức mạnh giá rổ VN30, biểu đồ, chỉ báo và nhận định kỹ thuật tự động, chấm điểm theo một quy tắc cố định; chưa có bằng chứng về lợi thế. Chỉ để tham khảo, không phải khuyến nghị đầu tư.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
