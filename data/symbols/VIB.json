@@ -4,22 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-20",
-      17056.36,
-      17142.94,
-      15887.52,
-      15887.52,
-      21199866
-    ],
-    [
-      "2025-10-21",
-      15930.81,
-      16407,
-      15757.65,
-      16147.26,
-      14715433
-    ],
-    [
       "2025-10-22",
       16233.84,
       16363.71,
@@ -2082,43 +2066,47 @@
       13800,
       14250,
       9168100
+    ],
+    [
+      "2026-11-05",
+      14250,
+      14300,
+      14100,
+      14100,
+      4984400
+    ],
+    [
+      "2026-11-06",
+      13900,
+      14100,
+      13850,
+      14000,
+      4025000
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 14250,
-    "sma50": 13658.0304,
-    "sma200": 14320.00935,
-    "ema12": 13944.326783858865,
-    "ema26": 13840.462862118076,
-    "ema50": 13771.081119961013,
-    "ema200": 14267.270154660573,
-    "rsi14": 59.6059438137982,
-    "macd": 103.86392174078932,
-    "macdSignal": 109.48528178072687,
-    "macdHistogram": -5.621360039937542,
-    "bollingerUpper": 14273.93553321053,
-    "bollingerMiddle": 13907.5,
-    "bollingerLower": 13541.06446678947,
-    "atr14": 287.43209986322745
+    "date": "2026-11-06",
+    "close": 14000,
+    "sma50": 13683.0688,
+    "sma200": 14302.2835,
+    "ema12": 13973.157046431495,
+    "ema26": 13870.081328976403,
+    "ema50": 13792.45127605782,
+    "ema200": 14262.96293147975,
+    "rsi14": 53.26159658145657,
+    "macd": 103.07571745509267,
+    "macdSignal": 108.05991169060779,
+    "macdHistogram": -4.984194235515119,
+    "bollingerUpper": 14291.567916623922,
+    "bollingerMiddle": 13940.0,
+    "bollingerLower": 13588.432083376078,
+    "atr14": 278.9593105963543
   },
   "relativeStrength": {
-    "20": 0.036797,
-    "60": 0.08497
+    "20": 0.031249,
+    "60": 0.062953
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Daily candles only. The 2026-11-04 session closed 14250, up 2.5% on the day with volume 1.3x its 20-session average, after a dip to 13500 on 2026-11-02. The close sits near the top of the 20-session range 13500 to 14350 (range position 0.88) and just under the 200-session averages (SMA200 14320, EMA200 14267). Price is above SMA50 13658 and EMA12 is above EMA26, but the MACD histogram is slightly negative (-5.6) and Wilder RSI14 is 59.6, neutral. The regime label is sideways with high volatility. Over 20 and 60 sessions the stock outperformed VNINDEX by 3.7 and 8.5 points. Taken together the picture is a range with a test of the 200-session averages that is not yet confirmed; a move of 5% or more within 20 sessions would need a break above 14350 and the volume-profile value-area high near 15080, while a fall of 4% would need a close back below the 13500 range low. View: sideways over 20 sessions, for reference only.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

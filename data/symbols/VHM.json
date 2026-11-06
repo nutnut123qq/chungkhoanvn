@@ -4,22 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-20",
-      54891,
-      55372.5,
-      52002,
-      52002,
-      11649150
-    ],
-    [
-      "2025-10-21",
-      52483.5,
-      55372.5,
-      51472.35,
-      53398.35,
-      8248718
-    ],
-    [
       "2025-10-22",
       53928,
       54409.5,
@@ -2082,43 +2066,47 @@
       60800,
       63200,
       4951200
+    ],
+    [
+      "2026-11-05",
+      64000,
+      64900,
+      63000,
+      63300,
+      7233200
+    ],
+    [
+      "2026-11-06",
+      62000,
+      63000,
+      62000,
+      62100,
+      5192100
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 63200,
-    "sma50": 67590.0,
-    "sma200": 64831.57025,
-    "ema12": 62828.615723218485,
-    "ema26": 64117.752398503064,
-    "ema50": 66102.2707371473,
-    "ema200": 64003.7901116454,
-    "rsi14": 46.65725777546265,
-    "macd": -1289.1366752845797,
-    "macdSignal": -1614.2112118751154,
-    "macdHistogram": 325.0745365905357,
-    "bollingerUpper": 66700.42785048354,
-    "bollingerMiddle": 62610.0,
-    "bollingerLower": 58519.57214951646,
-    "atr14": 2415.1935235271626
+    "date": "2026-11-06",
+    "close": 62100,
+    "sma50": 67158.0,
+    "sma200": 64865.603,
+    "ema12": 62777.884630233355,
+    "ema26": 63912.20198774269,
+    "ema50": 65839.73550168806,
+    "ema200": 63977.91372023637,
+    "rsi14": 43.35443110610602,
+    "macd": -1134.3173575093292,
+    "macdSignal": -1444.9253295942967,
+    "macdHistogram": 310.6079720849675,
+    "bollingerUpper": 65798.41262200322,
+    "bollingerMiddle": 62295.0,
+    "bollingerLower": 58791.58737799678,
+    "atr14": 2301.3658442657675
   },
   "relativeStrength": {
-    "20": -0.058971,
-    "60": -0.114428
+    "20": -0.053483,
+    "60": -0.111602
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Daily candles only, for reference only. The stock fell from a high of 81700 in early August to a low of 57600 on 2026-10-20, then rebounded and since 2026-10-22 has moved in a band between about 60100 and 65300. The latest close is 63200, up 2.1% on the day with volume 0.6x its 20-session average, so the rise came on light activity. The close sits below SMA50 67590 and just under SMA200 64832, while EMA12 62829 is still below EMA26 64118, and the momentum line is negative while its MACD histogram is positive, so downside momentum has eased without a turn. Wilder RSI14 is 46.7 while the simple-average RSI14 in the conditions module reads 62.4; the two disagree and both are outside oversold and overbought. The regime label is sideways with normal volatility. Over the last 20- and 60-session windows the stock lagged VNINDEX by 5.9 and 11.4 points. Daily ATR14 is about 3.8% of the close, so a 20-session move of +5% or -4% is within normal range in either direction. With mixed signals and no tested statistics for this symbol, the view for the next 20 sessions is sideways: a close above about 66400 or below about 60700 twenty sessions later would contradict it.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

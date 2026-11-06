@@ -4,22 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-20",
-      17051.58,
-      17296.49,
-      15796.44,
-      15796.44,
-      13291898
-    ],
-    [
-      "2025-10-21",
-      15857.66,
-      16286.25,
-      15398.46,
-      16102.57,
-      8839654
-    ],
-    [
       "2025-10-22",
       16347.47,
       16714.83,
@@ -2082,43 +2066,47 @@
       25800,
       26500,
       11872000
+    ],
+    [
+      "2026-11-05",
+      26150,
+      27100,
+      25700,
+      26500,
+      9390600
+    ],
+    [
+      "2026-11-06",
+      26550,
+      27100,
+      26250,
+      26250,
+      6878000
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 26500,
-    "sma50": 29122.0,
-    "sma200": 27116.5572,
-    "ema12": 27908.880828538156,
-    "ema26": 28649.871830752614,
-    "ema50": 28597.53973401527,
-    "ema200": 25763.674553709752,
-    "rsi14": 34.05008483966817,
-    "macd": -740.9910022144553,
-    "macdSignal": -399.95039404995896,
-    "macdHistogram": -341.04060816449635,
-    "bollingerUpper": 31709.38689114764,
-    "bollingerMiddle": 28835.0,
-    "bollingerLower": 25960.61310885236,
-    "atr14": 1099.0124178975316
+    "date": "2026-11-06",
+    "close": 26250,
+    "sma50": 29095.0,
+    "sma200": 27172.1648,
+    "ema12": 27470.263788479984,
+    "ema26": 28324.65006065896,
+    "ema50": 28426.448635667308,
+    "ema200": 25775.767332527903,
+    "rsi14": 32.75287975020173,
+    "macd": -854.3862721789791,
+    "macdSignal": -554.6042480152414,
+    "macdHistogram": -299.7820241637377,
+    "bollingerUpper": 30897.47938886064,
+    "bollingerMiddle": 28320.0,
+    "bollingerLower": 25742.52061113936,
+    "atr14": 1101.1892786973615
   },
   "relativeStrength": {
-    "20": -0.153737,
-    "60": 0.042725
+    "20": -0.148982,
+    "60": 0.034772
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Technical-only view on daily candles, for reference only. The close of 26500 on 2026-11-04 is 16.5% lower than 20 sessions earlier, while the index fell 1.2% over the same window; over 60 sessions the stock is up 2.3%. The close sits below the 50-day simple average (29122) and below the 200-day simple average (27117), but above the 200-day exponential average (25764). Price is near the lower Bollinger band (25961) and at range position 0.11 within the 20-session range of 25800 to 32400. Wilder RSI14 is 34.1; the simple-average RSI14 of the conditions module is 36.5 and has just moved back above 30, while the MACD line is below its signal line with a negative histogram and on-balance volume is under its 50-bar average. The last bar opened at the low end, dipped to 25800 and closed near the middle of its range on volume 1.4x its 20-session average, forming a bullish harami with the prior bar, not yet confirmed. The regime label is a bear trend with normal volatility. Momentum is still down, but the decline is stretched and the oversold reading is easing, so these signals do not favour a move of 5% or more either way over the next 20 sessions; the base case is a range of roughly 25000 to 28500. A daily close below 25000 would point to continued weakness; a close back above 28500 would point to a recovery toward the 50-day average.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

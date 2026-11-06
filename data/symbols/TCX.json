@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-21",
-      34227.84,
-      35052.61,
-      33299.98,
-      33643.63,
-      14668000
-    ],
-    [
       "2025-10-22",
       33678,
       33678,
@@ -2074,43 +2066,47 @@
       26500,
       28350,
       5485500
+    ],
+    [
+      "2026-11-05",
+      28950,
+      29400,
+      28600,
+      28900,
+      6375300
+    ],
+    [
+      "2026-11-06",
+      28250,
+      29200,
+      28200,
+      29000,
+      7258100
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 28350,
-    "sma50": 29969.9358,
-    "sma200": 34355.36995,
-    "ema12": 27840.84982935873,
-    "ema26": 28427.908859902956,
-    "ema50": 29608.28238677461,
-    "ema200": 32675.322357692763,
-    "rsi14": 49.09295473395787,
-    "macd": -587.0590305442253,
-    "macdSignal": -626.1956139524355,
-    "macdHistogram": 39.136583408210186,
-    "bollingerUpper": 29697.94953621696,
-    "bollingerMiddle": 27862.5,
-    "bollingerLower": 26027.05046378304,
-    "atr14": 865.9598635594542
+    "date": "2026-11-06",
+    "close": 29000,
+    "sma50": 29776.3232,
+    "sma200": 34287.12715,
+    "ema12": 28157.05816184856,
+    "ema26": 28502.665346281683,
+    "ema50": 29557.741641924582,
+    "ema200": 32601.560374421202,
+    "rsi14": 53.45149441116014,
+    "macd": -345.6071844331251,
+    "macdSignal": -543.3398401404767,
+    "macdHistogram": 197.73265570735157,
+    "bollingerUpper": 29915.00500666862,
+    "bollingerMiddle": 28042.5,
+    "bollingerLower": 26169.99499333138,
+    "atr14": 887.7409027629986
   },
   "relativeStrength": {
-    "20": 0.025929,
-    "60": -0.114498
+    "20": 0.077697,
+    "60": -0.11993
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Technical-only view over 20 sessions, for reference only. On 2026-11-04 the daily candle rose 6.98% from 26500 to 28350, closing at its high and at the top of the daily price band, on volume 1.77x its 20-session average. The stored recognizer labels the last three bars a Morning Star after the decline from 29950 on 2026-10-22 to a low of 26100 on 2026-11-02. The rebound is not yet confirmed by the trend: the close is below the SMA50 (29970), below the EMA50 (29608) and below the SMA200 (34355), the spread between EMA12 and EMA26 is still negative (MACD -587 with a slightly positive histogram), and the 60-session return is -13.4%, about 11.4 points weaker than VNINDEX, while the 20-session return is +1.4%, about 2.6 points stronger. Wilder RSI14 is 49.1 and the simple-average RSI14 of the conditions module is 54.4, both neutral. The regime label is sideways with high volatility and the operative Fibonacci leg is bearish. The close sits at range position 0.58 of the 20-session range from 26100 to 29950 and at 0.24 of the 60-session range. The base case is a range between roughly 26100 and 29950 over the next 20 sessions, which would score sideways under the plus 5 and minus 4 percent rule; a daily close above the SMA50 would weaken this view, and a close below 26100 would point lower.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

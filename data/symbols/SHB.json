@@ -4,22 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-20",
-      17642.24,
-      17740.8,
-      16607.36,
-      16607.36,
-      157107927
-    ],
-    [
-      "2025-10-21",
-      16607.36,
-      17001.6,
-      15868.16,
-      16755.2,
-      144451854
-    ],
-    [
       "2025-10-22",
       16755.2,
       16755.2,
@@ -2082,43 +2066,47 @@
       10400,
       10750,
       46906600
+    ],
+    [
+      "2026-11-05",
+      10800,
+      10900,
+      10700,
+      10700,
+      26581900
+    ],
+    [
+      "2026-11-06",
+      10550,
+      10750,
+      10500,
+      10750,
+      32677200
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
+    "date": "2026-11-06",
     "close": 10750,
-    "sma50": 11195.0,
-    "sma200": 13357.0956,
-    "ema12": 10642.053746030197,
-    "ema26": 10787.000916449093,
-    "ema50": 11124.554721438308,
-    "ema200": 12718.32650093124,
-    "rsi14": 48.65146100385504,
-    "macd": -144.94717041889595,
-    "macdSignal": -181.80029192409827,
-    "macdHistogram": 36.853121505202324,
-    "bollingerUpper": 11022.34207901135,
-    "bollingerMiddle": 10547.5,
-    "bollingerLower": 10072.65792098865,
-    "atr14": 286.3646743847775
+    "sma50": 11141.0,
+    "sma200": 13300.736,
+    "ema12": 10666.204161358899,
+    "ema26": 10778.292966777344,
+    "ema50": 11093.870006218138,
+    "ema200": 12678.858141218732,
+    "rsi14": 48.821002498000404,
+    "macd": -112.0888054184447,
+    "macdSignal": -159.50400388091782,
+    "macdHistogram": 47.41519846247313,
+    "bollingerUpper": 10948.067693521041,
+    "bollingerMiddle": 10617.5,
+    "bollingerLower": 10286.932306478959,
+    "atr14": 278.03892842360915
   },
   "relativeStrength": {
-    "20": 0.006988,
-    "60": -0.061378
+    "20": 0.080608,
+    "60": -0.069544
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Daily candles only, 20-session view, for reference only. The longer trend is down: the close 10750 sits below SMA50 11195 and well below SMA200 13357, and the last 100 sessions fell about 23% from the June high. Since the 9550 low of 2026-10-09 the price has moved in a 10300 to 10900 band for three weeks; on 2026-11-04 it rose 2.9% to the top of that band on volume 1.1x its 20-session average, range position 0.89 over 20 sessions and 0.44 over 60. Momentum is mixed: Wilder RSI14 48.7 and the simple-average RSI14 59.5 are both neutral, MACD is below zero but its histogram is positive, and EMA12 is still under EMA26. The market regime label is sideways with normal volatility. Over 20 sessions the return is -0.5% against -1.2% for the index, while over 60 sessions it lags the index by about 6 points. A close of 5% higher would need a move through the 10900 band top and SMA50, and a 4% decline would mean losing the 10300 band floor. Neither is confirmed yet, so the base case is a range. This call has never been tested on this symbol.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

@@ -4,22 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-20",
-      57032.87,
-      57517.02,
-      53256.5,
-      53256.5,
-      8762669
-    ],
-    [
-      "2025-10-21",
-      54321.63,
-      56161.4,
-      54321.63,
-      54708.95,
-      7079112
-    ],
-    [
       "2025-10-22",
       55289.93,
       55483.59,
@@ -2082,43 +2066,47 @@
       56400,
       57400,
       3430600
+    ],
+    [
+      "2026-11-05",
+      57700,
+      58000,
+      57100,
+      57500,
+      2669700
+    ],
+    [
+      "2026-11-06",
+      57100,
+      58000,
+      57100,
+      57800,
+      3328500
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 57400,
-    "sma50": 59294.0,
-    "sma200": 60113.78655,
-    "ema12": 57307.36018321922,
-    "ema26": 57920.46410062188,
-    "ema50": 58566.782135473164,
-    "ema200": 59049.45136179806,
-    "rsi14": 45.93662084727707,
-    "macd": -613.1039174026582,
-    "macdSignal": -604.1654600600355,
-    "macdHistogram": -8.938457342622769,
-    "bollingerUpper": 58781.46968069092,
-    "bollingerMiddle": 57590.0,
-    "bollingerLower": 56398.53031930908,
-    "atr14": 860.5535342844533
+    "date": "2026-11-06",
+    "close": 57800,
+    "sma50": 59084.0,
+    "sma200": 60018.7705,
+    "ema12": 57408.2282968611,
+    "ema26": 57882.70241822863,
+    "ema50": 58496.51822655558,
+    "ema200": 59021.75499068254,
+    "rsi14": 49.06403466199386,
+    "macd": -474.4741213675356,
+    "macdSignal": -569.9321640844665,
+    "macdHistogram": 95.45804271693095,
+    "bollingerUpper": 58761.38105177288,
+    "bollingerMiddle": 57575.0,
+    "bollingerLower": 56388.61894822712,
+    "atr14": 865.987486194248
   },
   "relativeStrength": {
-    "20": 0.001273,
-    "60": -0.054375
+    "20": 0.007341,
+    "60": -0.040647
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Technical-only daily view over 20 sessions, for reference only. On 2026-11-04 the stock closed 57400, up 1.95% on the day on volume 1.9x its 20-session average, after touching 55600 on 2026-11-02. The close sits below SMA50 59294 and SMA200 60114, and EMA12 57307 is under EMA26 57920, and the MACD line is negative with a histogram near zero. Wilder RSI14 is 45.9 and the simple-average RSI14 is 51.5, both neutral. Bollinger bands span 56399 to 58781 with the close near the middle 57590. The 20-session range is 55600 to 58500 with range position 0.62; the 60-session range is 55600 to 64400 with range position 0.21. The regime label is sideways with high volatility, and the 20-session return is -1.0% against -1.2% for the index, while the 60-session return is -7.4% against -2.0%. The longer trend is down but the last month is a flat range, and the latest up day is not yet confirmed. The base case is a range between roughly 55600 and 58800 over the next 20 sessions, which falls inside the scoring band of -4% to +5%.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

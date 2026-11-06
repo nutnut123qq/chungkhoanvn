@@ -4,22 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-20",
-      24907.34,
-      25219.8,
-      23255.78,
-      23255.78,
-      103075157
-    ],
-    [
-      "2025-10-21",
-      23478.96,
-      24103.88,
-      23211.14,
-      23925.33,
-      74360824
-    ],
-    [
       "2025-10-22",
       24014.6,
       24014.6,
@@ -2082,43 +2066,47 @@
       21100,
       21700,
       38465700
+    ],
+    [
+      "2026-11-05",
+      21750,
+      21900,
+      21450,
+      21500,
+      18613700
+    ],
+    [
+      "2026-11-06",
+      21150,
+      21400,
+      21050,
+      21200,
+      22105200
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 21700,
-    "sma50": 21040.0,
-    "sma200": 22979.35285,
-    "ema12": 21026.549226797433,
-    "ema26": 20937.413420122008,
-    "ema50": 21099.209437300444,
-    "ema200": 22316.647661684885,
-    "rsi14": 59.458128995129016,
-    "macd": 89.1358066754244,
-    "macdSignal": 10.576257934978537,
-    "macdHistogram": 78.55954874044586,
-    "bollingerUpper": 21617.663381242073,
-    "bollingerMiddle": 20852.5,
-    "bollingerLower": 20087.336618757927,
-    "atr14": 510.5745546244913
+    "date": "2026-11-06",
+    "close": 21200,
+    "sma50": 21013.0,
+    "sma200": 22948.01995,
+    "ema12": 21114.866606168576,
+    "ema26": 20995.450463067566,
+    "ema50": 21118.26292155262,
+    "ema200": 22297.49174650091,
+    "rsi14": 52.6193566086583,
+    "macd": 119.41614310101058,
+    "macdSignal": 49.900242846934866,
+    "macdHistogram": 69.51590025407572,
+    "bollingerUpper": 21624.230313520406,
+    "bollingerMiddle": 20975.0,
+    "bollingerLower": 20325.769686479594,
+    "atr14": 502.23010067111755
   },
   "relativeStrength": {
-    "20": 0.077957,
-    "60": 0.006182
+    "20": 0.060334,
+    "60": -0.011454
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "HPG daily closed 21700 on 2026-11-04, up 2.1% on the day and 6.6% over 20 sessions, at the top of its 20-session range on volume 2.0x its 20-session average. The close is above SMA50 21040 and EMA50 21099, and MACD is above its signal line, with Wilder RSI14 at 59.5 (neutral zone). The longer picture is weaker: the close is still below SMA200 22979 and EMA200 22317, the 60-session range is 19600 to 22400 with the close at range position 0.75, and the regime module labels the trend sideways with normal volatility. Relative to VNINDEX the stock gained 7.8 points over 20 sessions but only 0.6 points over 60 sessions. A +5% move over 20 sessions would need a close near 22785, which sits at the SMA200 area and below the volume-profile VAH 23459; a -4% move would bring it back to about 20830, inside the recent range. The short-term strength is not yet confirmed against the declining long averages, so the base view is a range over the next 20 sessions. For reference only; this kind of call has never been tested on HPG.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

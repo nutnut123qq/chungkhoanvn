@@ -4,22 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-20",
-      35951.03,
-      36359.56,
-      33227.47,
-      33295.56,
-      25122546
-    ],
-    [
-      "2025-10-21",
-      33363.65,
-      34316.89,
-      33295.56,
-      34010.49,
-      13438444
-    ],
-    [
       "2025-10-22",
       34384.98,
       34384.98,
@@ -2082,43 +2066,47 @@
       30000,
       31050,
       10975700
+    ],
+    [
+      "2026-11-05",
+      31100,
+      31600,
+      31100,
+      31600,
+      17794700
+    ],
+    [
+      "2026-11-06",
+      31150,
+      31850,
+      31050,
+      31850,
+      12317000
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 31050,
-    "sma50": 30464.0,
-    "sma200": 33305.3014,
-    "ema12": 30395.625245087736,
-    "ema26": 30346.61638193044,
-    "ema50": 30564.170212158027,
-    "ema200": 32045.85274393911,
-    "rsi14": 58.12635652341673,
-    "macd": 49.008863157300816,
-    "macdSignal": 3.259563148406288,
-    "macdHistogram": 45.74930000889453,
-    "bollingerUpper": 31281.98653659313,
-    "bollingerMiddle": 30205.0,
-    "bollingerLower": 29128.01346340687,
-    "atr14": 608.4984274281248
+    "date": "2026-11-06",
+    "close": 31850,
+    "sma50": 30467.0,
+    "sma200": 33221.4916,
+    "ema12": 30776.157719855717,
+    "ema26": 30543.944086017178,
+    "ema50": 30653.622714106663,
+    "ema200": 32039.511757449884,
+    "rsi14": 64.81847847498898,
+    "macd": 232.2136338385391,
+    "macdSignal": 71.16149614618239,
+    "macdHistogram": 161.05213769235672,
+    "bollingerUpper": 31692.809961570674,
+    "bollingerMiddle": 30442.5,
+    "bollingerLower": 29192.190038429326,
+    "atr14": 618.2971134456792
   },
   "relativeStrength": {
-    "20": 0.055315,
-    "60": -0.024797
+    "20": 0.085269,
+    "60": 0.013163
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Technical-only view over 20 sessions, for reference only. On 2026-11-04 the daily candle rose 3.3% to close 31050 near its high, on volume 1.5x its 20-session average, a full-bodied green candle. The close sits at range position 0.98 of the 20-session range (28850 to 31100) but only 0.54 of the 60-session range (28850 to 32950). The close is 1.9% above the SMA50 at 30464 and 6.8% below the SMA200 at 33305, so the longer trend is still down while the shorter trend has turned up: the EMA12 is just above the EMA26 and the Wilder RSI14 reads 58, neutral. The regime label is sideways with high volatility, and daily true range averages about 2% of price. Over 20 sessions the stock rose 4.4% while the main index fell 1.2%, but over 60 sessions it fell 4.5%, weaker than the index. The latest swing leg is still labelled bearish. The upper edge of the volume value area at about 33600 and the 60-session high at 32950 both sit above the +5% scoring line near 32600, while the 20-session low at 28850 sits below the -4% line near 29800. A move clear of 31100 is not yet confirmed. On balance the view is sideways: a return between -4% and +5% over the next 20 sessions.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

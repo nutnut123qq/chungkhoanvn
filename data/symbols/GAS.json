@@ -4,22 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-20",
-      56947.48,
-      57822.1,
-      55392.6,
-      55392.6,
-      612230
-    ],
-    [
-      "2025-10-21",
-      55684.14,
-      57141.84,
-      54420.8,
-      54420.8,
-      844653
-    ],
-    [
       "2025-10-22",
       55586.96,
       57336.2,
@@ -2082,43 +2066,47 @@
       74100,
       75600,
       593600
+    ],
+    [
+      "2026-11-05",
+      75500,
+      76500,
+      74100,
+      74600,
+      1154200
+    ],
+    [
+      "2026-11-06",
+      74500,
+      76200,
+      74100,
+      74100,
+      638600
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 75600,
-    "sma50": 80712.7632,
-    "sma200": 83313.6073,
-    "ema12": 77213.9681887959,
-    "ema26": 78288.71368521353,
-    "ema50": 78741.41041438738,
-    "ema200": 77862.10598870523,
-    "rsi14": 41.4458320804904,
-    "macd": -1074.7454964176272,
-    "macdSignal": -928.028009445529,
-    "macdHistogram": -146.7174869720982,
-    "bollingerUpper": 81334.299929986,
-    "bollingerMiddle": 77835.0,
-    "bollingerLower": 74335.700070014,
-    "atr14": 2524.866892103168
+    "date": "2026-11-06",
+    "close": 74100,
+    "sma50": 80411.7972,
+    "sma200": 83036.7173,
+    "ema12": 76394.61627718524,
+    "ema26": 77725.44040227498,
+    "ema50": 78403.35501920189,
+    "ema200": 77792.53630501017,
+    "rsi14": 37.81053988745141,
+    "macd": -1330.824125089743,
+    "macdSignal": -1052.6877747084498,
+    "macdHistogram": -278.13635038129314,
+    "bollingerUpper": 80306.2931116502,
+    "bollingerMiddle": 77135.0,
+    "bollingerLower": 73963.7068883498,
+    "atr14": 2486.2372692114045
   },
   "relativeStrength": {
-    "20": -0.024097,
-    "60": 0.06263
+    "20": -0.076177,
+    "60": 0.010969
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Daily candles only, for reference only. The close on 2026-11-04 was 75600, down 3.6% over 20 sessions and up 4.3% over 60 sessions. Price sits below SMA50 80713 (6.3% under) and SMA200 83314 (9.3% under), and below EMA200 77862, while SMA50 is 3.1% under SMA200. EMA12 is below EMA26 and the MACD histogram is negative, so short-term momentum points lower. Wilder RSI14 is 41.4, in the neutral zone. The close is 1.7% above the lower Bollinger band 74336, and the 20-session range runs from 73800 to 83600 with range position 0.18. The low of 73800 on 2026-10-29 came on volume 2.9x its 20-session average and was not broken on later retests (lows 74000 and 74100). The latest bar is a hammer shape in one rule set and a bullish harami in the other, on volume 0.62x its 20-session average, not yet confirmed. The regime module labels the market sideways with normal volatility. Over 20 sessions the view is sideways: the trend structure leans lower, but the bar shapes near the range floor and the sideways regime argue against a fall of 4% or more, and nothing points to a rise of 5% or more. A daily close under 73800 would shift the balance lower; a close above 79400 would weaken the sideways view. Relative to the broad index the stock lagged by 2.4 points over 20 sessions and led by 6.3 points over 60 sessions.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,

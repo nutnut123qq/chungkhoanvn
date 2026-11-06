@@ -4,22 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-20",
-      22056.96,
-      22100.04,
-      21195.36,
-      21367.68,
-      32258331
-    ],
-    [
-      "2025-10-21",
-      21410.76,
-      21798.48,
-      21410.76,
-      21540,
-      19394085
-    ],
-    [
       "2025-10-22",
       21712.32,
       21798.48,
@@ -2082,54 +2066,47 @@
       20150,
       20500,
       11819700
+    ],
+    [
+      "2026-11-05",
+      20700,
+      20750,
+      20500,
+      20550,
+      6518000
+    ],
+    [
+      "2026-11-06",
+      20350,
+      20500,
+      20200,
+      20350,
+      7535400
     ]
   ],
   "indicators": {
-    "date": "2026-11-04",
-    "close": 20500,
-    "sma50": 21385.0,
-    "sma200": 21262.0006,
-    "ema12": 20735.444353112798,
-    "ema26": 20896.638017997393,
-    "ema50": 21206.341431929777,
-    "ema200": 21319.385708881324,
-    "rsi14": 42.151344045952854,
-    "macd": -161.1936648845976,
-    "macdSignal": -170.26597418198855,
-    "macdHistogram": 9.072309297390944,
-    "bollingerUpper": 21486.451437435346,
-    "bollingerMiddle": 20652.5,
-    "bollingerLower": 19818.548562564654,
-    "atr14": 419.29135049474274
+    "date": "2026-11-06",
+    "close": 20350,
+    "sma50": 21309.0,
+    "sma200": 21253.0392,
+    "ema12": 20652.004536844073,
+    "ema26": 20832.37141460682,
+    "ema50": 21148.029903138562,
+    "ema200": 21302.160675661726,
+    "rsi14": 40.005920491684456,
+    "macd": -180.3668777627462,
+    "macdSignal": -171.2910670516555,
+    "macdHistogram": -9.075810711090725,
+    "bollingerUpper": 21475.91458786885,
+    "bollingerMiddle": 20672.5,
+    "bollingerLower": 19869.08541213115,
+    "atr14": 403.113460375569
   },
   "relativeStrength": {
-    "20": 0.004354,
-    "60": -0.065003
+    "20": 0.015533,
+    "60": -0.074451
   },
-  "notes": [
-    {
-      "signalDate": "2026-11-04",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Technical-only view on daily candles over 20 sessions, for reference only. The close of 20500 on 2026-11-04 sits below SMA50 21385 and SMA200 21262 and below both the EMA50 and the EMA200, while the EMA12 is below the EMA26, with the regime labelled bearish with normal volatility. Over 60 sessions the price fell 8.5% and lags the index by 6.5 points, and the close is near the bottom of its 60-session range (range position 0.16). Against that, the last two bars formed a tweezer-bottom shape near the 20050 low, the close is just above the volume-profile value-area low 20446, the MACD histogram turned slightly positive, and Wilder RSI14 is 42, neither oversold nor strong. Volume on the latest bar was 1.24x its 20-session average. The 20-session range of 20050 to 21450 is about 7% wide, narrower than the +5% and -4% scoring bands combined, so the base case is a range: a daily close above 21450 and SMA50 would point higher, a close below 20050 would extend the decline. No historical condition statistics or base rates exist for this stock, and this kind of call has never been tested on it.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-02",
-      "returnPct": null,
-      "hit": null
-    },
-    {
-      "signalDate": "2026-11-03",
-      "horizonSessions": 20,
-      "direction": "sideways",
-      "thesis": "Daily candles only. On 23 October a wide green candle on volume 6.0x its 20-session average lifted the close to 21,300; four flat sessions capped at 21,450 followed before a full retracement: down 1.4% on 30 October and 3.3% on 2 November, when the session opened 1.7% lower on volume 1.9x its average and printed a 60-session low of 20,050. On 3 November the close was 20,250, with a small body, a lower shadow half the candle's range and volume 0.7x its average. Support at 20,050 to 20,200 has held since 9 October, with no daily close below 20,150. The trend leans down: EMA50, SMA200, EMA200 and SMA50 sit 4.9% to 5.8% above the close, EMA12 is below EMA26, MACD is negative with a slightly positive histogram, the regime label is a low-volatility downtrend, and the close is under the 100-session volume-profile value area (VAL 22,029, POC 22,346). Wilder RSI14 is 36.5 and a simple-average RSI14 is 46.3, both neutral; ATR14 is 2.1% of the close. Over 20 sessions the stock fell 1.7% against 3.4% for the VNINDEX; over 60 sessions, 8.6% against 3.7%. View for the next 20 sessions: sideways, a close 20 sessions later between 19,440 and 21,262.5 (-4% to +5%). The -4% line lies 3% under the 20,050 low; the +5% line falls inside the cluster of averages where the late-October advance stalled. A daily close below 20,050 would invalidate the view in favor of down; one above 21,450, in favor of up. Reference only: such calls showed no edge in blind tests and were never tested on this stock.",
-      "status": "pending",
-      "pendingReason": "immature",
-      "targetDate": "2026-12-01",
-      "returnPct": null,
-      "hit": null
-    }
-  ],
+  "notes": [],
   "score": {
     "scored": 0,
     "hits": 0,
