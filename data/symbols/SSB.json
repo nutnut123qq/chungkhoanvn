@@ -4,46 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-22",
-      15515.39,
-      15515.39,
-      14644.2,
-      15142.02,
-      2614316
-    ],
-    [
-      "2025-10-23",
-      15266.48,
-      15266.48,
-      14768.66,
-      15059.06,
-      2611699
-    ],
-    [
-      "2025-10-24",
-      15059.06,
-      15059.06,
-      14644.2,
-      14934.6,
-      2742664
-    ],
-    [
-      "2025-10-27",
-      14893.12,
-      14893.12,
-      14561.24,
-      14561.24,
-      2729502
-    ],
-    [
-      "2025-10-28",
-      14602.72,
-      14727.18,
-      14146.38,
-      14727.18,
-      2473838
-    ],
-    [
       "2025-10-29",
       14727.18,
       14893.12,
@@ -2082,31 +2042,83 @@
       14750,
       14800,
       1981800
+    ],
+    [
+      "2026-11-09",
+      14750,
+      14950,
+      14300,
+      14800,
+      2713100
+    ],
+    [
+      "2026-11-10",
+      14900,
+      15200,
+      14800,
+      15100,
+      2230300
+    ],
+    [
+      "2026-11-11",
+      15100,
+      15100,
+      14850,
+      15100,
+      2249400
+    ],
+    [
+      "2026-11-12",
+      15100,
+      15100,
+      14850,
+      15050,
+      2166500
+    ],
+    [
+      "2026-11-13",
+      15000,
+      15050,
+      14800,
+      15050,
+      2089900
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 14800,
-    "sma50": 17578.0,
-    "sma200": 15339.642,
-    "ema12": 15423.785695017654,
-    "ema26": 16106.504174261434,
-    "ema50": 16556.282737621314,
-    "ema200": 15900.810274360034,
-    "rsi14": 34.023396725518126,
-    "macd": -682.7184792437804,
-    "macdSignal": -658.6669488755331,
-    "macdHistogram": -24.051530368247313,
-    "bollingerUpper": 16738.109574838476,
-    "bollingerMiddle": 15712.5,
-    "bollingerLower": 14686.890425161524,
-    "atr14": 596.5828149546911
+    "date": "2026-11-13",
+    "close": 15050,
+    "sma50": 17384.0,
+    "sma200": 15346.7552,
+    "ema12": 15202.58370065767,
+    "ema26": 15761.542773032945,
+    "ema50": 16278.401978248201,
+    "ema200": 15857.89587728778,
+    "rsi14": 38.205365959910836,
+    "macd": -558.9590723752741,
+    "macdSignal": -623.058288188917,
+    "macdHistogram": 64.0992158136429,
+    "bollingerUpper": 16495.80005271751,
+    "bollingerMiddle": 15452.5,
+    "bollingerLower": 14409.19994728249,
+    "atr14": 519.0877928708502
   },
   "relativeStrength": {
-    "20": -0.11344,
-    "60": -0.011866
+    "20": -0.085123,
+    "60": -0.00168
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only. The close of 14800 on 2026-11-06 sits at range position 0.05 of the 20-session range and 0.01 of the 60-session range, after the September spike (high 24800 on 2026-09-18) fully retraced; the close is back at the August base around 14750 to 15050 and near the June low of 14650. Price is below SMA50 17578 and EMA50 16556 and slightly below SMA200 15340 and EMA200 15901; EMA12 is under EMA26 and the MACD histogram is slightly negative. Wilder RSI14 is 34.0 (Cutler RSI14 34.7, neutral zone, not oversold). The close is just above the lower Bollinger band 14687 and below the 100-bar volume-profile value area low 14861. Over 20 sessions the stock fell 11.9% while VNINDEX fell 0.6%, and it lagged the bank peers; over 60 sessions it was close to VNINDEX. The last session fell 2.3% on volume 0.89x its 20-session average, so the decline is not accompanied by heavy volume. The trend is down but price is at a multi-month base with momentum stretched, so the 20-session view is sideways (between -4% and +5%). A daily close under 14200 would point to a break of the base; a close above 15550 would point to a rebound. For reference only; this kind of view has never been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

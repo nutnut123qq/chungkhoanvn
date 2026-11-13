@@ -4,46 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-22",
-      28249.6,
-      28249.6,
-      27084.66,
-      27994.77,
-      32824521
-    ],
-    [
-      "2025-10-23",
-      28031.17,
-      28140.38,
-      27303.09,
-      27303.09,
-      24303029
-    ],
-    [
-      "2025-10-24",
-      27084.66,
-      27230.28,
-      25992.54,
-      26210.97,
-      82117726
-    ],
-    [
-      "2025-10-27",
-      26502.2,
-      26611.41,
-      25155.25,
-      25337.27,
-      71186329
-    ],
-    [
-      "2025-10-28",
-      25264.46,
-      26210.97,
-      25264.46,
-      26101.75,
-      34496457
-    ],
-    [
       "2025-10-29",
       26174.56,
       26356.58,
@@ -2082,31 +2042,83 @@
       19950,
       20400,
       31158400
+    ],
+    [
+      "2026-11-09",
+      20450,
+      20500,
+      19850,
+      19900,
+      20753500
+    ],
+    [
+      "2026-11-10",
+      20300,
+      20800,
+      20250,
+      20650,
+      34145200
+    ],
+    [
+      "2026-11-11",
+      20550,
+      20650,
+      20350,
+      20550,
+      12460700
+    ],
+    [
+      "2026-11-12",
+      20600,
+      20600,
+      20250,
+      20250,
+      11814100
+    ],
+    [
+      "2026-11-13",
+      20200,
+      20300,
+      20100,
+      20200,
+      10800700
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 20400,
-    "sma50": 20186.0,
-    "sma200": 21665.31515,
-    "ema12": 19851.752989150056,
-    "ema26": 19838.799246399343,
-    "ema50": 19982.517157223276,
-    "ema200": 21201.239199208496,
-    "rsi14": 58.39913784133983,
-    "macd": 12.953742750712934,
-    "macdSignal": -98.65228895776127,
-    "macdHistogram": 111.6060317084742,
-    "bollingerUpper": 20706.949615824844,
-    "bollingerMiddle": 19662.5,
-    "bollingerLower": 18618.050384175156,
-    "atr14": 563.5371033263112
+    "date": "2026-11-13",
+    "close": 20200,
+    "sma50": 20090.0,
+    "sma200": 21527.63045,
+    "ema12": 20112.289137300206,
+    "ema26": 19989.956572345098,
+    "ema50": 20042.125117194442,
+    "ema200": 21157.791231820655,
+    "rsi14": 52.95734623875546,
+    "macd": 122.33256495510825,
+    "macdSignal": 36.13729609411401,
+    "macdHistogram": 86.19526886099425,
+    "bollingerUpper": 20895.706836664125,
+    "bollingerMiddle": 19962.5,
+    "bollingerLower": 19029.293163335875,
+    "atr14": 531.0098316648869
   },
   "relativeStrength": {
-    "20": 0.079292,
-    "60": 0.041899
+    "20": 0.021549,
+    "60": 0.034217
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only, 20-session view: sideways. The stock rebounded from a low of 18500 on 2026-11-02 and closed at 20400 on 2026-11-06, up 5.7% over five sessions and 7.4% over 20 sessions, while the VN-Index fell 0.6% over the same 20 sessions (excess return about +7.9 points). The rebound came with volume 2.4x its 20-session average on 2026-11-04 and about 1.6x on the next two sessions. EMA12 crossed above EMA26 on the last bar, the MACD histogram is positive, and Wilder RSI14 is 58, in the neutral zone. The close is above SMA50 at 20186 but below EMA200 at 21201 and SMA200 at 21665, and below the 100-bar value-area high near 21436. On 2026-11-05 the bar opened at 20700, reached 21000 and closed at 20400, leaving an upper wick, and the next bar closed unchanged; the stored recognizer marks a bearish harami on those two bars. The regime label is sideways with high volatility (daily true range about 2.8% of the close). The +5% level for the 20-session rule sits near 21420, inside the overhead zone of the 200-session averages and the value-area high, while the -4% level near 19584 sits below the recent breakout area. Momentum has turned up but has not yet cleared the 200-session averages, so the balance is a range between roughly 19300 and 21500. Not yet confirmed either way. For reference only; this kind of call has never been tested on this symbol.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

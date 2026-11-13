@@ -4,46 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-22",
-      19276.73,
-      19306.39,
-      18802.22,
-      19276.73,
-      12375281
-    ],
-    [
-      "2025-10-23",
-      19247.07,
-      20314.71,
-      19217.42,
-      19573.29,
-      34279929
-    ],
-    [
-      "2025-10-24",
-      19425.01,
-      19602.95,
-      18980.16,
-      19395.35,
-      17228397
-    ],
-    [
-      "2025-10-27",
-      19543.64,
-      19543.64,
-      18446.35,
-      18446.35,
-      17562559
-    ],
-    [
-      "2025-10-28",
-      18120.13,
-      19098.79,
-      18120.13,
-      19098.79,
-      14464035
-    ],
-    [
       "2025-10-29",
       19247.07,
       20225.74,
@@ -2082,31 +2042,83 @@
       21950,
       22500,
       16101400
+    ],
+    [
+      "2026-11-09",
+      22550,
+      22550,
+      22000,
+      22200,
+      11167700
+    ],
+    [
+      "2026-11-10",
+      22300,
+      22550,
+      22150,
+      22500,
+      13600400
+    ],
+    [
+      "2026-11-11",
+      22500,
+      22500,
+      22250,
+      22500,
+      12328200
+    ],
+    [
+      "2026-11-12",
+      22400,
+      22600,
+      22300,
+      22500,
+      15776200
+    ],
+    [
+      "2026-11-13",
+      22500,
+      22600,
+      22300,
+      22600,
+      13233800
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 22500,
-    "sma50": 21741.4308,
-    "sma200": 20713.5927,
-    "ema12": 22311.187067742874,
-    "ema26": 22162.36618792131,
-    "ema50": 21805.531739938273,
-    "ema200": 20509.101794928523,
-    "rsi14": 55.15108307555544,
-    "macd": 148.8208798215621,
-    "macdSignal": 205.58345030652657,
-    "macdHistogram": -56.76257048496447,
-    "bollingerUpper": 23226.627788979218,
-    "bollingerMiddle": 22467.5,
-    "bollingerLower": 21708.372211020782,
-    "atr14": 614.3683309005688
+    "date": "2026-11-13",
+    "close": 22600,
+    "sma50": 21868.2848,
+    "sma200": 20719.7303,
+    "ema12": 22409.826170832894,
+    "ema26": 22261.28551142739,
+    "ema50": 21925.329205590424,
+    "ema200": 20604.326827764882,
+    "rsi14": 56.10272947331927,
+    "macd": 148.54065940550348,
+    "macdSignal": 161.98588833188998,
+    "macdHistogram": -13.445228926386505,
+    "bollingerUpper": 22915.42024519682,
+    "bollingerMiddle": 22357.5,
+    "bollingerLower": 21799.57975480318,
+    "atr14": 532.9435106746165
   },
   "relativeStrength": {
-    "20": 0.010072,
-    "60": 0.114499
+    "20": -0.025783,
+    "60": 0.08853
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only. The latest daily close was 22500 on 2026-11-06, up 0.4% over 20 sessions and up 8.7% over 60 sessions. The close sits at range position 0.54 inside the 20-session range of 21400 to 23450, after a pullback from 23450 in late October and a two-day bullish engulfing shape on 2026-11-04. Trend measures are mildly positive: the close is above SMA50 21741 and SMA200 20714, and EMA12 sits above EMA26. Momentum is flat: Wilder RSI14 is 55 while the simple-average RSI14 of the conditions module is 47, both in the neutral zone; the MACD histogram is negative (-57) with the MACD line below its signal line. The regime classifier labels the market sideways with normal volatility. The close is just under the value area high of the 100-bar volume profile (22579) and above its point of control (21225). Volume on the last session was 0.9x its 20-session average. Against the VN-Index the stock gained 1.0 percentage points over 20 sessions and 11.4 points over 60 sessions; among bank peers it lagged CTG over 20 sessions. The daily ATR is about 2.7% of the close, so the +5% level (about 23625) lies above the 20-session high, while the -4% level (about 21600) sits near the recent lows. The 20-session view is sideways. For reference only: this kind of view has never been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

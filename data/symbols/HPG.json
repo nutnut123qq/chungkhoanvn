@@ -4,46 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-22",
-      24014.6,
-      24014.6,
-      23345.05,
-      23836.06,
-      37337299
-    ],
-    [
-      "2025-10-23",
-      23880.69,
-      24103.88,
-      23657.51,
-      23657.51,
-      23480069
-    ],
-    [
-      "2025-10-24",
-      23657.51,
-      23836.06,
-      23300.41,
-      23568.24,
-      30625906
-    ],
-    [
-      "2025-10-27",
-      23880.69,
-      23969.97,
-      23434.33,
-      23434.33,
-      27425118
-    ],
-    [
-      "2025-10-28",
-      23523.6,
-      23925.33,
-      23345.05,
-      23925.33,
-      28546402
-    ],
-    [
       "2025-10-29",
       24014.6,
       24594.88,
@@ -2082,31 +2042,83 @@
       21050,
       21200,
       22105200
+    ],
+    [
+      "2026-11-09",
+      21350,
+      21350,
+      20750,
+      20900,
+      22854600
+    ],
+    [
+      "2026-11-10",
+      21200,
+      21500,
+      21050,
+      21250,
+      17283100
+    ],
+    [
+      "2026-11-11",
+      21200,
+      21350,
+      21150,
+      21350,
+      10152300
+    ],
+    [
+      "2026-11-12",
+      21300,
+      21350,
+      21050,
+      21050,
+      14696900
+    ],
+    [
+      "2026-11-13",
+      21050,
+      21200,
+      21000,
+      21050,
+      9460100
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 21200,
-    "sma50": 21013.0,
-    "sma200": 22948.01995,
-    "ema12": 21114.866606168576,
-    "ema26": 20995.450463067566,
-    "ema50": 21118.26292155262,
-    "ema200": 22297.49174650091,
-    "rsi14": 52.6193566086583,
-    "macd": 119.41614310101058,
-    "macdSignal": 49.900242846934866,
-    "macdHistogram": 69.51590025407572,
-    "bollingerUpper": 21624.230313520406,
-    "bollingerMiddle": 20975.0,
-    "bollingerLower": 20325.769686479594,
-    "atr14": 502.23010067111755
+    "date": "2026-11-13",
+    "close": 21050,
+    "sma50": 20932.0,
+    "sma200": 22868.0666,
+    "ema12": 21117.992479766803,
+    "ema26": 21035.519954822634,
+    "ema50": 21118.691162731866,
+    "ema200": 22240.07356899439,
+    "rsi14": 50.232191674273324,
+    "macd": 82.47252494416703,
+    "macdSignal": 80.40831445451953,
+    "macdHistogram": 2.0642104896475075,
+    "bollingerUpper": 21658.523778430495,
+    "bollingerMiddle": 21075.0,
+    "bollingerLower": 20491.476221569505,
+    "atr14": 459.3984663542
   },
   "relativeStrength": {
-    "20": 0.060334,
-    "60": -0.011454
+    "20": -0.009834,
+    "60": 0.000701
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, 20-session horizon: sideways. HPG closed 21200 on 2026-11-06 with a spinning top after easing from 21700 two sessions earlier. The close is above SMA50 21013 and EMA50 21118 but below EMA200 22297 and SMA200 22948, so the longer trend is still down while the medium trend has flattened. The market regime label is sideways with normal volatility. Wilder RSI14 is 52.6 and the simple-average RSI14 is 57.3, both in the neutral zone. MACD is above its signal line with a positive histogram of 0.14 ATR14. The close is inside the Bollinger band (20326 to 21624) at range position 0.62 of the 20-session range (20050 to 21900). The close is below the 100-bar volume point of control near 22048 and above the value-area low near 20481. Over 20 sessions the stock rose 5.5% while the VN-Index fell 0.6%; over 60 sessions it fell 3.9%, about 1.1 points worse than the index. The last five sessions averaged 1.5x the volume of the 20 sessions before them. Neither side shows a clear break: the +5% threshold lies above the point of control and close to the 60-session high 22400, while the -4% threshold lies near the lower Bollinger band and the value-area low. No historical condition statistics exist for this symbol and the method has never been tested on it, so this view is for reference only.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

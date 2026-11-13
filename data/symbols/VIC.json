@@ -4,46 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-22",
-      102000,
-      102000,
-      96500,
-      101500,
-      4206567
-    ],
-    [
-      "2025-10-23",
-      101450,
-      107750,
-      100000,
-      107500,
-      4780435
-    ],
-    [
-      "2025-10-24",
-      107700,
-      111450,
-      107550,
-      109500,
-      3430619
-    ],
-    [
-      "2025-10-27",
-      111450,
-      113250,
-      107000,
-      107000,
-      3910623
-    ],
-    [
-      "2025-10-28",
-      106750,
-      110300,
-      99550,
-      110050,
-      5229446
-    ],
-    [
       "2025-10-29",
       109500,
       109500,
@@ -2082,31 +2042,83 @@
       232600,
       234500,
       1570600
+    ],
+    [
+      "2026-11-09",
+      234500,
+      234500,
+      227000,
+      234400,
+      1644700
+    ],
+    [
+      "2026-11-10",
+      235000,
+      242000,
+      234800,
+      242000,
+      2218600
+    ],
+    [
+      "2026-11-11",
+      241700,
+      247100,
+      240000,
+      245200,
+      1749100
+    ],
+    [
+      "2026-11-12",
+      245500,
+      246500,
+      241300,
+      243000,
+      1790500
+    ],
+    [
+      "2026-11-13",
+      240100,
+      244000,
+      239800,
+      243000,
+      1487700
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 234500,
-    "sma50": 233688.0,
-    "sma200": 198847.5,
-    "ema12": 234881.07572949174,
-    "ema26": 232161.5737425562,
-    "ema50": 229391.1191804624,
-    "ema200": 197272.5982578736,
-    "rsi14": 52.75067847162507,
-    "macd": 2719.501986935534,
-    "macdSignal": 2104.9866543633652,
-    "macdHistogram": 614.515332572169,
-    "bollingerUpper": 251627.4418830778,
-    "bollingerMiddle": 229205.0,
-    "bollingerLower": 206782.5581169222,
-    "atr14": 7466.680698074779
+    "date": "2026-11-13",
+    "close": 243000,
+    "sma50": 233788.0,
+    "sma200": 200863.0,
+    "ema12": 238949.24635614024,
+    "ema26": 235236.22005353094,
+    "ema50": 231615.76433166568,
+    "ema200": 199432.35199845827,
+    "rsi14": 59.67171586217629,
+    "macd": 3713.0263026092894,
+    "macdSignal": 2939.935507451028,
+    "macdHistogram": 773.0907951582612,
+    "bollingerUpper": 255347.7647781158,
+    "bollingerMiddle": 234965.0,
+    "bollingerLower": 214582.2352218842,
+    "atr14": 7069.815732340466
   },
   "relativeStrength": {
-    "20": 0.045519,
-    "60": 0.151795
+    "20": 0.113221,
+    "60": 0.21332
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily candles only, 20-session view: sideways. The 2026-11-06 close was 234500, just above SMA50 233688 and EMA50 229391, and well above SMA200 198848, so the longer trend is still up while the last two months are a range. The backend regime label is sideways with normal volatility. Wilder RSI14 is 52.8 (neutral), while the simple-average RSI14 of the conditions module reads 77.2 (overbought zone); the two formulas disagree and both are shown. MACD is above its signal line with a small positive histogram (0.08 of ATR14). The close sits at range position 0.70 of the 20-session range 205800 to 246500 and 0.57 of the 60-session range. Over the last five sessions the stock fell 2.7% after a high of 246500 on 2026-11-02; the latest bar has a shooting-star shape and the active Fibonacci leg is bearish. Volume on the latest bar was 0.64x its 20-session average, so the pullback came on light volume. The close is below the volume-profile value-area high 240531 and above the point of control 220956. Over 20 and 60 sessions the stock rose 4.0% and 12.5%, ahead of the index by 4.6 and 15.2 points. The up band for the scoring rule starts near 246225, about the recent high, and the down band near 225120, about 1.3 times ATR14 away, so the mixed signals point to a range. For reference only; this kind of call has never been tested on this stock.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

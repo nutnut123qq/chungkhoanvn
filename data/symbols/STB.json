@@ -4,46 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-22",
-      55700,
-      55700,
-      53500,
-      55400,
-      5680600
-    ],
-    [
-      "2025-10-23",
-      55400,
-      55900,
-      54700,
-      55600,
-      5822500
-    ],
-    [
-      "2025-10-24",
-      55200,
-      55500,
-      53600,
-      54500,
-      7394000
-    ],
-    [
-      "2025-10-27",
-      54500,
-      55300,
-      53500,
-      54600,
-      4852600
-    ],
-    [
-      "2025-10-28",
-      54400,
-      56800,
-      53600,
-      56800,
-      6598200
-    ],
-    [
       "2025-10-29",
       56800,
       58100,
@@ -2082,31 +2042,83 @@
       68200,
       70000,
       4067200
+    ],
+    [
+      "2026-11-09",
+      70100,
+      70300,
+      68000,
+      68500,
+      1475600
+    ],
+    [
+      "2026-11-10",
+      68900,
+      70900,
+      68700,
+      69700,
+      3005000
+    ],
+    [
+      "2026-11-11",
+      70000,
+      70000,
+      68200,
+      68500,
+      974100
+    ],
+    [
+      "2026-11-12",
+      68500,
+      70500,
+      68100,
+      68900,
+      4249900
+    ],
+    [
+      "2026-11-13",
+      68700,
+      71200,
+      68700,
+      71200,
+      3597800
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 70000,
-    "sma50": 70930,
-    "sma200": 68762.5,
-    "ema12": 67389.69193255059,
-    "ema26": 67832.14522348913,
-    "ema50": 69308.45168117013,
-    "ema200": 67202.26405322336,
-    "rsi14": 57.610248024414496,
-    "macd": -442.45329093854684,
-    "macdSignal": -1233.506962891201,
-    "macdHistogram": 791.0536719526542,
-    "bollingerUpper": 70605.58013327482,
-    "bollingerMiddle": 65865,
-    "bollingerLower": 61124.41986672518,
-    "atr14": 2046.894107457476
+    "date": "2026-11-13",
+    "close": 71200,
+    "sma50": 70358,
+    "sma200": 68994.5,
+    "ema12": 68597.69636225085,
+    "ema26": 68343.46696916608,
+    "ema50": 69324.57684276275,
+    "ema200": 67307.94948666422,
+    "rsi14": 59.48967378113486,
+    "macd": 254.22939308476126,
+    "macdSignal": -399.8651134385777,
+    "macdHistogram": 654.094506523339,
+    "bollingerUpper": 72130.86949051249,
+    "bollingerMiddle": 67070,
+    "bollingerLower": 62009.13050948752,
+    "atr14": 2121.1083065095804
   },
   "relativeStrength": {
-    "20": 0.045727,
-    "60": -0.030779
+    "20": 0.116747,
+    "60": -0.054872
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view on daily candles, for reference only. The close of 2026-11-06 at 70000 ended a five-session rebound of 5.6% from the 65100 low of 2026-11-02, with volume 1.25x its 20-session average on the last bar. The close sits just under SMA50 70930 and above SMA200 68762 and EMA200 67202, while EMA12 remains below EMA26 and the MACD histogram is positive. Wilder RSI14 reads 57.6, but the simple-average RSI14 of the conditions reads 75.3 and moved into overbought on the last bar; the two readings disagree. In the 20-session window the close is near the top of the range (range position 0.95), while over 60 sessions it is mid-range (0.50), below the 79000 high of 2026-09-10 and under the volume-profile point of control near 71900. Over 20 sessions the close rose 4.0% against a 0.6% decline in the index, while the 60-session return of -5.8% trails the index by 3.1 points. The short-term rebound is not yet confirmed by a close above SMA50, and the larger leg since September is still down. The view is sideways over 20 sessions: a rise of 5% or more would need a clear break above 70930 and the 71900 area, while a 4% decline would bring price back to the 67200 area of late October.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

@@ -4,46 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-10-15",
-      119952.27,
-      120192.82,
-      117145.9,
-      119391,
-      413871
-    ],
-    [
-      "2025-10-16",
-      119391,
-      120994.63,
-      117867.54,
-      118508.99,
-      663309
-    ],
-    [
-      "2025-10-17",
-      119310.81,
-      119711.72,
-      115061.17,
-      116744.99,
-      230903
-    ],
-    [
-      "2025-10-20",
-      115943.17,
-      115943.17,
-      110651.16,
-      111052.07,
-      646775
-    ],
-    [
-      "2025-10-21",
-      100227.5,
-      113457.53,
-      100227.5,
-      112816.07,
-      317093
-    ],
-    [
       "2025-10-22",
       112014.25,
       116103.53,
@@ -2082,31 +2042,83 @@
       128000,
       129800,
       488600
+    ],
+    [
+      "2026-11-09",
+      129800,
+      129800,
+      125100,
+      126000,
+      287900
+    ],
+    [
+      "2026-11-10",
+      127600,
+      129800,
+      127000,
+      127700,
+      221300
+    ],
+    [
+      "2026-11-11",
+      127200,
+      127500,
+      124300,
+      124400,
+      240000
+    ],
+    [
+      "2026-11-12",
+      124400,
+      125100,
+      121600,
+      123900,
+      305900
+    ],
+    [
+      "2026-11-13",
+      121700,
+      123500,
+      121700,
+      123500,
+      391400
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 129800,
-    "sma50": 140340.0,
-    "sma200": 138972.0335,
-    "ema12": 135379.18194689084,
-    "ema26": 137644.34322999744,
-    "ema50": 138496.5715738157,
-    "ema200": 140929.1535496929,
-    "rsi14": 19.686430596342575,
-    "macd": -2265.161283106613,
-    "macdSignal": -1295.0917782884223,
-    "macdHistogram": -970.0695048181908,
-    "bollingerUpper": 145323.84767263557,
-    "bollingerMiddle": 138165.0,
-    "bollingerLower": 131006.15232736443,
-    "atr14": 2690.954497105623
+    "date": "2026-11-13",
+    "close": 123500,
+    "sma50": 138632.0,
+    "sma200": 138155.9627,
+    "ema12": 129392.50573463198,
+    "ema26": 133594.07976896386,
+    "ema50": 136055.09860366685,
+    "ema200": 140156.29133560898,
+    "rsi14": 18.58928485636305,
+    "macd": -4201.57403433186,
+    "macdSignal": -2907.388315526877,
+    "macdHistogram": -1294.1857188049835,
+    "bollingerUpper": 146621.54829043537,
+    "bollingerMiddle": 134220.0,
+    "bollingerLower": 121818.45170956464,
+    "atr14": 2923.332666622981
   },
   "relativeStrength": {
-    "20": -0.0867,
-    "60": -0.018494
+    "20": -0.134869,
+    "60": -0.092924
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Technical-only view for reference only, 20-session horizon: sideways. The daily close on 2026-11-06 was 129800, down 2.4% on the day and 9.2% over 20 sessions, a new 60-session low (range position 0.10), on volume 0.88x its 20-session average. The close sits below SMA50 140340, SMA200 138972 and EMA200, and about 0.9% under the lower Bollinger band; MACD is below its signal line with a negative histogram, so the trend is down. Momentum is stretched: Wilder RSI14 is 19.7 and the simple-average RSI14 in the conditions read is 15.8, both deep in oversold territory, and the market regime label is sideways with high volatility. Over 20 sessions the stock trailed the VN-Index by 8.7 percentage points. The bearish structure and the oversold reading pull in opposite directions; a rebound of at least 5% or a further fall of at least 4% within 20 sessions are both plausible, with no edge to separate them, so the call is the middle band. A daily close back above 137300 (the value-area low) would tilt the picture up; a close below the June low near 124300 would extend the decline.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,

@@ -4,46 +4,6 @@
   "isBank": true,
   "candles": [
     [
-      "2025-10-22",
-      34696.35,
-      34696.35,
-      33771.11,
-      34418.78,
-      3978223
-    ],
-    [
-      "2025-10-23",
-      34233.73,
-      34650.09,
-      34094.95,
-      34141.21,
-      2710914
-    ],
-    [
-      "2025-10-24",
-      34233.73,
-      34326.26,
-      33493.54,
-      34141.21,
-      3495261
-    ],
-    [
-      "2025-10-27",
-      34187.47,
-      34418.78,
-      33771.11,
-      33771.11,
-      2067006
-    ],
-    [
-      "2025-10-28",
-      33863.64,
-      34372.52,
-      33863.64,
-      34326.26,
-      2796558
-    ],
-    [
       "2025-10-29",
       34696.35,
       35066.44,
@@ -2082,31 +2042,83 @@
       31800,
       31950,
       4187700
+    ],
+    [
+      "2026-11-09",
+      32100,
+      32450,
+      32000,
+      32050,
+      2345700
+    ],
+    [
+      "2026-11-10",
+      32400,
+      32700,
+      32100,
+      32200,
+      4406900
+    ],
+    [
+      "2026-11-11",
+      32350,
+      32750,
+      32300,
+      32450,
+      4589600
+    ],
+    [
+      "2026-11-12",
+      32500,
+      32500,
+      32100,
+      32100,
+      1741300
+    ],
+    [
+      "2026-11-13",
+      32100,
+      32100,
+      31750,
+      31850,
+      3072300
     ]
   ],
   "indicators": {
-    "date": "2026-11-06",
-    "close": 31950,
-    "sma50": 34817.0,
-    "sma200": 38193.49905,
-    "ema12": 32827.73251456563,
-    "ema26": 33554.0211311897,
-    "ema50": 34390.241451026784,
-    "ema200": 36508.487309694756,
-    "rsi14": 33.008708949208454,
-    "macd": -726.2886166240713,
-    "macdSignal": -621.7778443215307,
-    "macdHistogram": -104.51077230254066,
-    "bollingerUpper": 34791.59213722251,
-    "bollingerMiddle": 33277.5,
-    "bollingerLower": 31763.407862777483,
-    "atr14": 762.2802409280715
+    "date": "2026-11-13",
+    "close": 31850,
+    "sma50": 34357.0,
+    "sma200": 37787.9282,
+    "ema12": 32421.12738242657,
+    "ema26": 33096.449040284,
+    "ema50": 33979.7144909516,
+    "ema200": 36294.89468749436,
+    "rsi14": 34.858400856746954,
+    "macd": -675.3216578574313,
+    "macdSignal": -667.4150696574567,
+    "macdHistogram": -7.906588199974635,
+    "bollingerUpper": 34675.56645442627,
+    "bollingerMiddle": 32937.5,
+    "bollingerLower": 31199.43354557373,
+    "atr14": 675.3791528360699
   },
   "relativeStrength": {
-    "20": -0.051914,
-    "60": -0.099897
+    "20": -0.078867,
+    "60": -0.116958
   },
-  "notes": [],
+  "notes": [
+    {
+      "signalDate": "2026-11-06",
+      "horizonSessions": 20,
+      "direction": "sideways",
+      "thesis": "Daily trend is down. EMA12 is below EMA26, the regime label is bear with normal volatility, and the close of 31950 on 2026-11-06 sits below SMA50 34817 and SMA200 38193. The price fell 5.8% over 20 sessions and 12.7% over 60 sessions, lagging the index by 5.2 and 10.0 points. Momentum is weak but stretched: Wilder RSI14 is 33.0 and the simple-average RSI14 is 34.3, both just above the oversold line, and the close is near the lower Bollinger band at 31763. The 2 November decline came on volume 2.45x its 20-session average; since then the low of 31600 from 3 November has not been broken, and the last four sessions traded between 31600 and 33100. The signal bar opened at its low and left a long upper wick (0.75 of the range), which the two pattern rule sets label differently (inverted hammer vs shooting-star shape). Range position is 0.11 over 20 sessions and 0.06 over 60 sessions. A down score needs the close 20 sessions later at or below about 30670, an up score at or above about 33550. With price already at the lower edge of the range and momentum near oversold, a further 4% decline is not yet confirmed, while the trend shows no sign of a 5% rebound either, so the 20-session view is sideways. This view is for reference only and has not beaten always-sideways in blind tests.",
+      "status": "pending",
+      "pendingReason": "immature",
+      "targetDate": "2026-12-04",
+      "returnPct": null,
+      "hit": null
+    }
+  ],
   "score": {
     "scored": 0,
     "hits": 0,
