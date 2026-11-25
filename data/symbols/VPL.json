@@ -4,14 +4,6 @@
   "isBank": false,
   "candles": [
     [
-      "2025-11-06",
-      75700,
-      75700,
-      73800,
-      73800,
-      77000
-    ],
-    [
       "2025-11-07",
       73900,
       73900,
@@ -2082,29 +2074,37 @@
       95100,
       96000,
       526700
+    ],
+    [
+      "2026-11-25",
+      96000,
+      97500,
+      95400,
+      97000,
+      594300
     ]
   ],
   "indicators": {
-    "date": "2026-11-23",
-    "close": 96000,
-    "sma50": 85440,
-    "sma200": 83917,
-    "ema12": 93858.40098444888,
-    "ema26": 90792.29216501459,
-    "ema50": 87506.39587972475,
-    "ema200": 84763.14316437952,
-    "rsi14": 83.7544191322704,
-    "macd": 3066.1088194342788,
-    "macdSignal": 3110.123856018475,
-    "macdHistogram": -44.01503658419642,
-    "bollingerUpper": 97350.15463671004,
-    "bollingerMiddle": 92500,
-    "bollingerLower": 87649.84536328996,
-    "atr14": 2125.4488598028724
+    "date": "2026-11-25",
+    "close": 97000,
+    "sma50": null,
+    "sma200": null,
+    "ema12": null,
+    "ema26": null,
+    "ema50": null,
+    "ema200": null,
+    "rsi14": null,
+    "macd": null,
+    "macdSignal": null,
+    "macdHistogram": null,
+    "bollingerUpper": null,
+    "bollingerMiddle": null,
+    "bollingerLower": null,
+    "atr14": null
   },
   "relativeStrength": {
-    "20": 0.153936,
-    "60": 0.344777
+    "20": 0.157182,
+    "60": 0.330294
   },
   "notes": [
     {
